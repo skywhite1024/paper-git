@@ -34,3 +34,20 @@ def test_route_detail():
     assert {"VIC", "DIAYN", "METRA"} <= labels
     assert any(e["from"] == "VIC" and e["to"] == "DIAYN" for e in usd["edges"])
     assert get_route_detail("nope") is None
+
+
+def test_graph_network_endpoint(client):
+    data = client.get("/api/routes/graph/network").json()
+    ids = {n["id"] for n in data["nodes"]}
+    hubs = [n for n in data["nodes"] if n["kind"] == "hub"]
+    papers = [n for n in data["nodes"] if n["kind"] == "paper"]
+    assert len(hubs) == 6
+    assert len(papers) >= 100
+    assert len(data["links"]) >= 28
+    assert all(l["source"] in ids and l["target"] in ids for l in data["links"])
+    loop_links = [l for l in data["links"] if l["kind"] == "loop"]
+    assert len(loop_links) >= 3
+    sample = next(n for n in papers if n["label"] == "DIAYN")
+    assert sample["route"] == "usd" and sample["stage_idx"] == 0
+    assert sample["url"]
+    assert {m["id"] for m in data["routes_meta"]} == {h["route"] for h in hubs}

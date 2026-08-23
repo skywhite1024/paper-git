@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import RouteGraph from "@/components/RouteGraph";
+import StageDiagram from "@/components/StageDiagram";
 import { apiGet, type RouteDetail, type RoutesResponse } from "@/lib/api";
 
 export const dynamic = "force-dynamic";
@@ -73,6 +74,16 @@ export default async function RoutePage({ params }: { params: Promise<{ id: stri
               领域树 · {nid}
             </Link>
           ))}
+          <Link
+            href={`/?route=${route.id}`}
+            className="rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs text-emerald-700 hover:bg-emerald-100"
+          >
+            在网络图中查看该路线 →
+          </Link>
+        </div>
+        <div className="mt-3 max-w-md">
+          <div className="mb-1 text-xs font-semibold text-gray-500">路线原理示意</div>
+          <StageDiagram route={route.id} />
         </div>
       </header>
 
@@ -86,8 +97,23 @@ export default async function RoutePage({ params }: { params: Promise<{ id: stri
           <div key={stage.name} className="rounded-xl border border-[var(--pg-border)] bg-white p-4">
             <h3 className="text-sm font-semibold text-gray-800">
               {i + 1}. {stage.name}
+              <span className="ml-2 text-xs font-normal text-gray-400">{stage.items.length} 篇 · 点击定位网络图</span>
             </h3>
             <p className="mt-1.5 text-xs leading-relaxed text-gray-600">{stage.description}</p>
+            <div className="mt-2 flex flex-wrap gap-1">
+              {stage.items.map((item) => (
+                <Link
+                  key={item.label}
+                  href={`/?route=${route.id}&node=${encodeURIComponent(item.label)}`}
+                  className="rounded-full border border-[var(--pg-border)] px-2 py-0.5 text-xs text-gray-700 hover:border-blue-400 hover:text-blue-700"
+                  title={item.note}
+                >
+                  {item.key && "⭐"}
+                  {item.label}
+                  {item.year ? ` ${item.year}` : ""}
+                </Link>
+              ))}
+            </div>
           </div>
         ))}
       </section>
