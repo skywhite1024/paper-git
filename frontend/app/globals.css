@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+:root {
+  --pg-bg: #f6f8fa;
+  --pg-border: #d1d9e0;
+}
+
+body {
+  background: var(--pg-bg);
+  color: #1f2328;
+}
+
+::selection {
+  background: #0969da33;
+}

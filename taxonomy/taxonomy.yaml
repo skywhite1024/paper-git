@@ -1,0 +1,433 @@
+# PaperGit 领域树（taxonomy 即代码）
+# 新增/调整领域与子领域：修改本文件后执行 `python -m app.taxonomy_loader` 同步数据库。
+# 节点字段：
+#   id          层级式唯一标识（用 . 表示层级，如 ai.ml.dl.arch）
+#   name_en / name_zh  英/中名称
+#   description 简介（展示在节点页概览）
+#   keywords    分类规则关键词（命中标题/摘要用于自动挂载，小写）
+#   arxiv_cats  arXiv 分类映射（主/次分类命中加分）
+#   fallback    仅根节点使用：无法归入具体节点时按主分类落到该根
+version: 1
+
+nodes:
+  # ==================== AI 人工智能 ====================
+  - id: ai
+    name_en: Artificial Intelligence
+    name_zh: 人工智能
+    description: 人工智能领域总览，涵盖机器学习、NLP、计算机视觉、语音、知识表示与 AI 安全等方向。
+    keywords: [artificial intelligence]
+    arxiv_cats: [cs.AI]
+    fallback: true
+    children:
+      - id: ai.ml
+        name_en: Machine Learning
+        name_zh: 机器学习
+        description: 机器学习方法总览：深度学习、强化学习、自监督学习、联邦学习、图学习与学习理论。
+        keywords: [machine learning]
+        arxiv_cats: [cs.LG, stat.ML]
+        children:
+          - id: ai.ml.dl
+            name_en: Deep Learning
+            name_zh: 深度学习
+            description: 深度学习方法：网络架构、优化训练、高效模型与压缩。
+            keywords: [deep learning, deep neural network, neural network]
+            arxiv_cats: [cs.LG, cs.NE]
+            children:
+              - id: ai.ml.dl.arch
+                name_en: Network Architectures
+                name_zh: 网络架构
+                description: 深度网络架构研究：Transformer、CNN、RNN 及架构搜索等。
+                keywords: [transformer, attention mechanism, convolutional neural network, recurrent neural network, lstm, resnet, vision transformer, rnn, neural architecture search, mlp-mixer]
+                arxiv_cats: [cs.LG, cs.NE, cs.CV]
+              - id: ai.ml.dl.optim
+                name_en: Optimization & Training
+                name_zh: 优化与训练
+                description: 训练方法与优化：优化器、归一化、学习率调度、训练动力学与损失景观。
+                keywords: [optimizer, gradient descent, adam optimizer, learning rate schedule, batch normalization, loss landscape, training dynamics, convergence analysis, warmup]
+                arxiv_cats: [cs.LG, math.OC]
+              - id: ai.ml.dl.eff
+                name_en: Efficient ML & Compression
+                name_zh: 高效模型与压缩
+                description: 模型效率研究：剪枝、量化、蒸馏、稀疏化、MoE 与推理加速。
+                keywords: [pruning, quantization, knowledge distillation, model compression, efficient inference, sparse neural network, mixture-of-experts, inference acceleration, low-rank]
+                arxiv_cats: [cs.LG]
+          - id: ai.ml.rl
+            name_en: Reinforcement Learning
+            name_zh: 强化学习
+            description: 强化学习：算法理论、人类反馈对齐、多智能体强化学习。
+            keywords: [reinforcement learning, markov decision process, policy optimization, reward function]
+            arxiv_cats: [cs.LG, cs.AI]
+            children:
+              - id: ai.ml.rl.algo
+                name_en: RL Algorithms & Theory
+                name_zh: 强化学习算法与理论
+                description: 经典与前沿 RL 算法：PPO/DQN/SAC、离线 RL、基于模型的 RL 与探索。
+                keywords: [proximal policy optimization, ppo, trpo, dqn, soft actor-critic, q-learning, offline reinforcement learning, model-based reinforcement learning, exploration bonus, offline rl]
+                arxiv_cats: [cs.LG]
+              - id: ai.ml.rl.rlhf
+                name_en: RLHF & Preference Learning
+                name_zh: 人类反馈对齐
+                description: 基于人类反馈的对齐：RLHF、DPO、奖励模型与偏好学习。
+                keywords: [rlhf, reinforcement learning from human feedback, reward model, direct preference optimization, dpo, preference learning, human preference]
+                arxiv_cats: [cs.LG, cs.CL]
+              - id: ai.ml.rl.marl
+                name_en: Multi-Agent RL
+                name_zh: 多智能体强化学习
+                description: 多智能体强化学习：合作与竞争、自博弈、平均场方法。
+                keywords: [multi-agent reinforcement learning, marl, cooperative multi-agent, self-play, mean-field game, emergent cooperation]
+                arxiv_cats: [cs.LG, cs.MA]
+          - id: ai.ml.ssl
+            name_en: Self-Supervised & Representation Learning
+            name_zh: 自监督与表示学习
+            description: 自监督与表示学习：对比学习、掩码建模、预训练与表示分析。
+            keywords: [self-supervised learning, contrastive learning, simclr, masked image modeling, masked language modeling, pretraining, representation learning, embedding space, probe]
+            arxiv_cats: [cs.LG, cs.CV]
+          - id: ai.ml.fl
+            name_en: Federated & Privacy-Preserving Learning
+            name_zh: 联邦学习与隐私保护
+            description: 联邦学习与隐私保护训练：联邦优化、差分隐私、分布式隐私。
+            keywords: [federated learning, federated averaging, differential privacy, privacy-preserving machine learning, client drift]
+            arxiv_cats: [cs.LG, cs.DC]
+          - id: ai.ml.graph
+            name_en: Graph Machine Learning
+            name_zh: 图机器学习
+            description: 图数据上的机器学习：GNN、图卷积、节点分类、链接预测与图生成。
+            keywords: [graph neural network, gnn, graph convolutional network, node classification, link prediction, graph transformer, molecular graph]
+            arxiv_cats: [cs.LG]
+          - id: ai.ml.theory
+            name_en: Learning Theory
+            name_zh: 学习理论
+            description: 统计学习理论：泛化、样本复杂度、PAC 学习与收敛分析。
+            keywords: [learning theory, generalization bound, pac learning, sample complexity, rademacher complexity, uniform convergence, double descent]
+            arxiv_cats: [cs.LG, stat.ML, cs.IT]
+      - id: ai.nlp
+        name_en: Natural Language Processing
+        name_zh: 自然语言处理
+        description: 自然语言处理：大语言模型、RAG、智能体、机器翻译与评测。
+        keywords: [natural language processing, nlp, language]
+        arxiv_cats: [cs.CL]
+        children:
+          - id: ai.nlp.llm
+            name_en: Large Language Models
+            name_zh: 大语言模型
+            description: 大语言模型：架构、预训练、Scaling Law、长上下文与推理能力。
+            keywords: [large language model, llm, gpt, autoregressive language model, scaling law, long context, in-context learning, chain-of-thought, tokenizer, mixture of experts]
+            arxiv_cats: [cs.CL]
+          - id: ai.nlp.rag
+            name_en: Retrieval-Augmented Generation
+            name_zh: 检索增强生成
+            description: 检索增强生成与开放域问答：稠密检索、向量库、段落排序。
+            keywords: [retrieval augmented generation, rag, dense retrieval, open-domain question answering, vector database, passage ranking, retriever]
+            arxiv_cats: [cs.CL, cs.IR]
+          - id: ai.nlp.agent
+            name_en: LLM Agents & Tool Use
+            name_zh: 智能体与工具使用
+            description: 基于语言模型的智能体：工具调用、任务规划、Web/代码智能体。
+            keywords: [language agent, tool use, function calling, agentic, web agent, code agent, autonomous agent, multi-agent collaboration, planning with language model]
+            arxiv_cats: [cs.CL, cs.AI]
+          - id: ai.nlp.mt
+            name_en: Machine Translation
+            name_zh: 机器翻译
+            description: 机器翻译：模型、平行语料、同声传译与低资源翻译。
+            keywords: [machine translation, parallel corpus, simultaneous translation, low-resource translation]
+            arxiv_cats: [cs.CL]
+          - id: ai.nlp.eval
+            name_en: Evaluation & Benchmarks
+            name_zh: 模型评测与基准
+            description: 语言模型评测：基准、排行榜、幻觉度量与人类评估。
+            keywords: [benchmark, evaluation of language model, lm evaluation, hallucination, leaderboard, contamination, human evaluation]
+            arxiv_cats: [cs.CL]
+      - id: ai.cv
+        name_en: Computer Vision
+        name_zh: 计算机视觉
+        description: 计算机视觉：检测分割、视觉生成、多模态、视频理解与三维视觉。
+        keywords: [computer vision, image]
+        arxiv_cats: [cs.CV]
+        children:
+          - id: ai.cv.det
+            name_en: Detection & Segmentation
+            name_zh: 检测与分割
+            description: 目标检测与图像分割：YOLO、R-CNN 系列、全景/实例分割。
+            keywords: [object detection, semantic segmentation, instance segmentation, yolo, r-cnn, panoptic segmentation, anchor-free]
+            arxiv_cats: [cs.CV]
+          - id: ai.cv.gen
+            name_en: Visual Generation
+            name_zh: 视觉生成
+            description: 图像/视频生成：扩散模型、GAN、VAE、文生图与流匹配。
+            keywords: [diffusion model, generative adversarial network, gan, variational autoencoder, text-to-image, stable diffusion, image synthesis, flow matching, image inpainting]
+            arxiv_cats: [cs.CV, stat.ML]
+          - id: ai.cv.mm
+            name_en: Multimodal Learning
+            name_zh: 多模态学习
+            description: 视觉-语言多模态：CLIP、VLM、视觉问答与图文对齐。
+            keywords: [multimodal, vision-language, vision language model, clip, contrastive language-image, visual question answering, image-text, llava]
+            arxiv_cats: [cs.CV, cs.CL]
+          - id: ai.cv.video
+            name_en: Video Understanding
+            name_zh: 视频理解
+            description: 视频理解与生成：动作识别、视频分割、目标跟踪、视频生成。
+            keywords: [video understanding, action recognition, video segmentation, video generation, visual tracking, video prediction]
+            arxiv_cats: [cs.CV]
+          - id: ai.cv.3d
+            name_en: 3D Vision
+            name_zh: 三维视觉
+            description: 三维视觉：NeRF、三维重建、高斯泼溅、点云、深度估计与 SfM。
+            keywords: [nerf, neural radiance field, 3d reconstruction, point cloud, gaussian splatting, stereo matching, structure from motion, monocular depth]
+            arxiv_cats: [cs.CV]
+      - id: ai.speech
+        name_en: Speech & Audio
+        name_zh: 语音与音频
+        description: 语音与音频处理：ASR、TTS、说话人识别与音频理解。
+        keywords: [speech recognition, automatic speech recognition, text-to-speech, tts, speaker recognition, audio understanding, voice conversion]
+        arxiv_cats: [cs.SD, eess.AS]
+      - id: ai.krr
+        name_en: Knowledge Representation & Reasoning
+        name_zh: 知识表示与推理
+        description: 知识表示与推理：知识图谱、神经符号推理、本体与自动定理证明。
+        keywords: [knowledge graph, neuro-symbolic, ontology, logical reasoning, automated theorem proving, description logic, knowledge graph completion]
+        arxiv_cats: [cs.AI]
+      - id: ai.planning
+        name_en: Planning & Search
+        name_zh: 规划与搜索
+        description: 自动规划与搜索：任务规划、POMDP、启发式搜索、约束求解与 SAT。
+        keywords: [automated planning, pomdp, heuristic search, constraint satisfaction, sat solver, task planning, temporal planning]
+        arxiv_cats: [cs.AI]
+      - id: ai.theory
+        name_en: AI Safety & Alignment
+        name_zh: AI 安全与对齐
+        description: AI 安全、对齐与可解释性研究。
+        keywords: [ai safety, alignment, safe ai]
+        arxiv_cats: [cs.AI, cs.CY]
+        children:
+          - id: ai.theory.align
+            name_en: Alignment
+            name_zh: 对齐
+            description: 对齐技术：可扩展监督、reward hacking、宪法 AI 与越狱防御。
+            keywords: [alignment, scalable oversight, reward hacking, constitutional ai, jailbreak, red teaming, corrigibility]
+            arxiv_cats: [cs.CL, cs.AI]
+          - id: ai.theory.interp
+            name_en: Interpretability
+            name_zh: 可解释性
+            description: 机制可解释性：探针分析、注意力归因、电路分析与概念可视化。
+            keywords: [interpretability, mechanistic interpretability, explainable ai, probing classifier, saliency map, activation patching, sparse autoencoder interpretability]
+            arxiv_cats: [cs.LG, cs.AI]
+      - id: ai.app
+        name_en: AI for Science
+        name_zh: AI for Science
+        description: AI 在科学中的应用：药物发现、蛋白质结构、材料发现、气象与科学机器学习。
+        keywords: [ai for science, drug discovery, protein structure prediction, material discovery, scientific machine learning, weather forecasting, physics-informed]
+        arxiv_cats: [cs.AI, cs.LG]
+
+  # ==================== CS 计算机科学 ====================
+  - id: cs
+    name_en: Computer Science
+    name_zh: 计算机科学
+    description: 计算机科学领域总览：系统、网络、安全、理论、软件工程、编程语言、HCI 与量子计算。
+    keywords: [computer science]
+    arxiv_cats: [cs]
+    fallback: true
+    children:
+      - id: cs.systems
+        name_en: Systems
+        name_zh: 计算机系统
+        description: 计算机系统：分布式系统、数据库、操作系统与体系结构。
+        keywords: [computer systems]
+        arxiv_cats: [cs.DC]
+        children:
+          - id: cs.systems.dist
+            name_en: Distributed Systems
+            name_zh: 分布式系统
+            description: 分布式系统：一致性协议、容错、区块链、云计算与 Serverless。
+            keywords: [distributed systems, consensus protocol, paxos, raft, fault tolerance, blockchain, serverless, cloud computing, microservice]
+            arxiv_cats: [cs.DC]
+          - id: cs.systems.db
+            name_en: Databases
+            name_zh: 数据库
+            description: 数据库系统：查询处理、事务、OLAP/OLTP、索引与新型存储。
+            keywords: [database, query processing, transaction processing, olap, oltp, index structure, key-value store, query optimizer]
+            arxiv_cats: [cs.DB]
+          - id: cs.systems.os
+            name_en: Operating Systems
+            name_zh: 操作系统
+            description: 操作系统：内核、调度、虚拟化与容器。
+            keywords: [operating system, kernel, cpu scheduling, virtualization, container runtime, system call]
+            arxiv_cats: [cs.OS]
+          - id: cs.systems.arch
+            name_en: Computer Architecture
+            name_zh: 体系结构
+            description: 计算机体系结构：GPU、加速器、缓存与内存层次、FPGA。
+            keywords: [gpu architecture, hardware accelerator, cache hierarchy, memory system, fpga, chiplet, tensor core, rtl design]
+            arxiv_cats: [cs.AR]
+      - id: cs.networks
+        name_en: Networking
+        name_zh: 计算机网络
+        description: 计算机网络：协议、拥塞控制、无线与数据中心网络。
+        keywords: [computer network, network protocol, congestion control, wireless network, datacenter network, 5g, sdn]
+        arxiv_cats: [cs.NI]
+      - id: cs.security
+        name_en: Security & Cryptography
+        name_zh: 安全与密码学
+        description: 安全与密码学：漏洞挖掘、攻击防御、模糊测试与密码协议。
+        keywords: [security, cryptography, vulnerability detection, adversarial attack, malware, fuzzing, zero-knowledge, side-channel]
+        arxiv_cats: [cs.CR]
+      - id: cs.theory
+        name_en: Theoretical Computer Science
+        name_zh: 理论计算机科学
+        description: 理论计算机科学：算法与复杂度、信息论、逻辑与形式化验证。
+        keywords: [theoretical computer science]
+        arxiv_cats: [cs.CC]
+        children:
+          - id: cs.theory.algo
+            name_en: Algorithms & Complexity
+            name_zh: 算法与复杂度
+            description: 算法与复杂度理论：近似算法、流式/亚线性算法、图算法与硬度。
+            keywords: [algorithm design, np-hard, approximation algorithm, streaming algorithm, sublinear algorithm, graph algorithm, parameterized complexity]
+            arxiv_cats: [cs.DS, cs.CC]
+          - id: cs.theory.it
+            name_en: Information Theory
+            name_zh: 信息论
+            description: 信息论：熵、互信息、信道容量与率失真。
+            keywords: [information theory, entropy, mutual information, channel capacity, rate-distortion, source coding]
+            arxiv_cats: [cs.IT, math.IT]
+          - id: cs.theory.logic
+            name_en: Logic & Verification
+            name_zh: 逻辑与形式化验证
+            description: 逻辑与验证：模型检测、类型论、定理证明、SAT/SMT 与程序逻辑。
+            keywords: [formal verification, model checking, type theory, interactive theorem proving, smt solver, program verification, separation logic]
+            arxiv_cats: [cs.LO]
+      - id: cs.se
+        name_en: Software Engineering
+        name_zh: 软件工程
+        description: 软件工程：测试、缺陷修复、程序综合、AI4SE 与 DevOps。
+        keywords: [software engineering, software testing, bug detection, program repair, code generation, devops, refactoring, technical debt]
+        arxiv_cats: [cs.SE]
+      - id: cs.pl
+        name_en: Programming Languages
+        name_zh: 编程语言
+        description: 编程语言：编译器、类型系统、静态分析与运行时。
+        keywords: [programming language, compiler optimization, type system, static analysis, abstract interpretation, garbage collection, just-in-time]
+        arxiv_cats: [cs.PL]
+      - id: cs.hc
+        name_en: Human-Computer Interaction
+        name_zh: 人机交互
+        description: 人机交互：可用性、用户研究、无障碍与 XR 交互界面。
+        keywords: [human-computer interaction, usability, user study, accessibility, crowdsourcing, virtual reality interface, design tool]
+        arxiv_cats: [cs.HC]
+      - id: cs.mlsys
+        name_en: ML Systems
+        name_zh: 机器学习系统
+        description: 面向 ML 的系统：训练基础设施、推理引擎、并行策略与 ML 编译器。
+        keywords: [mlsys, training infrastructure, distributed training system, model serving, inference engine, pipeline parallelism, tensor parallelism, ml compiler, gpu cluster]
+        arxiv_cats: [cs.DC, cs.LG]
+      - id: cs.quantum
+        name_en: Quantum Computing
+        name_zh: 量子计算
+        description: 量子计算：量子算法、纠错、线路与量子硬件。
+        keywords: [quantum computing, qubit, quantum algorithm, quantum error correction, quantum circuit, variational quantum]
+        arxiv_cats: [quant-ph]
+      - id: cs.graphics
+        name_en: Graphics
+        name_zh: 计算机图形学
+        description: 计算机图形学：渲染、光线追踪、几何处理、动画与物理仿真。
+        keywords: [rendering, ray tracing, mesh processing, geometry processing, character animation, physics simulation, cloth simulation]
+        arxiv_cats: [cs.GR]
+      - id: cs.ir
+        name_en: Information Retrieval & Recommendation
+        name_zh: 信息检索与推荐
+        description: 信息检索与推荐系统：搜索排序、相关性、协同过滤与召回。
+        keywords: [information retrieval, search engine, learning to rank, recommendation system, collaborative filtering, click-through, semantic search]
+        arxiv_cats: [cs.IR]
+
+  # ==================== Robotics 机器人 ====================
+  - id: robotics
+    name_en: Robotics
+    name_zh: 机器人
+    description: 机器人领域总览：定位建图、规划控制、操作、具身智能与各类机器人系统。
+    keywords: [robotics, robot]
+    arxiv_cats: [cs.RO]
+    fallback: true
+    children:
+      - id: robotics.loc
+        name_en: SLAM & Localization
+        name_zh: 定位与建图
+        description: 同步定位与建图：视觉/激光里程计、回环检测与 BA 优化。
+        keywords: [slam, visual odometry, lidar odometry, loop closure, bundle adjustment, visual-inertial, pose graph]
+        arxiv_cats: [cs.RO]
+      - id: robotics.plan
+        name_en: Motion Planning
+        name_zh: 运动规划
+        description: 运动规划：采样式规划、轨迹优化与避障。
+        keywords: [motion planning, path planning, trajectory optimization, sampling-based planning, rapidly-exploring random tree, collision avoidance, kinodynamic]
+        arxiv_cats: [cs.RO]
+      - id: robotics.control
+        name_en: Control & Dynamics
+        name_zh: 控制与动力学
+        description: 机器人控制：MPC、阻抗/自适应控制、动力学建模与稳定性分析。
+        keywords: [model predictive control, impedance control, adaptive control, robust control, robot dynamics, lyapunov stability, whole-body control]
+        arxiv_cats: [cs.SY, eess.SY, cs.RO]
+      - id: robotics.manip
+        name_en: Manipulation
+        name_zh: 机器人操作
+        description: 机器人操作：抓取、灵巧手、在环操控与装配。
+        keywords: [manipulation, grasping, dexterous manipulation, gripper design, in-hand manipulation, assembly task, contact-rich]
+        arxiv_cats: [cs.RO]
+      - id: robotics.loco
+        name_en: Legged & Mobile Robots
+        name_zh: 腿足与移动机器人
+        description: 腿足与移动机器人：四足、双足步态、轮式平台与动态行走。
+        keywords: [legged robot, quadruped, bipedal walking, dynamic locomotion, wheeled robot, gait, parkour robot]
+        arxiv_cats: [cs.RO]
+      - id: robotics.humanoid
+        name_en: Humanoid Robots
+        name_zh: 人形机器人
+        description: 人形机器人：全身控制、硬件设计与人形策略学习。
+        keywords: [humanoid robot, humanoid control, torque-controlled humanoid, humanoid loco-manipulation]
+        arxiv_cats: [cs.RO]
+      - id: robotics.perception
+        name_en: Robot Perception
+        name_zh: 机器人感知
+        description: 机器人感知：多传感器融合、占据栅格、开放词汇 3D 感知。
+        keywords: [robot perception, sensor fusion, occupancy prediction, semantic mapping, 3d scene understanding, event camera]
+        arxiv_cats: [cs.RO, cs.CV]
+      - id: robotics.embodied
+        name_en: Embodied AI
+        name_zh: 具身智能
+        description: 具身智能：VLA 模型、机器人基础模型、模仿学习与语言条件控制。
+        keywords: [vision-language-action, vla model, robot foundation model, embodied ai, language-conditioned policy, imitation learning, learning from demonstration, diffusion policy]
+        arxiv_cats: [cs.RO, cs.AI]
+      - id: robotics.sim
+        name_en: Simulation & Sim2Real
+        name_zh: 仿真与 Sim2Real
+        description: 机器人仿真：物理引擎、域随机化、Sim2Real 迁移与数字孪生。
+        keywords: [robot simulation, sim-to-real, domain randomization, digital twin, physics engine, isaac gym, mujoco]
+        arxiv_cats: [cs.RO, cs.SY]
+      - id: robotics.hri
+        name_en: Human-Robot Interaction
+        name_zh: 人机交互机器人
+        description: 人机交互：社交机器人、辅助机器人与遥操作。
+        keywords: [human-robot interaction, social robot, assistive robot, teleoperation, shared autonomy]
+        arxiv_cats: [cs.RO, cs.HC]
+      - id: robotics.multi
+        name_en: Multi-Robot Systems
+        name_zh: 多机器人系统
+        description: 多机器人系统：集群、编队控制与协同探索。
+        keywords: [multi-robot system, swarm robotics, formation control, cooperative exploration, multi-robot coordination]
+        arxiv_cats: [cs.RO, cs.MA]
+      - id: robotics.medical
+        name_en: Medical Robotics
+        name_zh: 医疗机器人
+        description: 医疗机器人：手术机器人、康复机器人与连续体机器人。
+        keywords: [surgical robot, medical robot, rehabilitation robot, continuum robot, minimally invasive]
+        arxiv_cats: [cs.RO]
+      - id: robotics.field
+        name_en: Field & Autonomous Robots
+        name_zh: 野外与特种机器人
+        description: 野外与特种机器人：无人机、自动驾驶、水下与太空机器人。
+        keywords: [field robot, unmanned aerial vehicle, drone, autonomous driving, self-driving, underwater vehicle, agricultural robot]
+        arxiv_cats: [cs.RO]
+      - id: robotics.soft
+        name_en: Soft Robotics
+        name_zh: 软体机器人
+        description: 软体机器人：软驱动器、柔性机构与气动驱动。
+        keywords: [soft robot, soft actuator, compliant mechanism, pneumatic actuator, soft gripper]
+        arxiv_cats: [cs.RO]

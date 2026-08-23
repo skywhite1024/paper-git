@@ -1,0 +1,53 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: papergit
+      POSTGRES_PASSWORD: papergit
+      POSTGRES_DB: papergit
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U papergit"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  api:
+    build: ./backend
+    environment:
+      DATABASE_URL: postgresql+psycopg://papergit:papergit@db:5432/papergit
+      TAXONOMY_PATH: /srv/taxonomy/taxonomy.yaml
+    volumes:
+      - ./taxonomy:/srv/taxonomy:ro
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  web:
+    build: ./frontend
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:8000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+
+  # 一次性任务：docker compose run --rm ingest
+  ingest:
+    build: ./backend
+    environment:
+      DATABASE_URL: postgresql+psycopg://papergit:papergit@db:5432/papergit
+      TAXONOMY_PATH: /srv/taxonomy/taxonomy.yaml
+    volumes:
+      - ./taxonomy:/srv/taxonomy:ro
+    depends_on:
+      db:
+        condition: service_healthy
+    profiles: ["tools"]
+    command: ["python", "-m", "app.ingest.runner", "--per-category", "900"]
+
+volumes:
+  pgdata:
