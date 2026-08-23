@@ -1,17 +1,10 @@
 import Link from "next/link";
 import LoopGraph from "@/components/LoopGraph";
 import { apiGet, type RoutesResponse } from "@/lib/api";
+import { L } from "@/lib/lexicon";
+import { routeColor } from "@/lib/routeColors";
 
 export const dynamic = "force-dynamic";
-
-const routeIcon: Record<string, string> = {
-  usd: "🎲",
-  demo: "🎞️",
-  guided: "🧭",
-  taskgen: "🏭",
-  datax: "📈",
-  compose: "🧩",
-};
 
 export default async function RoutesHubPage() {
   const data = await apiGet<RoutesResponse>("/api/routes");
@@ -53,7 +46,10 @@ export default async function RoutesHubPage() {
               className="flex flex-col rounded-xl border border-[var(--pg-border)] bg-white p-5 transition hover:border-blue-400 hover:shadow-sm"
             >
               <div className="flex items-center justify-between">
-                <span className="text-xl">{routeIcon[r.id] ?? "🔀"}</span>
+                <span className="flex items-center gap-2">
+                  <span className="inline-block h-3 w-3 rounded-sm" style={{ background: routeColor(r.id) }} />
+                  <span className="text-xs uppercase tracking-wider text-gray-400">{r.name_en}</span>
+                </span>
                 <span className="text-xs text-gray-400">
                   {r.stage_count} 阶段 · {r.item_count} 节点 · {r.edge_count} 演进边
                 </span>

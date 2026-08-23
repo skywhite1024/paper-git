@@ -152,7 +152,9 @@ export default function RouteGraph({ stages, edges }: { stages: RouteStage[]; ed
                 style={{ left: x, top: y, width: CARD_W, height: CARD_H, opacity: dim ? 0.25 : 1 }}
               >
                 <div className="flex items-center gap-1">
-                  {p.item.key && <span title="关键工作">⭐</span>}
+                  {p.item.key && (
+                    <span className="rounded bg-amber-100 px-1 text-[9px] font-medium text-amber-700">关键</span>
+                  )}
                   <span className="truncate text-[13px] font-semibold text-gray-900">{p.label}</span>
                   {p.item.year && <span className="ml-auto shrink-0 rounded bg-gray-100 px-1 text-[10px] text-gray-500">{p.item.year}</span>}
                 </div>

@@ -1,51 +1,57 @@
 import Link from "next/link";
-import MapExplorer, { type NetworkData } from "@/components/MapExplorer";
+import TopologyExplorer, { type TopoData } from "@/components/TopologyExplorer";
 import { apiGet, type StatsDTO } from "@/lib/api";
+import { L } from "@/lib/lexicon";
 
 export const dynamic = "force-dynamic";
 
-const domainIcon: Record<string, string> = { ai: "🧠", cs: "💻", robotics: "🤖" };
-
-export default async function MapHomePage({
+export default async function TopologyHomePage({
   searchParams,
 }: {
   searchParams: Promise<{ route?: string; node?: string }>;
 }) {
   const sp = await searchParams;
-  const [network, stats] = await Promise.all([
-    apiGet<NetworkData>("/api/routes/graph/network"),
+  const [topo, stats] = await Promise.all([
+    apiGet<TopoData>("/api/routes/graph/network"),
     apiGet<StatsDTO>("/api/stats"),
   ]);
 
   const initialNode = sp.node ? `${sp.route ?? ""}:${sp.node}` : null;
-  const validNode = initialNode && network.nodes.some((n) => n.id === initialNode) ? initialNode : null;
+  const validNode = initialNode && topo.nodes.some((n) => n.id === initialNode) ? initialNode : undefined;
+  const paperCount = topo.nodes.filter((n) => n.kind === "paper").length;
+  const stageCount = topo.nodes.filter((n) => n.kind === "stage").length;
 
   return (
-    <div className="space-y-4">
-      <section className="flex flex-wrap items-center gap-3 rounded-xl border border-[var(--pg-border)] bg-white px-5 py-3">
+    <div className="space-y-3">
+      <section className="flex flex-wrap items-center gap-x-6 gap-y-1 rounded-lg border border-[var(--pg-border)] bg-white px-5 py-2.5">
         <div>
-          <h1 className="text-xl font-bold">论文网络 · {network.family.name_zh}</h1>
-          <p className="text-xs text-gray-500">
-            {network.routes_meta.length} 条技术路线 · {network.nodes.filter((n) => n.kind === "paper").length} 个方法节点 ·{" "}
-            {network.links.length} 条演进/闭环关系
-          </p>
+          <span className="text-base font-bold">{L.topology.title}</span>
+          <span className="ml-3 text-xs text-gray-500">
+            {L.topology.routeCount(topo.routes_meta.length)} · {stageCount} 层地层 · {L.topology.nodeCount(paperCount)} ·{" "}
+            {L.topology.edgeCount(topo.links.length)}
+          </span>
         </div>
-        <div className="ml-auto flex flex-wrap items-center gap-3 text-xs text-gray-500">
-          <span>📚 {stats.paper_real.toLocaleString()} 篇论文语料</span>
-          <span>🌲 {stats.node_total} 领域节点</span>
+        <div className="ml-auto flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-gray-500">
+          <span>{L.home.corpusStat(stats.paper_real.toLocaleString())}</span>
+          <span>{L.home.taxonomyStat(stats.node_total)}</span>
+          <span>{L.home.recentStat(stats.recent_7d)}</span>
           <span className="text-gray-300">|</span>
-          {stats.domains.map((d) => (
-            <Link key={d.id} href={`/nodes/${d.id}`} className="hover:text-blue-600">
-              {domainIcon[d.id] ?? "📁"} {d.name_zh}
-            </Link>
-          ))}
-          <Link href="/routes" className="text-blue-600 hover:underline">
-            路线族总览 →
+          <Link href="/routes" className="text-blue-700 hover:underline">
+            {L.nav.routes}
+          </Link>
+          <Link href="/nodes/ai" className="hover:text-blue-700">
+            {L.nav.treeAI}
+          </Link>
+          <Link href="/nodes/cs" className="hover:text-blue-700">
+            {L.nav.treeCS}
+          </Link>
+          <Link href="/nodes/robotics" className="hover:text-blue-700">
+            {L.nav.treeRobotics}
           </Link>
         </div>
       </section>
 
-      <MapExplorer data={network} initialRoute={sp.route} initialNode={validNode ?? undefined} />
+      <TopologyExplorer data={topo} initialRoute={sp.route} initialNode={validNode} />
     </div>
   );
 }

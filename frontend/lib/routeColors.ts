@@ -21,8 +21,9 @@ export function routeColor(route: string): string {
 }
 
 export const LINK_COLORS: Record<string, string> = {
-  evolve: "#0969da",
-  enable: "#1a7f37",
-  compare: "#bf8700",
-  loop: "#9333ea",
+  evolve: "#3b82f6",
+  enable: "#10b981",
+  compare: "#d97706",
+  loop: "#a855f7",
+  pipeline: "#475569",
 };

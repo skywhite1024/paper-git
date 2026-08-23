@@ -18,7 +18,7 @@ export default async function PaperPage({ params }: { params: Promise<{ id: stri
     <div className="mx-auto max-w-4xl">
       <div className="rounded-xl border border-[var(--pg-border)] bg-white p-6">
         <h1 className="text-2xl font-bold leading-snug">
-          {paper.is_milestone && <span title="里程碑工作">⭐ </span>}
+          {paper.is_milestone && (<span className="mr-1.5 rounded bg-amber-100 px-1.5 py-0.5 align-middle text-[10px] font-medium text-amber-700">里程碑</span>)}
           {paper.title}
         </h1>
         <p className="mt-2 text-sm text-gray-600">{paper.authors.join(", ")}</p>

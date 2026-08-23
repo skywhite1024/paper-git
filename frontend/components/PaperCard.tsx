@@ -12,7 +12,11 @@ export default function PaperCard({ paper, showNodes = true }: { paper: PaperDTO
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <Link href={`/papers/${paper.id}`} className="font-semibold text-blue-700 hover:underline">
-            {paper.is_milestone && <span title="里程碑工作">⭐ </span>}
+            {paper.is_milestone && (
+              <span className="mr-1.5 rounded bg-amber-100 px-1.5 py-0.5 align-middle text-[10px] font-medium text-amber-700">
+                里程碑
+              </span>
+            )}
             {paper.title}
           </Link>
           <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-500">

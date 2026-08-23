@@ -108,7 +108,7 @@ export default async function RoutePage({ params }: { params: Promise<{ id: stri
                   className="rounded-full border border-[var(--pg-border)] px-2 py-0.5 text-xs text-gray-700 hover:border-blue-400 hover:text-blue-700"
                   title={item.note}
                 >
-                  {item.key && "⭐"}
+                  {item.key && <span className="rounded bg-amber-100 px-1 text-[9px] font-medium text-amber-700">关键</span>}
                   {item.label}
                   {item.year ? ` ${item.year}` : ""}
                 </Link>

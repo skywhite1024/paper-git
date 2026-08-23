@@ -157,7 +157,7 @@ async function Overview({ slug, detail }: { slug: string; detail: NodeDetailDTO 
 
       {detail.milestones.length > 0 && (
         <section>
-          <h3 className="mb-2 text-sm font-semibold text-gray-700">⭐ 里程碑工作</h3>
+          <h3 className="mb-2 text-sm font-semibold text-gray-700">里程碑工作</h3>
           <div className="space-y-2">
             {detail.milestones.map((p) => (
               <PaperCard key={p.id} paper={p} />

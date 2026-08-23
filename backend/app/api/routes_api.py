@@ -51,8 +51,33 @@ def graph_network():
             }
         )
         node_ids.add(hub_id)
+        prev_anchor: str | None = None
         for stage_idx, stage in enumerate(route.get("stages", [])):
-            for item in stage.get("items", []):
+            stage_items = stage.get("items", [])
+            anchor_id = f"stage:{rid}:{stage_idx}"
+            nodes.append(
+                {
+                    "id": anchor_id,
+                    "kind": "stage",
+                    "label": stage["name"],
+                    "route": rid,
+                    "stage": stage["name"],
+                    "stage_idx": stage_idx,
+                    "stage_description": stage.get("description", ""),
+                    "item_count": len(stage_items),
+                }
+            )
+            node_ids.add(anchor_id)
+            links.append(
+                {
+                    "source": prev_anchor or hub_id,
+                    "target": anchor_id,
+                    "kind": "pipeline",
+                    "label": "阶段推进",
+                }
+            )
+            prev_anchor = anchor_id
+            for item in stage_items:
                 nid = f"{rid}:{item['label']}"
                 if nid in node_ids:
                     continue

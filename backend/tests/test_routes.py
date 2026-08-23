@@ -40,14 +40,19 @@ def test_graph_network_endpoint(client):
     data = client.get("/api/routes/graph/network").json()
     ids = {n["id"] for n in data["nodes"]}
     hubs = [n for n in data["nodes"] if n["kind"] == "hub"]
+    stages = [n for n in data["nodes"] if n["kind"] == "stage"]
     papers = [n for n in data["nodes"] if n["kind"] == "paper"]
     assert len(hubs) == 6
+    assert len(stages) >= 20
     assert len(papers) >= 100
-    assert len(data["links"]) >= 28
     assert all(l["source"] in ids and l["target"] in ids for l in data["links"])
     loop_links = [l for l in data["links"] if l["kind"] == "loop"]
     assert len(loop_links) >= 3
+    pipeline_links = [l for l in data["links"] if l["kind"] == "pipeline"]
+    assert len(pipeline_links) >= 25, "每条路线 hub→阶段→…→阶段 的结构边应齐全"
     sample = next(n for n in papers if n["label"] == "DIAYN")
     assert sample["route"] == "usd" and sample["stage_idx"] == 0
     assert sample["url"]
     assert {m["id"] for m in data["routes_meta"]} == {h["route"] for h in hubs}
+    stage_anchor = next(n for n in stages if n["id"] == "stage:usd:0")
+    assert stage_anchor["item_count"] >= 3 and stage_anchor["stage_description"]
