@@ -3,7 +3,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from .api import misc, nodes, papers, watch
+from .api import misc, nodes, papers, routes_api, watch
 from .taxonomy_loader import init_db, load_taxonomy
 
 
@@ -33,6 +33,7 @@ app.include_router(nodes.router, prefix=API_PREFIX)
 app.include_router(papers.router, prefix=API_PREFIX)
 app.include_router(misc.router, prefix=API_PREFIX)
 app.include_router(watch.router, prefix=API_PREFIX)
+app.include_router(routes_api.router, prefix=API_PREFIX)
 
 
 @app.get(f"{API_PREFIX}/health", tags=["misc"])

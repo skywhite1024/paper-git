@@ -1,0 +1,686 @@
+version: 1
+family:
+  id: skill-discovery
+  name_zh: 机器人技能发现与获取
+  name_en: Robotic Skill Discovery & Acquisition
+  description: 机器人如何从交互、示范和自动生成任务中确定值得获得的新能力，将行为数据归纳成可执行技能， 再把技能组合、验证、部署并沉淀为可持续演化的技能库。
+  theme_quote: 研究目标正在从「学一个可区分的 latent code」，升级为「构造一个能够执行、组合、恢复、验证和治理的长期技能资产」。
+  loop:
+    nodes:
+    - id: A
+      label: 经验、环境与用户需求
+      kind: input
+    - id: B
+      label: 候选能力从哪里来
+      kind: hub
+    - id: B1
+      label: 在线无监督探索
+      kind: route
+      route: usd
+    - id: B2
+      label: 离线示范与轨迹
+      kind: route
+      route: demo
+    - id: B3
+      label: 语言、偏好与基础模型引导
+      kind: route
+      route: guided
+    - id: B4
+      label: 自动任务、场景与课程生成
+      kind: route
+      route: taskgen
+    - id: C
+      label: 候选行为与训练数据
+      kind: data
+    - id: E
+      label: 可行性审计、求解与数据生成
+      kind: process
+    - id: D
+      label: 边界、身份与参数归纳
+      kind: process
+    - id: F
+      label: 可执行技能（策略·控制器·终止·效果）
+      kind: artifact
+    - id: G
+      label: 几何 Grounding、连接与长程组合
+      kind: route
+      route: compose
+    - id: H
+      label: 监控、验证、失败恢复与真实部署
+      kind: process
+    - id: I
+      label: 版本化技能库与执行 Trace
+      kind: artifact
+    edges:
+    - from: A
+      to: B
+    - from: B
+      to: B1
+    - from: B
+      to: B2
+    - from: B
+      to: B3
+    - from: B
+      to: B4
+    - from: B1
+      to: C
+      label: 探索产出行为
+    - from: B4
+      to: E
+      label: 生成任务需验证
+    - from: E
+      to: C
+      label: 审计后产出数据
+    - from: C
+      to: D
+      label: 归纳
+    - from: B2
+      to: D
+      label: 示范分解
+    - from: B3
+      to: D
+      label: 语义先验
+    - from: D
+      to: F
+      label: 技能成型
+    - from: F
+      to: G
+      label: 组合
+    - from: G
+      to: H
+      label: 部署
+    - from: H
+      to: I
+      label: 沉淀
+    - from: I
+      to: B
+      label: 经验回流，驱动新候选能力
+      kind: feedback
+  contract:
+    formula: S_k = (identity, precondition, controller, termination, effect, monitor, recovery, resource, permission, version)
+    note: 一个可长期复用的机器人技能不应只有名字和策略：至少需要身份、前置条件、控制器、终止条件、效果、 监控、恢复、资源、权限与版本十项要素构成的「技能契约」。
+  matrix:
+  - claim: 发现了边界
+    evidence: Boundary F1/IoU、MoF、过分段/漏分段、跨任务稳定性
+  - claim: 学到了技能身份
+    evidence: 聚类一致性、跨示范稳定性、语义一致性、codebook collapse
+  - claim: 学到了可执行技能
+    evidence: 闭环成功率、终止准确性、数据效率、OOD 初始状态
+  - claim: 技能可组合
+    evidence: 未见顺序、长于训练序列、转移兼容性、错误累积
+  - claim: 技能可部署
+    evidence: 扰动恢复、对象/场景/本体迁移、真机 trials
+  - claim: 自动生成了任务
+    evidence: 语义有效率、静态可行率、执行可行率、学习增益
+  - claim: 建成了技能库
+    evidence: 检索命中、负迁移、重复率、版本回滚、长期污染
+  - claim: 具备安全或形式保证
+    evidence: 抽象忠实度、模型检查范围、运行时监控覆盖、反例处理
+routes:
+- id: usd
+  name_zh: 在线无监督技能发现
+  name_en: Unsupervised Skill Discovery (Online)
+  description: 无任务奖励条件下，通过内在奖励驱动技能条件策略产生多样化、可区分、可达的行为，形成技能库供下游任务选用。
+  pipeline: 采样技能变量 z → 技能条件策略 π(a|s,z) → 内在奖励 → 无任务奖励探索 → 技能库 → 下游任务选择或微调
+  objective: 最大化互信息 I(Z;Y) = H(Z) − H(Z|Y)，其中 Y 可以是终点状态、访问状态、状态转移、整条轨迹或对象交互效果。
+  insight: Diversity 不等于 usefulness：状态覆盖、可区分性、可控性、语义意义和下游复用是不同指标， 不能用一个 intrinsic reward 统一代替。
+  related_nodes:
+  - ai.ml.rl
+  - robotics.embodied
+  stages:
+  - name: 行为可区分性
+    description: 让不同技能产生可识别的状态或轨迹。但机器人可能通过静止姿态、无意义抖动等「捷径」获得高互信息。
+    items:
+    - label: VIC
+      year: 2017
+      full_title: Variational Intrinsic Control
+      note: 变分内在控制，技能=可区分的终点状态分布
+      url: https://arxiv.org/abs/1611.07507v1
+    - label: DIAYN
+      year: 2018
+      full_title: 'Diversity is All You Need: Learning Skills without a Reward Function'
+      note: 以状态互信息最大化驱动技能多样性
+      key: true
+      url: https://arxiv.org/abs/1802.06070v6
+    - label: VALOR
+      year: 2019
+      full_title: Variational Option Discovery Algorithms
+      note: 变分选项发现，互信息目标扩展到轨迹级
+      url: https://arxiv.org/abs/1807.10299v1
+    - label: CIC
+      year: 2022
+      note: 引入可控性感知，修正「捷径」行为
+  - name: 探索覆盖
+    description: 增加状态熵、不确定性或增量 curriculum，避免所有技能坍缩在熟悉区域。
+    items:
+    - label: EDL
+      year: 2020
+      full_title: 'Explore, Discover and Learn: Unsupervised Discovery of State-Covering Skills'
+      note: 状态覆盖驱动的技能发现
+      url: https://arxiv.org/abs/2002.03647v4
+    - label: DISDAIN
+      note: 引入不确定性建模引导探索
+    - label: APS
+      year: 2020
+      full_title: 'APS: Active Pretraining with Successor Features'
+      note: 主动预训练 + successor features 优势估计
+      url: https://arxiv.org/abs/2108.13956v1
+    - label: DISCO-DANCE
+      note: 状态熵与技能多样性联合优化
+    - label: RePT
+      note: 增量式 curriculum 探索
+  - name: 可达目标与可控结果
+    description: 将技能空间塑造成符合机器人动力学的可达性几何，比纯视觉距离更适合规划和组合。
+    items:
+    - label: LSD
+      year: 2022
+      full_title: Lipschitz-constrained Unsupervised Skill Discovery
+      note: Lipschitz 约束下的可达技能空间
+      url: https://arxiv.org/abs/2202.00914v2
+    - label: CSD
+      note: 可控性感知的技能发现
+    - label: METRA
+      year: 2023
+      full_title: 'METRA: Scalable Unsupervised RL with Metric-Aware Abstraction'
+      note: 度量感知抽象，可扩展的 USD
+      key: true
+      url: https://arxiv.org/abs/2310.08887v2
+    - label: Deep Skill Graphs
+      note: 技能连通图结构
+  - name: 动力学与长期效果
+    description: 直接学习技能条件动力学或环境连通结构，使技能可用于模型预测规划。
+    items:
+    - label: DADS
+      year: 2019
+      full_title: Dynamics-Aware Unsupervised Discovery of Skills
+      note: 技能条件动力学模型
+      key: true
+      url: https://arxiv.org/abs/1907.01657v2
+    - label: Successor Features
+      note: 捕获技能长期效果的经典表示（概念）
+    - label: Eigenoptions
+      note: 环境谱结构导出的选项（概念）
+  - name: 时间结构、周期性与对称性
+    description: 引入周期、形态、群对称性或质量多样性档案，刻画更丰富的技能结构。
+    items:
+    - label: PSD
+      note: 周期性技能发现
+    - label: 层次 Option
+      note: 时间抽象的分层选项结构（概念）
+    - label: Factorized Skill Discovery
+      note: 因子化技能空间
+    - label: GISD
+      note: 形态与群对称性引导
+    - label: AURORA
+      note: 质量多样性档案式技能库
+  - name: 真实机器人安全与样本效率
+    description: 面向真机部署的安全约束与样本效率改进。
+    items:
+    - label: Safety-Aware USD
+      note: 安全 critic 约束探索
+    - label: SLAC
+      note: 低保真预训练降低样本成本
+    - label: URSA
+      note: world-model imagination 内的受约束探索
+    - label: SDAX
+      note: 安全感知的技能发现与执行
+  edges:
+  - from: VIC
+    to: DIAYN
+    relation: evolve
+    label: 互信息目标从终点分布扩展到状态
+  - from: DIAYN
+    to: VALOR
+    relation: evolve
+    label: 从状态互信息到轨迹级选项发现
+  - from: VALOR
+    to: CIC
+    relation: evolve
+    label: 可控性修正捷径行为
+  - from: EDL
+    to: APS
+    relation: evolve
+    label: 状态覆盖 → successor-feature 主动训练
+  - from: LSD
+    to: CSD
+    relation: evolve
+    label: 可达性几何进一步约束
+  - from: CSD
+    to: METRA
+    relation: evolve
+    label: 度量感知抽象带来可扩展性
+  - from: DADS
+    to: Deep Skill Graphs
+    relation: evolve
+    label: 动力学模型 → 技能连通图
+- id: demo
+  name_zh: 从示范与轨迹中发现技能
+  name_en: Skill Discovery from Demonstrations
+  description: 把已有轨迹分解为边界清晰、身份明确、可执行的技能，是当前最扎实的一条路线。
+  pipeline: 轨迹输入 → 技能边界发现 → 身份与参数表示 → 可执行控制器 → 跨视频/跨本体/基础模型引导
+  insight: 「分段准确」「latent 聚类清楚」「codebook 全部被使用」都不能证明技能已经可执行， 更不能证明它能在扰动下组合。
+  related_nodes:
+  - robotics.embodied
+  - robotics.manip
+  stages:
+  - name: 技能边界发现
+    description: 六种边界信号：重构误差、重复片段聚类、状态-动作新颖度、对象状态变化、策略支持范围、夹爪/接触/语义事件。 核心争议是粒度：固定窗口便于大规模学习，可变边界更符合高层决策；过度切分破坏连续接触行为，过长片段降低复用性。
+    items:
+    - label: CompILE
+      year: 2019
+      full_title: 'COMPILE: Compositional Imitation Learning and Execution'
+      note: 生成模型重构误差定位分段边界
+      key: true
+      url: https://arxiv.org/abs/1812.01483v2
+    - label: SkiD
+      note: 重构式轨迹分解（RAW 类）
+    - label: LOKI
+      note: 重构误差信号发现边界
+    - label: BUDS
+      note: 重复片段 + 层次聚类
+    - label: NBDI
+      note: 状态-动作新颖度定位决策点；好的边界=高层需要重新决定的位置
+      key: true
+    - label: GORDON
+      note: 对象状态与任务进度变化信号
+    - label: RDD
+      note: 既有策略支持范围划界
+    - label: AtomSkill
+      note: 夹爪事件与接触信号
+    - label: LodeStar
+      note: 接触事件驱动的分段
+    - label: STACK
+      note: VLM 语义阶段分割
+  - name: 技能身份与表示
+    description: 完整表示谱系：连续 latent plan、离散 token/prototype、非参数技能库、离散类型+连续参数、 跨 embodiment 表示、符号 operator+连续控制器、任务相关坐标系。
+    items:
+    - label: Play-LMP
+      note: 连续 latent plan，表达多种轨迹实现
+    - label: 离散技能 Token
+      note: 便于组合与高层预测，但存在 codebook collapse（CompILE/XSkill/GO-Skill/STAR/SOF 共性）
+    - label: 贝叶斯非参数技能库
+      note: 自动调整有效技能数，难扩展到复杂视觉接触
+    - label: DEPS
+      note: 离散技能类型 + 连续参数，区分「是什么技能」与「作用在哪」
+    - label: XSkill
+      year: 2023
+      full_title: 'XSkill: Cross Embodiment Skill Discovery'
+      note: 跨本体动作相关视觉表示
+      key: true
+      url: https://arxiv.org/abs/2307.09955v2
+    - label: SymSkill
+      note: 符号 operator + 连续控制器，可规划可解释
+    - label: TReF-6
+      note: 任务相关坐标系，单技能空间泛化有效
+  - name: 从表示到可执行控制
+    description: 发现 latent 或片段后，还要变成闭环行为：这一步最容易被误读为「已经学会技能」。
+    items:
+    - label: Skill-Conditioned BC
+      note: 技能条件模仿学习 / Diffusion Policy 解码
+    - label: 分层强化学习
+      note: SAC/PPO 等层级 RL 执行技能（概念）
+    - label: DMP / SE(3) 动力学系统
+      note: 经典运动基元作为技能控制器（概念）
+    - label: Action Chunk 解码器
+      note: 动作块生成式解码
+    - label: 轨迹采样器 + 效果模型
+      note: 采样轨迹并预测技能效果
+    - label: 技能终止函数
+      note: 学习「技能何时完成」是可组合性的关键
+    - label: 元控制器 / 符号规划器
+      note: 高层调度技能序列
+  - name: 跨视频、跨本体与基础模型引导
+    description: XSkill→UniSkill→SOF/AtomSkill/STACK 的演进：未配对人/机视频 → 动作相关视觉表示 → 技能 token/prototype → 机器人动作映射 → 进度对齐或技能切换。基础模型提供了越来越强的
+      ontology 先验， 更准确的称呼是 foundation-model-guided discovery 而非完全无监督发现。
+    items:
+    - label: UniSkill
+      note: 跨本体统一技能接口
+    - label: SOF
+      note: 技能原型学习与切换
+  edges:
+  - from: CompILE
+    to: XSkill
+    relation: evolve
+    label: 从轨迹分段到跨本体视觉技能表示
+  - from: XSkill
+    to: UniSkill
+    relation: evolve
+    label: 跨本体技能对齐与统一接口
+  - from: AtomSkill
+    to: STACK
+    relation: evolve
+    label: 夹爪事件 → VLM 语义阶段
+  - from: NBDI
+    to: 技能终止函数
+    relation: enable
+    label: 决策点边界支撑终止条件学习
+- id: guided
+  name_zh: 引导式与 Agentic 技能发现
+  name_en: Guided & Agentic Skill Discovery
+  description: 解决无监督方法「发现的能力不一定有人类价值」的问题：语义身份、安全区域、主动反馈、执行验证与持久技能库。
+  pipeline: 赋予语义身份 → 限制到有用安全区域 → 主动反馈对齐 → 执行验证驱动获取 → 持续发现、修复与技能库存储
+  insight: Agentic ≠ skill discovery：只有验证后的能力能够跨任务复用、持久化、去重并维护适用条件时， 才形成真正的持续技能库。
+  related_nodes:
+  - robotics.embodied
+  - ai.nlp.agent
+  stages:
+  - name: 赋予语义身份
+    description: 用语言、参考动作或 foundation-model embedding 组织技能空间。
+    items:
+    - label: LAST
+      note: 语言引导的技能空间结构化
+    - label: LCSD
+      note: 语言条件技能发现
+    - label: LGSD
+      note: 语言引导 + 分层技能发现
+    - label: RGSD
+      note: 参考动作引导
+    - label: FoG
+      note: foundation-model embedding 组织技能
+  - name: 限制到有用与安全的区域
+    description: 用偏好或 do/don't 视频抑制危险、无意义行为。
+    items:
+    - label: CDP
+      note: 偏好约束候选行为
+    - label: DoDont
+      note: do/don't 视频划定行为边界
+  - name: 主动反馈与低成本对齐
+    description: 选择最值得询问的人类反馈样本，降低对齐成本。
+    items:
+    - label: HaSD
+      note: 人机协同技能发现
+    - label: DAPPER
+      note: 主动反馈采样
+    - label: SRSD
+      note: 语义相关的反馈选择
+    - label: COLLIE
+      note: 协同交互式技能学习
+    - label: COMPASS
+      note: 主动偏好对齐
+  - name: 执行验证驱动的技能获取
+    description: 将生成奖励、任务分解、MCTS 与 VLM/程序化 verifier 接入技能学习。
+    items:
+    - label: ARO
+      note: 自动奖励 + 任务分解闭环
+    - label: VERGSA
+      note: 生成式任务 + MCTS 求解验证
+    - label: ASD
+      note: verifier 驱动的技能获取
+  - name: 持续发现、修复与技能库存储
+    description: 将成功修复、程序或控制模块持久化，并在新任务中检索复用。 ASPIRE 典型流程：任务 → 生成程序 → primitive 级多模态 trace → 定位失败 → 修复代码 → 多环境验证 → 抽取可复用修复
+      → 写入技能库。
+    items:
+    - label: Uni-Skill
+      note: 统一技能存储与检索
+    - label: Conquer
+      note: 持续技能获取框架
+    - label: ASPIRE
+      note: 从失败中发现技能：trace 定位 + 程序修复 + 验证沉淀
+      key: true
+    - label: RATS
+      note: 修复经验的技能库化
+  edges:
+  - from: DoDont
+    to: HaSD
+    relation: evolve
+    label: 边界约束 → 主动询问选择样本
+  - from: ASPIRE
+    to: RATS
+    relation: evolve
+    label: 单次修复经验 → 持续沉淀复用
+  - from: ARO
+    to: VERGSA
+    relation: evolve
+    label: 生成奖励 → 生成任务+求解验证一体化
+- id: taskgen
+  name_zh: 自动任务、场景与课程生成
+  name_en: Automatic Task, Scene & Curriculum Generation
+  description: 回答「接下来值得学什么」：自动提议任务、编译场景与奖励、验证可行性并组织课程，而非只从已有轨迹里挖掘。
+  pipeline: 任务提议 → 场景/资产/奖励/成功判据编译 → 静态可行性检查 → 动态执行检查 → 求解器选择 → 轨迹生成 → 策略学习 → 失败反馈与课程更新
+  insight: 证据链必须分开报告：N_generated → N_runnable → N_feasible → N_successful → Δpolicy success → real transfer。 「生成很多任务」不等于物理可行；oracle
+    能解不等于策略能学；仿真成功不等于真机迁移。 FATE、GRS 的价值在于把 verifier 和 repair 插进生成链。
+  related_nodes:
+  - robotics.sim
+  - robotics.embodied
+  stages:
+  - name: 任务规格生成
+    description: 生成结构化任务描述。
+    items:
+    - label: ManiTaskGen
+      note: 操作任务规格自动生成
+    - label: HOTD
+      note: 任务描述分层生成
+    - label: RoboGene
+      note: 任务族生成
+    - label: AXIS
+      note: 探索式任务规格合成
+  - name: 任务代码、奖励与求解器生成
+    description: 从任务规格生成可执行代码、奖励函数与求解器配置。
+    items:
+    - label: GenSim
+      note: 生成式仿真任务库
+      key: true
+    - label: RoboGen
+      note: 自动化任务+环境代码生成
+    - label: GenSim2
+      note: 多模态任务代码生成升级
+    - label: AnyTask
+      note: 通用任务生成管线
+    - label: CurricuLLM
+      note: LLM 驱动课程生成
+  - name: 场景、环境与 real-to-sim 生成
+    description: 生成场景、资产与环境，支撑数据生产。
+    items:
+    - label: GRS
+      note: 生成-修复闭环的场景生成
+      key: true
+    - label: MesaTask
+      note: 场景资产编译
+    - label: SAGE
+      note: 可执行环境生成
+    - label: RoboSnap
+      note: 场景重建与编辑
+    - label: AgentWorld
+      note: 交互式世界生成
+    - label: Steerable Scene Generation
+      note: 可控场景合成
+  - name: 课程与能力匹配
+    description: 把生成任务组织成与当前能力匹配的课程。
+    items:
+    - label: Eurekaverse
+      note: 课程化环境族生成
+    - label: FATE
+      note: 可行性验证驱动的任务生成课程
+      key: true
+    - label: 任务生成驱动 USD
+      note: 自动任务反哺无监督技能发现
+  - name: 基准与评测基础设施
+    description: 支撑该路线公平比较的基础设施。
+    items:
+    - label: RoboCerebra
+      note: 任务生成评测平台
+    - label: PARTNR
+      note: 多智能体任务基准
+    - label: RoboLab
+      note: 机器人实验环境套件
+  edges:
+  - from: GenSim
+    to: RoboGen
+    relation: evolve
+    label: 任务模板 → 全自动代码生成
+  - from: RoboGen
+    to: GenSim2
+    relation: evolve
+    label: 代码生成 → 多模态真实感升级
+  - from: GRS
+    to: FATE
+    relation: enable
+    label: 场景生成+修复 → 可行性驱动课程
+  - from: Eurekaverse
+    to: FATE
+    relation: evolve
+    label: 课程族 → 验证闭环课程
+- id: datax
+  name_zh: 技能数据扩展与部署
+  name_en: Skill Data Scaling & Deployment
+  description: 用少量技能示范生成大规模训练数据：结构保持的变换与重定向、几何物理筛选、模仿学习/VLA 与 sim-to-real。
+  pipeline: 少量技能示范 → 结构保持变换/重定向 → 几何与物理筛选 → 大规模轨迹 → 模仿学习/VLA → sim-to-real
+  insight: 数据扩展通常扩大的是一个已识别技能的有效域，而不是发现一个全新的技能。
+  related_nodes:
+  - robotics.manip
+  - robotics.sim
+  stages:
+  - name: 位姿变换与重定向
+    description: 基于对象位姿的 SE(3) 轨迹变换；free-space 与 contact-rich 片段分离； 双臂 Parallel/Coordination/Sequential 部分有序关系。
+    items:
+    - label: SkillMimicGen
+      note: 技能级示范变换生成数据
+      key: true
+    - label: DexMimicGen
+      note: 双臂灵巧操作数据自动生成
+    - label: DemoGen
+      note: 泛化数据源的示范扩展
+  - name: 大规模生成与世界模型
+    description: 程序化 expert 轨迹、视频世界模型与 pseudo-action、domain randomization、仿真成功判据过滤。
+    items:
+    - label: DexScale
+      note: 灵巧操作规模化数据
+    - label: DreamGen
+      note: 视频世界模型 + pseudo-action 生成动作标签
+  - name: Affordance 条件生成
+    description: affordance-conditioned grasp 与交互区域引导数据生成。
+    items:
+    - label: AffordGen
+      note: affordance 驱动交互数据生成
+    - label: AffordSim
+      note: affordance 仿真验证
+    - label: MolmoB0T
+      note: affordance 引导的操作数据管线
+  edges:
+  - from: SkillMimicGen
+    to: DexMimicGen
+    relation: evolve
+    label: 单臂技能级 → 双臂灵巧
+  - from: DexMimicGen
+    to: DemoGen
+    relation: evolve
+    label: 专用变换 → 泛化数据源
+  - from: AffordGen
+    to: AffordSim
+    relation: enable
+    label: affordance 生成 → 仿真可行性验证
+- id: compose
+  name_zh: 组合、运行时、验证与技能治理
+  name_en: Composition, Runtime, Verification & Governance
+  description: 从语义约束到几何 grounding，从技能连接到长程组合，再到编排监控、失败恢复与形式化契约治理。
+  pipeline: 语义约束 → 几何 Grounding → 技能连接与长程组合 → 编排/监控/失败恢复 → 形式化契约与技能治理
+  insight: 跨越这条路线后，技能不再是策略文件，而成为带契约的可治理资产——这是技能库长期演化的前提。
+  related_nodes:
+  - robotics.embodied
+  - robotics.plan
+  - robotics.control
+  stages:
+  - name: 从语义到几何
+    description: 把语言/任务意图 grounding 为可优化的几何约束。
+    items:
+    - label: VoxPoser
+      year: 2023
+      full_title: 'VoxPoser: Composable 3D Value Maps for Robotic Manipulation with Language Models'
+      note: 语言程序 → 3D value maps → MPC
+      key: true
+      url: https://arxiv.org/abs/2307.05973v2
+    - label: ReKep
+      year: 2024
+      full_title: 'ReKep: Spatio-Temporal Reasoning of Relational Keypoint Constraints for Robotic Manipulation'
+      note: 关系关键点约束 → 连续优化
+      key: true
+      url: https://arxiv.org/abs/2409.01652v2
+    - label: CoPa
+      note: 对象部件 → 几何关系约束
+    - label: ShapeGrasp
+      note: 任务效用 → 部件语义 → 抓取区域
+    - label: VoxAfford / AffordSim
+      note: 开放词汇 affordance → 3D mask → 可行性
+  - name: 技能连接与长程组合
+    description: 让离散技能可以连贯地串成长程行为。
+    items:
+    - label: FIST
+      note: 技能间转移模型
+    - label: LiSP
+      note: 潜在技能计划与转移
+    - label: Generative Skill Chaining
+      note: 联合扩散式技能链生成
+      key: true
+    - label: SPIN
+      note: Skill-RRT + connector + 噪声回放 + 蒸馏策略
+    - label: SkillWrapper
+      note: 执行数据 → predicate invention → 任务级规划
+    - label: IALP
+      note: 语言计划 + 物理 grounding
+    - label: FLARE
+      note: 语言条件技能接口与执行
+    - label: CABTO
+      note: 分支时序逻辑驱动的技能编排
+  - name: 编排、监控与失败恢复
+    description: planner–executor–verifier 闭环：异构策略编排、前后置条件检查、trace 驱动修复与持久运行时。
+    items:
+    - label: Agentic Robot
+      note: planner–executor–verifier 架构
+    - label: VoLo
+      note: 异构策略工具编排与 handoff
+    - label: Guava
+      note: 策略即工具的编排框架
+    - label: Unified Failure Handling
+      note: 前后置条件检查 + 失败处理
+    - label: BETR-XP-LLM
+      note: 行为树扩展 + LLM 恢复
+    - label: ASPIRE
+      note: 执行 trace 定位失败并修复程序（同 guided 路线）
+    - label: RHO
+      note: trace 驱动的程序修复
+    - label: HoloAgent-0
+      note: 持久状态与能力模块运行时
+    - label: AEROS
+      note: 面向执行的技能运行时
+  - name: 形式化契约与治理
+    description: 用形式模型刻画技能的前置/后置/资源约束，支撑安全与可验证演化。
+    items:
+    - label: Skill Petri Net
+      note: Petri 网建模技能组合与并发
+    - label: VASO
+      note: 形式化技能编排验证
+    - label: Contract-Grounded BT
+      note: 契约接地的行为树
+    - label: ECM Contracts
+      note: 环境能力模型契约
+    - label: Knowledge-Based Adaptive BT
+      note: 知识驱动的自适应行为树
+  edges:
+  - from: VoxPoser
+    to: ReKep
+    relation: evolve
+    label: 3D value map → 关系关键点约束
+  - from: ReKep
+    to: CoPa
+    relation: evolve
+    label: 关键点 → 部件级几何关系
+  - from: FIST
+    to: Generative Skill Chaining
+    relation: evolve
+    label: 转移模型 → 联合扩散链
+  - from: Generative Skill Chaining
+    to: SPIN
+    relation: evolve
+    label: 链生成 → RRT 规划 + 蒸馏
+  - from: SkillWrapper
+    to: Skill Petri Net
+    relation: enable
+    label: predicate 发明 → 形式化建模
+  - from: ASPIRE
+    to: RHO
+    relation: evolve
+    label: 在线修复 → trace 驱动离线/在线修复
+  - from: Unified Failure Handling
+    to: Contract-Grounded BT
+    relation: evolve
+    label: 前后置检查 → 契约化行为树

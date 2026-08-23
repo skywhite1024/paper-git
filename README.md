@@ -7,6 +7,7 @@
 
 ## 功能
 
+- **技术路线网**（`/routes`）：以「机器人技能发现与获取」为首个路线族——闭环总览图（能力来源→技能归纳→组合部署→技能库回流）、6 条技术路线（在线无监督技能发现 / 示范轨迹分解 / 引导式与 Agentic / 自动任务生成 / 数据扩展 / 组合与治理）、126 个方法节点、28 条演进边（VIC→DIAYN→…→METRA 式脉络）、技能契约与评测矩阵。路线即代码：`routes/routes.yaml`。
 - **领域树导航**：左侧可折叠树 + 节点过滤 + 面包屑，任意节点一页看懂"方向是什么 / 到哪了 / 最近有什么新进展"。
 - **论文聚合**：标题 / 作者 / 年份 / venue / 引用 / arXiv 链接，支持关键词筛选、年份过滤、排序与分页。
 - **时间线脉络**：按年份分组的论文流，里程碑工作 ⭐ 高亮。
@@ -51,6 +52,7 @@ python -m app.ingest.runner --categories cs.RO,cs.AI # 指定分类
 python -m app.ingest.runner --incremental --days 3   # 增量（定时任务用）
 python -m app.ingest.runner --backfill-citations     # OpenAlex 回填引用数/venue
 python -m app.ingest.seed                            # 离线演示数据（61 篇里程碑 + 合成填充）
+python -m app.ingest.enrich_routes                   # 为 routes.yaml 方法节点检索 arXiv 链接
 python -m pytest                                     # 后端测试（backend/ 下）
 ```
 
@@ -58,6 +60,7 @@ python -m pytest                                     # 后端测试（backend/ �
 
 ```
 taxonomy/taxonomy.yaml   领域树定义（即代码）
+routes/routes.yaml       技术路线族定义（即代码：路线/阶段/方法节点/演进边/闭环/契约/矩阵）
 backend/                 FastAPI：API + ingest 管道 + 测试
   app/api/               nodes/papers/search/watch 路由
   app/ingest/            arXiv & OpenAlex 适配器、去重、规则分类、CLI

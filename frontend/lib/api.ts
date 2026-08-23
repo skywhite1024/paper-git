@@ -73,3 +73,53 @@ export type StatsDTO = {
   domains: NodeDTO[];
   hot_nodes: NodeDTO[];
 };
+
+export type RouteItem = {
+  label: string;
+  year?: number;
+  full_title?: string;
+  note?: string;
+  url?: string;
+  key?: boolean;
+};
+
+export type RouteStage = { name: string; description?: string; items: RouteItem[] };
+
+export type RouteEdge = { from: string; to: string; relation: string; label?: string };
+
+export type LoopNode = { id: string; label: string; kind: string; route?: string };
+
+export type LoopEdge = { from: string; to: string; label?: string; kind?: string };
+
+export type RouteFamily = {
+  id: string;
+  name_zh: string;
+  name_en: string;
+  description: string;
+  theme_quote: string;
+  loop: { nodes: LoopNode[]; edges: LoopEdge[] };
+  contract: { formula: string; note: string };
+  matrix: { claim: string; evidence: string }[];
+};
+
+export type RouteSummary = {
+  id: string;
+  name_zh: string;
+  name_en: string;
+  description: string;
+  pipeline: string;
+  insight: string;
+  related_nodes: string[];
+  stage_count: number;
+  item_count: number;
+  edge_count: number;
+  stages: { name: string; item_count: number }[];
+};
+
+export type RoutesResponse = { family: RouteFamily; routes: RouteSummary[] };
+
+export type RouteDetail = Omit<RouteSummary, "stage_count" | "stages"> & {
+  objective?: string;
+  stages: RouteStage[];
+  edges: RouteEdge[];
+};

@@ -37,6 +37,16 @@ Base URL：`http://localhost:8000`（可经 `NEXT_PUBLIC_API_URL`/`API_URL` 覆�
 | DELETE | `/api/watch/{node_id}` | 取消关注 |
 | GET | `/api/watch/digest` | 每个关注节点近 N 天进展汇总（`days=14`） |
 
+## 技术路线网（Routes）
+
+| Method | Path | 说明 |
+|---|---|---|
+| GET | `/api/routes` | 路线族总览：闭环 loop（nodes+edges）、技能契约 contract、评测矩阵 matrix、全部路线摘要 |
+| GET | `/api/routes/{id}` | 单条路线：stages（含 items）、edges（演进关系）、pipeline/objective/insight |
+
+路线 id：`usd` / `demo` / `guided` / `taskgen` / `datax` / `compose`（定义于 `routes/routes.yaml`）。
+Item 字段：`label, year?, full_title?, note?, url?, key?`；Edge 字段：`from, to, relation(evolve/enable/compare), label?`。
+
 ## 管理（MVP 无鉴权）
 
 | Method | Path | 说明 |

@@ -18,6 +18,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               PaperGit
             </Link>
             <nav className="flex items-center gap-3 text-sm text-gray-300">
+              <Link href="/routes" className="font-medium text-white hover:text-blue-300">技术路线</Link>
+              <span className="text-gray-600">|</span>
               <Link href="/nodes/ai" className="hover:text-white">AI</Link>
               <Link href="/nodes/cs" className="hover:text-white">计算机科学</Link>
               <Link href="/nodes/robotics" className="hover:text-white">机器人</Link>
