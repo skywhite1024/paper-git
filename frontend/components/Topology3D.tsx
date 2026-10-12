@@ -229,7 +229,7 @@ export default function Topology3D({
       tint: THREE.Color,
       rec: Partial<LabelRec> = {}
     ) => {
-      const cap = narrowScene && kind === "hub" ? 14 : LABEL_CAP[kind];
+      const cap = narrowScene && kind === "hub" ? 18 : LABEL_CAP[kind];
       const text = raw.length > cap ? `${raw.slice(0, cap - 1)}…` : raw;
       const { map, aspect } = makeLabelTexture(text);
       const mat = new THREE.SpriteMaterial({ map, transparent: true, depthWrite: false, color: tint });
