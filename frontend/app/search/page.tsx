@@ -1,8 +1,8 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import PaperCard from "@/components/PaperCard";
-import { Badge, Breadcrumbs, Button, Card, EmptyState, Eyebrow, SectionTitle, Tabs, inputCls } from "@/components/ui";
-import { apiGet, type NodeDTO, type PaperDTO } from "@/lib/api";
+import { Badge, Breadcrumbs, Button, Card, EmptyState, Eyebrow, SectionTitle, Tabs, cx, inputCls } from "@/components/ui";
+import { apiGet, type NodeDTO, type PaperDTO, type StatsDTO } from "@/lib/api";
 import { L } from "@/lib/lexicon";
 
 export const dynamic = "force-dynamic";
@@ -15,11 +15,16 @@ export const metadata: Metadata = {
 const BASE_LIMIT = 30;
 const MAX_LIMIT = 100;
 
+const RESULT_SORTS = ["citations", "year"] as const;
+type ResultSort = (typeof RESULT_SORTS)[number];
+const DEFAULT_SORT: ResultSort = "citations";
+
 function escapeRe(s: string) {
   return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
 function Highlight({ text, query }: { text: string; query: string }) {
+  if (!query) return <>{text}</>;
   const parts = text.split(new RegExp(`(${escapeRe(query)})`, "ig"));
   return (
     <>
@@ -36,10 +41,36 @@ function Highlight({ text, query }: { text: string; query: string }) {
   );
 }
 
-function href(q: string, scope: string, limit?: number) {
+function href(q: string, scope: string, limit?: number, sort?: ResultSort) {
   const p = new URLSearchParams({ q, scope });
   if (limit) p.set("limit", String(limit));
+  if (sort && sort !== DEFAULT_SORT) p.set("sort", sort);
   return `/search?${p.toString()}`;
+}
+
+/** 结果排序切换：状态进 URL，服务端组件内本地排序，无需客户端 JS。 */
+function SortSwitch({ query, scope, limit, active }: { query: string; scope: string; limit: number; active: ResultSort }) {
+  return (
+    <div
+      role="group"
+      aria-label={L.searchPage.sortGroupLabel}
+      className="flex items-center gap-1 rounded-lg border border-line bg-surface p-0.5"
+    >
+      {RESULT_SORTS.map((s) => (
+        <Link
+          key={s}
+          href={href(query, scope, limit, s)}
+          aria-current={s === active ? "true" : undefined}
+          className={cx(
+            "inline-flex h-7 items-center rounded-md px-2 text-xs font-medium transition-colors",
+            s === active ? "bg-accent-soft text-accent" : "text-muted hover:bg-raised hover:text-fg"
+          )}
+        >
+          {s === "citations" ? L.searchPage.sortCitations : L.searchPage.sortYear}
+        </Link>
+      ))}
+    </div>
+  );
 }
 
 function NodeChip({ node, query }: { node: NodeDTO; query: string }) {
@@ -69,7 +100,29 @@ function NodeChip({ node, query }: { node: NodeDTO; query: string }) {
   );
 }
 
-function Guidance({ query }: { query?: string }) {
+/** 无结果 / 未输入检索词时给出的可执行出口：语料里真正活跃的方向（/api/stats 的 hot_nodes）。 */
+async function HotNodeSuggestions() {
+  let hot: NodeDTO[] = [];
+  try {
+    const stats = await apiGet<StatsDTO>("/api/stats");
+    hot = stats.hot_nodes.slice(0, 6);
+  } catch {
+    return null;
+  }
+  if (hot.length === 0) return null;
+  return (
+    <Card as="section" className="p-4">
+      <SectionTitle hint={L.searchPage.suggestHint}>{L.searchPage.suggestTitle}</SectionTitle>
+      <div className="grid gap-2.5 sm:grid-cols-2 xl:grid-cols-3">
+        {hot.map((n) => (
+          <NodeChip key={n.id} node={n} query="" />
+        ))}
+      </div>
+    </Card>
+  );
+}
+
+async function Guidance({ query }: { query?: string }) {
   return (
     <div className="space-y-5">
       <EmptyState
@@ -110,6 +163,7 @@ function Guidance({ query }: { query?: string }) {
           </p>
         ) : null}
       </Card>
+      <HotNodeSuggestions />
     </div>
   );
 }
@@ -117,12 +171,13 @@ function Guidance({ query }: { query?: string }) {
 export default async function SearchPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string; scope?: string; limit?: string }>;
+  searchParams: Promise<{ q?: string; scope?: string; limit?: string; sort?: string }>;
 }) {
   const sp = await searchParams;
   const query = (sp.q ?? "").trim();
   const scope = sp.scope === "papers" || sp.scope === "nodes" ? sp.scope : "all";
   const limit = Math.min(Math.max(Number(sp.limit) || BASE_LIMIT, 1), MAX_LIMIT);
+  const sort: ResultSort = RESULT_SORTS.includes(sp.sort as ResultSort) ? (sp.sort as ResultSort) : DEFAULT_SORT;
 
   if (query.length < 2) return <Guidance query={query} />;
 
@@ -130,6 +185,13 @@ export default async function SearchPage({
     `/api/search?q=${encodeURIComponent(query)}&limit=${limit}`
   );
   const total = data.papers.length + data.nodes.length;
+  /* 后端固定按引用降序返回，年份排序在前端本地完成（结果集已截断到 limit 内）。 */
+  const papers =
+    sort === "year"
+      ? [...data.papers].sort(
+          (a, b) => (b.year ?? 0) - (a.year ?? 0) || b.citation_count - a.citation_count || a.id - b.id
+        )
+      : data.papers;
 
   return (
     <div className="space-y-5">
@@ -153,6 +215,9 @@ export default async function SearchPage({
               <label className="sr-only" htmlFor="q">
                 {L.searchPage.refine}
               </label>
+              <input type="hidden" name="scope" value={scope} />
+              {limit !== BASE_LIMIT ? <input type="hidden" name="limit" value={String(limit)} /> : null}
+              {sort !== DEFAULT_SORT ? <input type="hidden" name="sort" value={sort} /> : null}
               <input
                 id="q"
                 name="q"
@@ -183,46 +248,55 @@ export default async function SearchPage({
           { key: "nodes", label: L.searchPage.scopeNodes, count: data.nodes.length },
         ]}
         active={scope}
-        hrefFor={(key) => href(query, key, limit)}
+        hrefFor={(key) => href(query, key, limit, sort)}
       />
 
       {total === 0 ? (
-        <EmptyState
-          icon="⌕"
-          title={L.searchPage.emptyTitle}
-          description={L.searchPage.emptyHint(query)}
-          action={
-            <div className="flex flex-wrap justify-center gap-2">
-              <Button href="/nodes/ai" variant="primary" size="sm">
-                {L.searchPage.toTree}
-              </Button>
-              <Button href="/routes" variant="default" size="sm">
-                {L.searchPage.toRoutes}
-              </Button>
-              <Button href="/" variant="default" size="sm">
-                {L.searchPage.toTopology}
-              </Button>
-            </div>
-          }
-        />
+        <div className="space-y-5">
+          <EmptyState
+            icon="⌕"
+            title={L.searchPage.emptyTitle}
+            description={L.searchPage.emptyHint(query)}
+            action={
+              <div className="flex flex-wrap justify-center gap-2">
+                <Button href="/nodes/ai" variant="primary" size="sm">
+                  {L.searchPage.toTree}
+                </Button>
+                <Button href="/routes" variant="default" size="sm">
+                  {L.searchPage.toRoutes}
+                </Button>
+                <Button href="/" variant="default" size="sm">
+                  {L.searchPage.toTopology}
+                </Button>
+              </div>
+            }
+          />
+          <HotNodeSuggestions />
+        </div>
       ) : null}
 
-      {scope !== "nodes" && data.papers.length > 0 ? (
+      {scope !== "nodes" && papers.length > 0 ? (
         <section aria-labelledby="papers-title" className="space-y-2">
-          <SectionTitle id="papers-title" hint={L.searchPage.papersShown(data.papers.length)}>
-            {L.searchPage.papersTitle}
-          </SectionTitle>
-          {data.papers.map((p) => (
+          <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+            <SectionTitle id="papers-title" className="mb-0">
+              {L.searchPage.papersTitle}
+            </SectionTitle>
+            <SortSwitch query={query} scope={scope} limit={limit} active={sort} />
+          </div>
+          <p className="text-[11px] text-subtle">
+            {sort === "year" ? L.searchPage.sortYearHint(papers.length) : L.searchPage.sortCitationsHint(papers.length)}
+          </p>
+          {papers.map((p) => (
             <PaperCard key={p.id} paper={p} />
           ))}
           <div className="flex flex-wrap gap-2 pt-1">
-            {data.papers.length >= limit && limit < MAX_LIMIT ? (
-              <Button href={href(query, scope, MAX_LIMIT)} variant="default" size="sm">
+            {papers.length >= limit && limit < MAX_LIMIT ? (
+              <Button href={href(query, scope, MAX_LIMIT, sort)} variant="default" size="sm">
                 {L.searchPage.showMore}
               </Button>
             ) : null}
             {limit > BASE_LIMIT ? (
-              <Button href={href(query, scope, BASE_LIMIT)} variant="ghost" size="sm">
+              <Button href={href(query, scope, BASE_LIMIT, sort)} variant="ghost" size="sm">
                 {L.searchPage.showLess}
               </Button>
             ) : null}

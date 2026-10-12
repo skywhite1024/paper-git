@@ -27,11 +27,14 @@ export default function PaperCard({
     { key: "year", text: String(paper.year), className: "font-medium tabular-nums text-muted" },
   ];
   if (paper.venue) meta.push({ key: "venue", text: paper.venue, className: "italic" });
-  meta.push({
-    key: "cites",
-    text: `${L.node.citations} ${paper.citation_count.toLocaleString()}`,
-    className: "tabular-nums",
-  });
+  /* 引用为 0 是该语料的常态（新收录条目尚无引用数），不占列表视觉焦点，直接省略。 */
+  if (paper.citation_count > 0) {
+    meta.push({
+      key: "cites",
+      text: `${L.node.citations} ${paper.citation_count.toLocaleString()}`,
+      className: "font-medium tabular-nums text-muted",
+    });
+  }
   if (published) meta.push({ key: "pub", text: published, className: "tabular-nums" });
   if (paper.is_demo) meta.push({ key: "demo", text: L.node.demo });
 

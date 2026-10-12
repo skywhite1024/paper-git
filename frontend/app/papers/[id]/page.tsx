@@ -30,6 +30,12 @@ function nodeHref(id: string) {
   return `/nodes/${encodeURIComponent(id)}`;
 }
 
+/** 面包屑末端用截断后的标题，避免出现「论文 #1」这类无意义标识。 */
+function crumbTitle(title: string, max = 40) {
+  const clean = title.replace(/\s+/g, " ").trim();
+  return clean.length > max ? `${clean.slice(0, max).trimEnd()}…` : clean;
+}
+
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const paper = await getPaper(id);
@@ -52,9 +58,17 @@ export default async function PaperPage({ params }: { params: Promise<{ id: stri
       }))
     : [];
 
-  const metaRows: { key: string; label: string; value: string; mono?: boolean }[] = [
+  const hasCites = paper.citation_count > 0;
+
+  const metaRows: { key: string; label: string; value: string; mono?: boolean; muted?: boolean; hint?: string }[] = [
     { key: "year", label: L.paper.yearField, value: String(paper.year) },
-    { key: "cites", label: L.paper.citesField, value: paper.citation_count.toLocaleString() },
+    {
+      key: "cites",
+      label: L.paper.citesField,
+      value: hasCites ? paper.citation_count.toLocaleString() : L.paper.citesNoneShort,
+      muted: !hasCites,
+      hint: hasCites ? undefined : L.paper.citesNoneHint,
+    },
     { key: "venue", label: L.paper.venueField, value: paper.venue ?? L.common.none },
     { key: "pub", label: L.paper.pubField, value: paper.published ? paper.published.slice(0, 10) : L.common.none },
     { key: "source", label: L.paper.sourceField, value: paper.source },
@@ -68,7 +82,7 @@ export default async function PaperPage({ params }: { params: Promise<{ id: stri
           items={[
             { label: L.node.crumbHome, href: "/" },
             ...crumbs,
-            { label: `${L.paper.crumbSelf} #${paper.id}` },
+            { label: crumbTitle(paper.title) },
           ]}
         />
 
@@ -101,12 +115,16 @@ export default async function PaperPage({ params }: { params: Promise<{ id: stri
                 <span className="italic">{paper.venue}</span>
               </>
             ) : null}
-            <span aria-hidden className="text-line">
-              ·
-            </span>
-            <span className="tabular-nums">
-              {L.node.citations} {paper.citation_count.toLocaleString()}
-            </span>
+            {hasCites ? (
+              <>
+                <span aria-hidden className="text-line">
+                  ·
+                </span>
+                <span className="font-medium tabular-nums text-muted">
+                  {L.node.citations} {paper.citation_count.toLocaleString()}
+                </span>
+              </>
+            ) : null}
             {paper.nodes.length > 0 ? (
               <>
                 <span aria-hidden className="text-line">
@@ -146,23 +164,26 @@ export default async function PaperPage({ params }: { params: Promise<{ id: stri
       <aside className="min-w-0 space-y-4 lg:sticky lg:top-[72px]">
         <Card className="p-3.5">
           <Eyebrow className="mb-2 block">{L.paper.metaTitle}</Eyebrow>
-          <div className="mb-2.5 flex items-baseline gap-2">
-            <span className="text-2xl font-semibold tabular-nums tracking-tight text-fg">
-              {paper.citation_count.toLocaleString()}
-            </span>
-            <span className="text-xs text-subtle">{L.paper.citesUnit}</span>
-          </div>
+          {hasCites ? (
+            <div className="mb-2.5 flex items-baseline gap-2">
+              <span className="text-2xl font-semibold tabular-nums tracking-tight text-fg">
+                {paper.citation_count.toLocaleString()}
+              </span>
+              <span className="text-xs text-subtle">{L.paper.citesUnit}</span>
+            </div>
+          ) : null}
           <dl className="divide-y divide-line-soft">
             {metaRows.map((row) => (
               <div key={row.key} className="flex items-baseline justify-between gap-3 py-1.5">
                 <dt className="shrink-0 text-xs text-subtle">{row.label}</dt>
                 <dd
                   className={cx(
-                    "min-w-0 truncate text-right text-[13px] text-fg",
+                    "min-w-0 truncate text-right text-[13px]",
+                    row.muted ? "text-subtle" : "text-fg",
                     row.mono && "font-mono text-xs",
                     row.key === "year" && "tabular-nums"
                   )}
-                  title={row.value}
+                  title={row.hint ?? row.value}
                 >
                   {row.value}
                 </dd>

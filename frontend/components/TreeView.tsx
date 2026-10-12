@@ -88,6 +88,7 @@ function TreeNodeRow({
             "shrink-0 text-right text-[11px] tabular-nums",
             isActive ? "font-semibold text-accent" : "text-subtle"
           )}
+          title={L.node.treeCountHint}
         >
           {(node.paper_count ?? 0).toLocaleString()}
         </span>
