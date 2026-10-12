@@ -1,10 +1,29 @@
 // WebGL-safe visual harness. Chrome's --screenshot misses animated WebGL frames,
 // so this drives the installed Chrome via Playwright with real device viewports.
-// Usage: node .qa/shoot.mjs <prefix> <desktop|mobile|both>
+// Usage: node visual-qa.mjs <prefix> <desktop|mobile|both> [light|dark]
 import { chromium } from "playwright";
-import { mkdirSync } from "node:fs";
-import { dirname, join } from "node:path";
+import { mkdirSync, readFileSync, readdirSync, statSync } from "node:fs";
+import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
+
+// Static guard: every colour must come from the theme tokens in globals.css.
+function findHardcodedColors(dir, acc = []) {
+  for (const entry of readdirSync(dir)) {
+    if (entry === "node_modules" || entry === ".next" || entry === "visual-qa.mjs") continue;
+    const p = join(dir, entry);
+    if (statSync(p).isDirectory()) findHardcodedColors(p, acc);
+    else if (/\.(tsx|ts)$/.test(p)) {
+      const src = readFileSync(p, "utf8");
+      const hit = src.match(/bg-white|text-gray-\d|text-slate-\d|bg-slate-\d|bg-\[#|border-\[#|--pg-border|text-blue-\d|bg-blue-\d/);
+      if (hit) acc.push(`${relative(process.cwd(), p)}: ${hit[0]}`);
+    }
+  }
+  return acc;
+}
+const tokenViolations = findHardcodedColors(join(process.cwd(), "app")).concat(
+  findHardcodedColors(join(process.cwd(), "components")),
+  findHardcodedColors(join(process.cwd(), "lib"))
+);
 
 const OUT = join(dirname(fileURLToPath(import.meta.url)), "..", ".qa", "shots");
 mkdirSync(OUT, { recursive: true });
@@ -150,4 +169,8 @@ for (const [wtag, viewport] of VIEWPORTS) {
 }
 
 await browser.close();
+if (tokenViolations.length) {
+  problems.unshift(`STATIC: hardcoded colour outside theme tokens :: ${tokenViolations.join("; ")}`);
+}
+
 console.log(problems.length ? `\nPROBLEMS:\n- ${problems.join("\n- ")}` : "\nno problems detected");
