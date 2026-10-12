@@ -93,13 +93,20 @@ await check("year filter narrows the result count", async () => {
   const total = async () =>
     (await page.locator("main").innerText()).match(/共\s*([\d,]+)\s*篇/)?.[1] ?? "";
   const before = await total();
-  const years = await page
-    .locator("select")
-    .first()
+  // Target the year control by its options, not by position: the page gains more
+  // selects (scope, per-page) as it evolves and a positional locator would drift.
+  const yearIdx = await page.evaluate(() =>
+    [...document.querySelectorAll("select")].findIndex((s) =>
+      [...s.options].some((o) => /^\d{4}$/.test(o.value))
+    )
+  );
+  assert(yearIdx >= 0, "no year select found");
+  const yearSelect = page.locator("select").nth(yearIdx);
+  const years = await yearSelect
     .locator("option")
     .evaluateAll((os) => os.map((o) => o.value).filter((v) => /^\d{4}$/.test(v)));
   assert(years.length > 0, "no year options");
-  await page.selectOption("select", years[0]);
+  await yearSelect.selectOption(years[0]);
   await page.click("button:has-text('应用筛选')");
   await page.waitForURL(/year=/, { timeout: 8000 });
   const after = await total();
