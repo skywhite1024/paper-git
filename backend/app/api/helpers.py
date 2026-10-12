@@ -25,23 +25,38 @@ def subtree_ids(index: dict[str, Node], root_id: str) -> list[str]:
     return out
 
 
-def direct_paper_counts(session: Session) -> dict[str, int]:
-    rows = session.execute(
-        select(PaperNode.node_id, func.count(func.distinct(PaperNode.paper_id))).group_by(PaperNode.node_id)
-    ).all()
-    counts = {r[0]: r[1] for r in rows}
-    return {k: int(v) for k, v in counts.items()}
+def direct_paper_sets(session: Session) -> dict[str, set[int]]:
+    rows = session.execute(select(PaperNode.node_id, PaperNode.paper_id)).all()
+    out: dict[str, set[int]] = {}
+    for node_id, paper_id in rows:
+        out.setdefault(node_id, set()).add(paper_id)
+    return out
 
 
-def aggregate_counts(index: dict[str, Node], direct: dict[str, int]) -> dict[str, int]:
-    """把直接挂载数向上卷积到祖先（父节点计数含子树）。"""
-    agg: dict[str, int] = {}
-    for nid in index:
-        total = 0
-        for target in subtree_ids(index, nid):
-            total += direct.get(target, 0)
-        agg[nid] = total
-    return agg
+def subtree_paper_counts(session: Session, index: dict[str, Node]) -> dict[str, int]:
+    """Distinct paper count per node, including its whole subtree.
+
+    Summing the children's own counts would double-count a paper attached to two
+    siblings, so the union is taken over paper ids instead.
+    """
+    direct = direct_paper_sets(session)
+    children_of: dict[str | None, list[str]] = {}
+    for nid, node in index.items():
+        children_of.setdefault(node.parent_id, []).append(nid)
+
+    memo: dict[str, set[int]] = {}
+
+    def union(nid: str) -> set[int]:
+        cached = memo.get(nid)
+        if cached is not None:
+            return cached
+        acc = set(direct.get(nid, ()))
+        for child in children_of.get(nid, []):
+            acc |= union(child)
+        memo[nid] = acc
+        return acc
+
+    return {nid: len(union(nid)) for nid in index}
 
 
 def ancestor_chain(index: dict[str, Node], node_id: str) -> list[dict]:

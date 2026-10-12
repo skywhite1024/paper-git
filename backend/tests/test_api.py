@@ -25,7 +25,46 @@ def test_tree(client, seeded):
     ai = next(r for r in roots if r["id"] == "ai")
     assert any(c["id"] == "ai.ml" for c in ai["children"])
     total_leaf = sum(c["paper_count"] for c in ai["children"])
-    assert total_leaf <= ai["paper_count"]
+    # A paper may sit under two siblings, so the parent's distinct count is at most the sum.
+    assert total_leaf >= ai["paper_count"]
+    assert ai["paper_count"] >= max(c["paper_count"] for c in ai["children"])
+
+
+def test_subtree_count_ignores_duplicate_membership(client, seeded):
+    """Attaching a paper to a sibling it already shares an ancestor with must not inflate counts."""
+    from sqlalchemy import delete, select
+
+    from app.database import SessionLocal
+    from app.models import Node, Paper, PaperNode
+
+    with SessionLocal() as session:
+        parent_id = session.scalar(select(Node.parent_id).where(Node.parent_id.is_not(None)).limit(1))
+        kids = session.scalars(select(Node.id).where(Node.parent_id == parent_id)).all()
+        assert len(kids) >= 2, "need two siblings to exercise cross-sibling dedupe"
+        a, b = kids[0], kids[1]
+        paper_id = session.scalar(
+            select(PaperNode.paper_id)
+            .where(PaperNode.node_id == a)
+            .where(PaperNode.paper_id.in_(select(Paper.id)))
+            .limit(1)
+        )
+        session.execute(delete(PaperNode).where(PaperNode.paper_id == paper_id, PaperNode.node_id == b))
+        session.commit()
+
+    before = client.get(f"/api/nodes/{parent_id}").json()["stats"]["paper_count"]
+
+    with SessionLocal() as session:
+        session.add(PaperNode(paper_id=paper_id, node_id=b))
+        session.commit()
+    try:
+        after = client.get(f"/api/nodes/{parent_id}").json()["stats"]["paper_count"]
+        assert after == before, "parent count grew for an already-counted paper"
+        sibling = client.get(f"/api/nodes/{b}").json()["stats"]["paper_count"]
+        assert sibling > 0
+    finally:
+        with SessionLocal() as session:
+            session.execute(delete(PaperNode).where(PaperNode.paper_id == paper_id, PaperNode.node_id == b))
+            session.commit()
 
 
 def test_node_detail(client, seeded):

@@ -5,13 +5,12 @@ from sqlalchemy.orm import Session
 from ..database import get_db
 from ..models import Node, Paper, PaperNode
 from .helpers import (
-    aggregate_counts,
     build_index,
-    direct_paper_counts,
     load_links,
     node_dict,
     paper_dict,
     recent_cutoff,
+    subtree_paper_counts,
 )
 
 router = APIRouter(tags=["misc"])
@@ -20,7 +19,7 @@ router = APIRouter(tags=["misc"])
 @router.get("/stats")
 def get_stats(db: Session = Depends(get_db)):
     index = build_index(db)
-    counts = aggregate_counts(index, direct_paper_counts(db))
+    counts = subtree_paper_counts(db, index)
     total = db.scalar(select(func.count()).select_from(Paper)) or 0
     demo = db.scalar(select(func.count()).select_from(Paper).where(Paper.is_demo.is_(True))) or 0
     real = total - demo
@@ -51,12 +50,14 @@ def get_stats(db: Session = Depends(get_db)):
         if nid in index and not index[nid].is_fallback
     ]
     hot.sort(key=lambda n: -n["paper_count"])
+    newest = db.scalar(select(func.max(Paper.published)))
     return {
         "paper_total": total,
         "paper_real": real,
         "paper_demo": demo,
         "node_total": len(index),
         "recent_7d": recent,
+        "newest_published": newest.isoformat() if newest else None,
         "domains": [node_dict(r, paper_count=counts.get(r.id, 0)) for r in roots],
         "hot_nodes": hot[:8],
     }

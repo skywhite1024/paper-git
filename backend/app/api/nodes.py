@@ -7,15 +7,14 @@ from sqlalchemy.orm import Session
 from ..database import get_db
 from ..models import Node, Paper, PaperNode
 from .helpers import (
-    aggregate_counts,
     ancestor_chain,
     build_index,
-    direct_paper_counts,
     load_links,
     node_dict,
     paper_dict,
     recent_cutoff,
     subtree_ids,
+    subtree_paper_counts,
 )
 
 router = APIRouter(prefix="/nodes", tags=["nodes"])
@@ -31,7 +30,7 @@ def _get_node(session: Session, node_id: str) -> Node:
 @router.get("", description="整棵领域树（含子树聚合计数），供前端导航")
 def get_tree(db: Session = Depends(get_db)):
     index = build_index(db)
-    counts = aggregate_counts(index, direct_paper_counts(db))
+    counts = subtree_paper_counts(db, index)
 
     def build(nid: str) -> dict:
         node = index[nid]
@@ -51,7 +50,7 @@ def get_node_detail(node_id: str, db: Session = Depends(get_db)):
     index = build_index(db)
     node = _get_node(db, node_id)
     ids = subtree_ids(index, node_id)
-    counts = aggregate_counts(index, direct_paper_counts(db))
+    counts = subtree_paper_counts(db, index)
 
     # A paper can be a milestone under several nodes in the subtree; collapse to distinct papers.
     milestones = db.scalars(
