@@ -26,7 +26,9 @@ def subtree_ids(index: dict[str, Node], root_id: str) -> list[str]:
 
 
 def direct_paper_sets(session: Session) -> dict[str, set[int]]:
-    rows = session.execute(select(PaperNode.node_id, PaperNode.paper_id)).all()
+    # ~38k membership rows: an ORM-enabled select costs ~300ms in row processing here,
+    # while the raw driver path returns plain tuples in ~50ms. No user input in the SQL.
+    rows = session.connection().exec_driver_sql("SELECT node_id, paper_id FROM paper_node").all()
     out: dict[str, set[int]] = {}
     for node_id, paper_id in rows:
         out.setdefault(node_id, set()).add(paper_id)

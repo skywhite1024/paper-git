@@ -51,6 +51,11 @@ def load_taxonomy(path=None) -> int:
 
 def init_db() -> None:
     Base.metadata.create_all(engine)
+    # create_all skips tables that already exist, so an index introduced after a
+    # database was created would never be built. Re-issue them idempotently.
+    for table in Base.metadata.tables.values():
+        for index in table.indexes:
+            index.create(engine, checkfirst=True)
 
 
 def sync() -> None:
