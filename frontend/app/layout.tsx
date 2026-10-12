@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import Link from "next/link";
 import SiteHeader from "@/components/SiteHeader";
 import "./globals.css";
 import { L } from "@/lib/lexicon";
@@ -43,7 +44,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <footer className="mt-10 border-t border-line py-6">
           <div className="mx-auto flex max-w-[1400px] flex-wrap items-center justify-between gap-2 px-4 text-xs text-subtle">
             <p>数据来源：arXiv · OpenAlex ／ {L.brand} 开源研究脉络项目 · 元数据仅用于研究目的</p>
-            <p className="tabular-nums">共 67 个领域节点 · 持续增量收录</p>
+            <p className="flex items-center gap-2">
+              <Link href="/routes" className="rounded hover:text-accent">
+                {L.nav.routes}
+              </Link>
+              <span aria-hidden className="text-line">
+                /
+              </span>
+              <Link href="/watchlist" className="rounded hover:text-accent">
+                {L.nav.watchlist}
+              </Link>
+            </p>
           </div>
         </footer>
       </body>

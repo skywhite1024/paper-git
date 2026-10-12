@@ -58,6 +58,27 @@ python -m app.ingest.enrich_routes                   # 为 routes.yaml 方法节
 python -m pytest                                     # 后端测试（backend/ 下）
 ```
 
+## 前端质量门禁
+
+需前后端已分别运行在 `localhost:3000` / `localhost:8000`。工具用 Playwright 驱动本机 Chrome。
+
+```bash
+cd frontend
+npx tsc --noEmit                     # 类型
+npx next build                       # 生产构建（含 lint）
+node visual-qa.mjs <前缀> both light   # 9 个页面 × 1440/390 截图，检出横向溢出与控制台报错
+node visual-qa.mjs <前缀> both dark    # 同上，深色主题
+node interaction-qa.mjs              # 14 项真实操作冒烟（主题持久化、即时检索、拓扑定位、
+                                     # 分页筛选、关注撤销、移动端抽屉、404 恢复）
+```
+
+截图输出到 `.qa/shots/`（已 gitignore）。
+
+> 三维画布是持续动画的 WebGL，`chrome --headless --screenshot` 抓不到帧（会得到一张全黑的
+> 假阴性图）。视觉验证必须走 Playwright。
+
+设计令牌、原语与文案约定见 [docs/design-system.md](docs/design-system.md)。
+
 ## 目录结构
 
 ```

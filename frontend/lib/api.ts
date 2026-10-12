@@ -77,6 +77,7 @@ export type StatsDTO = {
   paper_demo: number;
   node_total: number;
   recent_7d: number;
+  newest_published: string | null;
   domains: NodeDTO[];
   hot_nodes: NodeDTO[];
 };
