@@ -271,6 +271,7 @@ export const L = {
     loopFeedbackHint: "紫色虚线为技能库经验回流：闭环使「技能资产」持续演化。",
     loopRouteHint: "标为「技术路线」的环节可进入对应路线页。",
     panHint: "画布较宽时可横向平移；完整顺序与关系见「清单」。",
+    scrollRightHint: "可横向滚动 →",
     viewGraph: "图示",
     viewList: "清单",
     loopNodesTitle: "闭环节点",

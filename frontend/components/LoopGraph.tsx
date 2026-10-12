@@ -194,6 +194,7 @@ function placeLabels(
 export default function LoopGraph({ nodes, edges }: { nodes: LoopNode[]; edges: LoopEdge[] }) {
   const [mode, setMode] = useState<"graph" | "list">("graph");
   const [geom, setGeom] = useState<{ boxes: Record<string, Box>; w: number; h: number } | null>(null);
+  const hostRef = useRef<HTMLDivElement | null>(null);
   const innerRef = useRef<HTMLDivElement | null>(null);
   const nodeRefs = useRef(new Map<string, HTMLDivElement>());
   const byId = useMemo(() => new Map(nodes.map((n) => [n.id, n])), [nodes]);
@@ -237,6 +238,30 @@ export default function LoopGraph({ nodes, edges }: { nodes: LoopNode[]; edges: 
     if (!first?.length || !last?.length) return true;
     return Math.max(...last.map((b) => b.x)) > Math.max(...first.map((b) => b.x)) + 8;
   }, [geom, layers]);
+
+  /**
+   * Ten layers at a readable column width always exceed a desktop viewport, so the
+   * graph scrolls. A hard edge cut then reads as broken content, so keep a fade on
+   * the side that still has rows off-screen and drop it once the reader gets there.
+   */
+  const [scrollHint, setScrollHint] = useState<{ right: boolean }>({ right: false });
+
+  useEffect(() => {
+    const host = hostRef.current;
+    if (!host) return;
+    const sync = () => {
+      const overflow = host.scrollWidth - host.clientWidth;
+      setScrollHint({ right: host.scrollLeft < overflow - 4 });
+    };
+    sync();
+    const ro = new ResizeObserver(sync);
+    ro.observe(host);
+    host.addEventListener("scroll", sync, { passive: true });
+    return () => {
+      ro.disconnect();
+      host.removeEventListener("scroll", sync);
+    };
+  }, [mode]);
 
   const routes = useMemo(() => {
     if (!geom) return [];
@@ -308,7 +333,8 @@ export default function LoopGraph({ nodes, edges }: { nodes: LoopNode[]; edges: 
 
       {mode === "graph" ? (
         <>
-          <div className="pg-scroll overflow-x-auto rounded-card border border-line bg-surface">
+          <div className="relative">
+          <div ref={hostRef} className="pg-scroll overflow-x-auto rounded-card border border-line bg-surface">
             <div
               ref={innerRef}
               role="img"
@@ -421,6 +447,18 @@ export default function LoopGraph({ nodes, edges }: { nodes: LoopNode[]; edges: 
                 </span>
               ))}
             </div>
+          </div>
+            {scrollHint.right && (
+              <>
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute inset-y-0 right-0 w-16 rounded-r-card bg-gradient-to-l from-surface to-transparent"
+                />
+                <span className="pointer-events-none absolute bottom-2 right-2 rounded-md border border-line bg-surface px-2 py-0.5 text-[11px] font-medium text-fg shadow-card">
+                  {L.routes.scrollRightHint}
+                </span>
+              </>
+            )}
           </div>
           <p className="mt-2 text-xs text-subtle">
             {L.routes.loopRouteHint} {L.routes.loopFeedbackHint} {L.routes.panHint}
