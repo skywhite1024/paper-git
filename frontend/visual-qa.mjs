@@ -36,6 +36,63 @@ const VIEWPORTS =
           ["390", { width: 390, height: 844 }],
         ];
 
+// WCAG AA contrast probe over rendered text. Backgrounds are resolved by walking
+// up to the first opaque ancestor, so translucent cards are measured against what
+// the reader actually sees.
+const CONTRAST_JS = `(() => {
+  const lin = (c) => (c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4);
+  const rgba = (s) => {
+    const m = s.match(/[\\d.]+/g);
+    return m ? m.map(Number) : null;
+  };
+  const lum = ([r, g, b]) => 0.2126 * lin(r / 255) + 0.7152 * lin(g / 255) + 0.0722 * lin(b / 255);
+  const ratio = (a, b) => {
+    const [la, lb] = [lum(a), lum(b)].sort((x, y) => y - x);
+    return (la + 0.05) / (lb + 0.05);
+  };
+  const bgOf = (el) => {
+    for (let n = el; n; n = n.parentElement) {
+      const c = rgba(getComputedStyle(n).backgroundColor);
+      if (c && (c.length < 4 || c[3] > 0.85)) return c;
+    }
+    return [255, 255, 255];
+  };
+  const out = [];
+  for (const el of document.querySelectorAll('body *')) {
+    const txt = [...el.childNodes].some((n) => n.nodeType === 3 && n.textContent.trim());
+    if (!txt) continue;
+    // Decorative separators and glyphs carry no informational content, so AA does not apply.
+    if (el.closest('[aria-hidden="true"]') || el.getAttribute('aria-hidden') === 'true') continue;
+    if (!/[\\p{L}\\p{N}]/u.test(el.textContent)) continue;
+    const cs = getComputedStyle(el);
+    const r = el.getBoundingClientRect();
+    if (r.width < 2 || r.height < 2 || r.right < 0 || r.bottom < 0) continue;
+    if (cs.visibility === 'hidden' || cs.opacity === '0') continue;
+    const size = parseFloat(cs.fontSize) || 16;
+    const bold = (parseInt(cs.fontWeight, 10) || 400) >= 700;
+    const need = size >= 24 || (size >= 18.66 && bold) ? 3 : 4.5;
+    const fg = rgba(cs.color);
+    if (!fg) continue;
+    const eff = fg.length === 4 && fg[3] < 1
+      ? fg.slice(0, 3).map((v, i) => v * fg[3] + bgOf(el)[i] * (1 - fg[3]))
+      : fg;
+    const got = ratio(eff, bgOf(el));
+    if (got < need) {
+      out.push({ sel: el.tagName.toLowerCase() + (typeof el.className === 'string' && el.className ? '.' + el.className.trim().split(/\\s+/).slice(0, 2).join('.') : ''), text: el.textContent.trim().slice(0, 28), size, need, got: +got.toFixed(2) });
+    }
+  }
+  out.sort((a, b) => a.got - b.got);
+  return out.slice(0, 8);
+})()`;
+
+async function contrastFailures(page) {
+  try {
+    return await page.evaluate(CONTRAST_JS);
+  } catch {
+    return [];
+  }
+}
+
 const browser = await chromium.launch({ channel: "chrome" });
 const problems = [];
 
@@ -75,6 +132,13 @@ for (const [wtag, viewport] of VIEWPORTS) {
     });
     if (overflow.scrollW > overflow.clientW + 1) {
       problems.push(`${name}@${wtag}: H-OVERFLOW ${overflow.scrollW} > ${overflow.clientW} :: ${overflow.culprits.join("; ")}`);
+    }
+    const bad = await contrastFailures(page);
+    if (bad.length) {
+      problems.push(
+        `${name}@${wtag}: CONTRAST ${bad.length}x :: ` +
+          bad.map((b) => `${b.sel} "${b.text}" ${b.got}<${b.need}`).join("; ")
+      );
     }
     await page.screenshot({ path: join(OUT, `${prefix}_${name}_${wtag}.png`) });
     await page.screenshot({ path: join(OUT, `${prefix}_${name}_${wtag}_full.png`), fullPage: true });

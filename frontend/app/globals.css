@@ -40,8 +40,8 @@
   --c-line: #e2e6ec;
   --c-line-soft: #eef0f4;
   --c-fg: #14181f;
-  --c-muted: #5b6472;
-  --c-subtle: #8b94a3;
+  --c-muted: #4a5462;
+  --c-subtle: #5f6b7a;
   --c-accent: #4f46e5;
   --c-accent-hover: #4338ca;
   --c-accent-fg: #ffffff;
@@ -53,6 +53,9 @@
   --s-pop: 0 12px 32px -8px rgba(16, 24, 40, 0.18), 0 2px 6px rgba(16, 24, 40, 0.06);
 }
 
+/* The inline script in app/layout.tsx always resolves data-theme before first
+   paint (falling back to prefers-color-scheme), so this is the single source of
+   truth for the dark palette — a second media-query copy here would drift. */
 [data-theme="dark"] {
   color-scheme: dark;
   --c-bg: #0a0d14;
@@ -61,8 +64,8 @@
   --c-line: #232c3d;
   --c-line-soft: #1a2130;
   --c-fg: #e8ecf4;
-  --c-muted: #98a3b6;
-  --c-subtle: #6b7689;
+  --c-muted: #a3adc0;
+  --c-subtle: #828ea1;
   --c-accent: #7c8cff;
   --c-accent-hover: #97a4ff;
   --c-accent-fg: #0a0d14;
@@ -72,29 +75,6 @@
   --c-danger: #f87171;
   --s-card: 0 1px 2px rgba(0, 0, 0, 0.4);
   --s-pop: 0 16px 40px -12px rgba(0, 0, 0, 0.7), 0 2px 8px rgba(0, 0, 0, 0.4);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme]) {
-    color-scheme: dark;
-    --c-bg: #0a0d14;
-    --c-surface: #111621;
-    --c-raised: #1a2130;
-    --c-line: #232c3d;
-    --c-line-soft: #1a2130;
-    --c-fg: #e8ecf4;
-    --c-muted: #98a3b6;
-    --c-subtle: #6b7689;
-    --c-accent: #7c8cff;
-    --c-accent-hover: #97a4ff;
-    --c-accent-fg: #0a0d14;
-    --c-accent-soft: #1b2140;
-    --c-warn: #fbbf24;
-    --c-ok: #4ade80;
-    --c-danger: #f87171;
-    --s-card: 0 1px 2px rgba(0, 0, 0, 0.4);
-    --s-pop: 0 16px 40px -12px rgba(0, 0, 0, 0.7), 0 2px 8px rgba(0, 0, 0, 0.4);
-  }
 }
 
 html {
