@@ -47,7 +47,7 @@ export default async function TopologyHomePage({
       <section className="flex flex-wrap items-center gap-x-6 gap-y-2 rounded-card border border-line bg-surface px-4 py-2.5 shadow-card">
         <div className="min-w-0 flex-1 basis-[300px]">
           <h1 className="text-[15px] font-semibold tracking-tight text-fg">{L.topology.title}</h1>
-          <p className="mt-0.5 truncate text-[11px] text-subtle">{L.home.heroSubtitle(topo.family.name_zh)}</p>
+          <p className="mt-0.5 text-[11px] leading-snug text-subtle">{L.home.heroSubtitle(topo.family.name_zh)}</p>
         </div>
         <dl className="flex flex-wrap items-center gap-x-5 gap-y-1">
           {facts.map((f) => (

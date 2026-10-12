@@ -39,6 +39,8 @@ export type LayoutNode = {
   z: number;
   color: string;
   radius: number;
+  /** 名牌相对节点的抬升高度（含阶段上下错层），取景盒与精灵定位共用。 */
+  lift: number;
 };
 
 export type LayoutEdge = {
@@ -103,6 +105,19 @@ export type Frame = { dist: number; target: Vec3 };
 /** 相机取景只需要包围盒与视角方向，故把「可取景的盒子」抽成独立类型：全场景与其子集共用 fitFrame。 */
 export type FrameBox = Pick<SceneLayout, "center" | "min" | "max" | "viewDir" | "radius">;
 
+/** 名牌浮在节点上方的抬升高度；阶段奇数位再错开一层，避免同走廊标签挤成一行。 */
+export const LABEL_LIFT = { hub: 9, stage: 6.6, paper: 4.6 } as const;
+export const STAGE_LABEL_STAGGER = 13.6;
+/** 名牌贴图半高（世界单位）的取景余量。 */
+const LABEL_TOP_PAD = 4;
+
+export function labelLift(kind: "hub" | "stage" | "paper", stageIdx = 0): number {
+  if (kind === "hub") return LABEL_LIFT.hub;
+  if (kind === "stage")
+    return LABEL_LIFT.stage + (stageIdx % 2 === 1 ? STAGE_LABEL_STAGGER : 0);
+  return LABEL_LIFT.paper;
+}
+
 /** 标签浮在节点上方，取景盒需要留出这段高度，否则上层名牌会被压到画布边缘。 */
 const LABEL_HEADROOM = 13;
 
@@ -130,14 +145,15 @@ export function frameBoxFor(scene: SceneLayout, active: Set<string>): FrameBox {
   }
   for (const n of scene.nodes) {
     if (!active.has(n.route ?? "")) continue;
-    if (n.kind === "hub") {
-      // hub 名牌右对齐、向左延伸约一个走廊宽度，取景盒留出这段空间才不会压住首段地层
-      grow([n.x, n.y, n.z], LABEL_HEADROOM * 2.4, LABEL_HEADROOM, n.radius);
-    } else if (n.kind === "stage") {
-      grow([n.x, n.y, n.z], n.radius, n.radius + LABEL_HEADROOM, n.radius);
-    } else {
-      grow([n.x, n.y, n.z], n.radius, n.radius, n.radius);
-    }
+    const rx = n.kind === "hub" ? LABEL_HEADROOM * 2.4 : n.radius;
+    // 顶界取「节点 + 名牌抬升 + 贴图半高余量」：solo 视图下阶段名牌含错层，必须整体入框
+    const top = n.y + n.lift + LABEL_TOP_PAD;
+    min[0] = Math.min(min[0], n.x - rx);
+    max[0] = Math.max(max[0], n.x + rx);
+    min[1] = Math.min(min[1], n.y - n.radius);
+    max[1] = Math.max(max[1], top, n.y + n.radius);
+    min[2] = Math.min(min[2], n.z - n.radius);
+    max[2] = Math.max(max[2], n.z + n.radius);
   }
   if (!Number.isFinite(min[0])) return scene;
   const center: Vec3 = [(min[0] + max[0]) / 2, (min[1] + max[1]) / 2, (min[2] + max[2]) / 2];
@@ -250,7 +266,15 @@ export function computeLayout(nodes: NetNode[], links: NetLink[], routesMeta: Ro
       radius = n.key ? R_PAPER_KEY : R_PAPER;
     }
     pos.set(n.id, p);
-    return { ...n, x: p[0], y: p[1], z: p[2], color: routeColor(n.route ?? ""), radius };
+    return {
+      ...n,
+      x: p[0],
+      y: p[1],
+      z: p[2],
+      color: routeColor(n.route ?? ""),
+      radius,
+      lift: labelLift(n.kind, n.stage_idx ?? 0),
+    };
   });
 
   const layoutEdges: LayoutEdge[] = [];
@@ -302,7 +326,10 @@ export function computeLayout(nodes: NetNode[], links: NetLink[], routesMeta: Ro
     min[0] = Math.min(min[0], n.x - n.radius);
     max[0] = Math.max(max[0], n.x + n.radius);
     min[1] = Math.min(min[1], n.y - n.radius);
-    max[1] = Math.max(max[1], n.y + n.radius);
+    // 全局视图下只有 hub 名牌常驻：顶界按「节点 + 基础抬升 + 贴图半高余量」留出标签带，
+    // 阶段错层名牌只在 solo/推近时出现，交给 frameBoxFor 处理
+    const labelTop = n.kind === "paper" ? 0 : LABEL_LIFT[n.kind] + LABEL_TOP_PAD;
+    max[1] = Math.max(max[1], n.y + n.radius, n.y + labelTop);
     min[2] = Math.min(min[2], n.z - n.radius);
     max[2] = Math.max(max[2], n.z + n.radius);
   }

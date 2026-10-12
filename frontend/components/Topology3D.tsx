@@ -196,6 +196,8 @@ export default function Topology3D({
     }
 
     const L0 = live.current.layout;
+    const narrowScene = (container.clientWidth || 760) < 760;
+    const layoutById = new Map(L0.nodes.map((n) => [n.id, n]));
     let pal = readPalette();
 
     const scene = new THREE.Scene();
@@ -227,7 +229,7 @@ export default function Topology3D({
       tint: THREE.Color,
       rec: Partial<LabelRec> = {}
     ) => {
-      const cap = LABEL_CAP[kind];
+      const cap = narrowScene && kind === "hub" ? 14 : LABEL_CAP[kind];
       const text = raw.length > cap ? `${raw.slice(0, cap - 1)}…` : raw;
       const { map, aspect } = makeLabelTexture(text);
       const mat = new THREE.SpriteMaterial({ map, transparent: true, depthWrite: false, color: tint });
@@ -235,7 +237,8 @@ export default function Topology3D({
       sp.position.set(at[0], at[1], at[2]);
       sp.renderOrder = 3;
       parent.add(sp);
-      labels.push({ sp, kind, aspect, cx: kind === "hub" ? 1 : 0.5, ...rec });
+      // 窄屏 hub 名牌改为左对齐（向右延伸进本走廊），配合屏幕空间避让；桌面保持右对齐
+      labels.push({ sp, kind, aspect, cx: kind === "hub" ? (narrowScene ? 0 : 1) : 0.5, ...rec });
       if (kind === "hub" || kind === "stage" || kind === "paper") fgMaterials.push(mat);
     };
 
@@ -298,10 +301,7 @@ export default function Topology3D({
 
       const kind: LabelKind | null = n.kind === "hub" ? "hub" : n.kind === "stage" ? "stage" : n.key ? "paper" : null;
       if (kind) {
-        // 阶段标签上下分层，避免同走廊 6 条标签挤在一行
-        const stagger = n.kind === "stage" && (n.stage_idx ?? 0) % 2 === 1 ? 13.6 : 0;
-        const lift = (n.kind === "hub" ? 9 : n.kind === "stage" ? 6.6 : 4.6) + stagger;
-        addLabel(group, n.label, kind, [n.x, n.y + lift, n.z], new THREE.Color(pal.fg), {
+        addLabel(group, n.label, kind, [n.x, n.y + n.lift, n.z], new THREE.Color(pal.fg), {
           route: n.route,
           nodeId: n.id,
         });
@@ -594,15 +594,28 @@ export default function Topology3D({
     const tmpWorld = new THREE.Vector3();
     const tmpView = new THREE.Vector3();
 
-    type LabelSlot = { rec: LabelRec; rank: number; depth: number; l: number; r: number; b: number; t: number };
+    type LabelSlot = {
+      rec: LabelRec;
+      rank: number;
+      depth: number;
+      l: number;
+      r: number;
+      b: number;
+      t: number;
+      /** 窄屏避让参数：锚点像素坐标 + 半宽半高 + 已钳制的水平对齐，垂直偏移在排序后搜索。 */
+      search?: { sxp: number; syp: number; hwp: number; hhp: number; ax: number };
+      done?: boolean;
+    };
     const slots: LabelSlot[] = [];
     const kept: LabelSlot[] = [];
+    const obstacles: { l: number; r: number; t: number; b: number }[] = [];
 
     /**
      * 名牌绘制：恒定像素尺寸 + 屏幕空间避让。
-     * 先按层级与距离排序（选中 > 走廊 > 阶段 > 层号 > 关键方法，近者优先），
-     * 再贪心丢弃与已放置名牌相交的候选——重叠改为「隐藏」而不是「叠字」，
-     * 完整名单始终可以在右侧详情面板与列表视图里读到。
+     * 先按层级与距离排序（选中 > 走廊 > 阶段 > 层号 > 关键方法，近者优先）。
+     * 桌面端：贪心丢弃与已放置名牌相交的候选。
+     * 窄屏：可见节点球投影为障碍矩形；走廊名牌按「天空/地面」两段有序安置（allocateHubs），
+     * 阶段/方法名牌在锚点上下按整行步进搜索空位，全部落不下才隐藏。
      */
     const renderLabels = (w: number, h: number) => {
       const tanV = Math.tan((camera.fov * DEG) / 2);
@@ -616,6 +629,26 @@ export default function Topology3D({
       const paperTier = zoom < fit * 0.55;
       slots.length = 0;
       kept.length = 0;
+      obstacles.length = 0;
+      if (narrow) {
+        for (const mesh of nodeMeshes.values()) {
+          if (!mesh.visible || mesh.parent?.visible === false) continue;
+          const n = layoutById.get(mesh.userData.nodeId as string);
+          if (!n) continue;
+          mesh.getWorldPosition(tmpWorld);
+          tmpView.copy(tmpWorld).applyMatrix4(camera.matrixWorldInverse);
+          const d = -tmpView.z;
+          if (d < 0.5) continue;
+          tmpWorld.project(camera);
+          if (Math.abs(tmpWorld.x) > 1.15 || Math.abs(tmpWorld.y) > 1.15) continue;
+          const r = n.radius * mesh.scale.x + 0.6;
+          const hwp = (r / (2 * tanH * d)) * (w / 2);
+          const hhp = (r / (2 * tanV * d)) * (h / 2);
+          const sxp = ((tmpWorld.x + 1) / 2) * w;
+          const syp = ((1 - tmpWorld.y) / 2) * h;
+          obstacles.push({ l: sxp - hwp, r: sxp + hwp, t: syp - hhp, b: syp + hhp });
+        }
+      }
       for (const rec of labels) {
         // 隐藏走廊的名牌不参与避让：它们不可见，却会投影到可见走廊上方抢走位置
         if (rec.route && !live.current.activeRoutes.has(rec.route)) {
@@ -645,10 +678,26 @@ export default function Topology3D({
         // 用视深（而非欧氏距离）换算恒定像素尺寸：否则偏心名牌的实际绘制会比避让矩形大 20% 左右
         const d = Math.max(0.001, -tmpView.z);
         const wpp = (2 * tanV * d) / h;
-        const px = LABEL_PX[rec.kind] * (narrow ? 0.82 : 1);
+        const px = LABEL_PX[rec.kind] * (narrow ? 0.72 : 1);
         rec.sp.scale.set(px * rec.aspect * wpp, px * wpp, 1);
-        // 标签恒定像素尺寸后，再把锚点收进画布内，避免长标签在边缘被裁切
         tmpWorld.project(camera);
+        const rank = (pinned ? 0 : 100) + LABEL_PRIO[rec.kind];
+        const depth = -tmpView.z;
+        if (narrow) {
+          const hwp = (rec.sp.scale.x / (2 * tanH * d)) * (w / 2);
+          const hhp = (rec.sp.scale.y / (2 * tanV * d)) * (h / 2);
+          const sxp = ((tmpWorld.x + 1) / 2) * w;
+          const syp = ((1 - tmpWorld.y) / 2) * h;
+          const Wp = 2 * hwp;
+          const EDGE = 5;
+          // 精灵水平占位 [sxp - ax*Wp, sxp + (1-ax)*Wp]：ax 上下界分别把右/左边缘收进画布
+          const lo = (sxp + Wp - (w - EDGE)) / Wp;
+          const hi = (sxp - EDGE) / Wp;
+          const ax = lo > hi ? (rec.cx <= 0.5 ? lo : hi) : Math.min(Math.max(rec.cx, lo), hi);
+          slots.push({ rec, rank, depth, l: 0, r: 0, b: 0, t: 0, search: { sxp, syp, hwp, hhp, ax } });
+          continue;
+        }
+        // 标签恒定像素尺寸后，再把锚点收进画布内，避免长标签在边缘被裁切
         const hw = rec.sp.scale.x / (2 * tanH * d);
         const hh = rec.sp.scale.y / (2 * tanV * d);
         const room = 0.97;
@@ -661,17 +710,122 @@ export default function Topology3D({
         rec.sp.center.set(ax, ay);
         slots.push({
           rec,
-          rank: (pinned ? 0 : 100) + LABEL_PRIO[rec.kind],
-          depth: -tmpView.z,
+          rank,
+          depth,
           l: ((tmpWorld.x - W * ax + 1) / 2) * w,
           r: ((tmpWorld.x + W * (1 - ax) + 1) / 2) * w,
           b: ((1 - (tmpWorld.y - H * ay)) / 2) * h,
           t: ((1 - (tmpWorld.y + H * (1 - ay))) / 2) * h,
         });
       }
-      slots.sort((a, b) => a.rank - b.rank || a.depth - b.depth);
+      // 窄屏按锚点屏幕高度从上到下选位：顶部走廊先拿天空位，走廊与名牌的上下对应关系才不致错乱
+      slots.sort(
+        (a, b) =>
+          a.rank - b.rank ||
+          (a.search && b.search ? a.search.syp - b.search.syp : a.depth - b.depth)
+      );
       const PAD = 2;
+
+      /**
+       * 竖屏下 6 条走廊在屏幕上纵向几乎相接、没有能塞下名牌的空隙，逐条贪心搜索会让
+       * 后放的名牌越堆越乱甚至消失。走廊名牌因此改为两段有序安置：锚点在上半区的从画布
+       * 顶往下按走廊顺序排进天空区、下半区的从底往上排进地面区，天空放不下则溢入地面——
+       * 保证全显、不压节点、名牌上下次序与走廊一致，且四周留白均衡。
+       */
+      const allocateHubs = () => {
+        const hubs: LabelSlot[] = [];
+        for (const s of slots) if (s.rec.kind === "hub" && s.search) hubs.push(s);
+        if (hubs.length < 3 || obstacles.length === 0) return;
+        hubs.sort((a, b) => a.search!.syp - b.search!.syp);
+        let skyTop = Infinity;
+        let groundBottom = -Infinity;
+        for (const o of obstacles) {
+          skyTop = Math.min(skyTop, o.t);
+          groundBottom = Math.max(groundBottom, o.b);
+        }
+        const EDGE = 5;
+        const step = Math.max(...hubs.map((s) => 2 * s.search!.hhp)) + 5;
+        const placeAt = (s: LabelSlot, t: number) => {
+          const { sxp, syp, hwp, hhp, ax } = s.search!;
+          const Wp = 2 * hwp;
+          const dy = syp - hhp - t;
+          s.rec.sp.center.set(ax, 0.5 - dy / (2 * hhp));
+          s.l = sxp - ax * Wp;
+          s.r = s.l + Wp;
+          s.t = t;
+          s.b = t + 2 * hhp;
+          kept.push(s);
+          s.rec.sp.visible = true;
+          s.done = true;
+        };
+        const mid = h / 2;
+        const sky: LabelSlot[] = [];
+        const ground: LabelSlot[] = [];
+        for (const s of hubs) (s.search!.syp < mid ? sky : ground).push(s);
+        let cursor = EDGE;
+        while (sky.length && cursor + 2 * sky[0].search!.hhp <= skyTop - 2) {
+          placeAt(sky.shift()!, cursor);
+          cursor += step;
+        }
+        const rest = [...sky, ...ground];
+        for (let j = rest.length - 1; j >= 0; j--) {
+          const t = h - EDGE - (rest.length - j) * step;
+          if (t < groundBottom + 4) continue;
+          placeAt(rest[j], t);
+        }
+      };
+      allocateHubs();
+
       for (const s of slots) {
+        if (s.done) continue;
+        if (s.search) {
+          const { sxp, syp, hwp, hhp, ax } = s.search;
+          const Wp = 2 * hwp;
+          const Hp = 2 * hhp;
+          const step = Hp + 5;
+          let placed: { l: number; r: number; t: number; b: number } | null = null;
+          // 上半区优先向上找天空位、下半区优先向下找地面位；dy 为正 = 屏幕上移
+          const dirs = syp < h / 2 ? [1, -1] : [-1, 1];
+          for (const m of [0, dirs[0], dirs[1], 2 * dirs[0], 2 * dirs[1], 3 * dirs[0], 3 * dirs[1], 4 * dirs[0], 4 * dirs[1], 5 * dirs[0], 5 * dirs[1]]) {
+            const dy = m * step;
+            const l = sxp - ax * Wp;
+            const r = l + Wp;
+            const t = syp - hhp - dy;
+            const b = t + Hp;
+            if (l < 2 || r > w - 2 || t < 2 || b > h - 2) continue;
+            let clash = false;
+            for (const o of obstacles) {
+              if (l < o.r + PAD && r > o.l - PAD && t < o.b + PAD && b > o.t - PAD) {
+                clash = true;
+                break;
+              }
+            }
+            if (!clash) {
+              for (const k of kept) {
+                if (l < k.r + PAD && r > k.l - PAD && t < k.b + PAD && b > k.t - PAD) {
+                  clash = true;
+                  break;
+                }
+              }
+            }
+            if (clash) continue;
+            // center.y 每偏离 0.5 一个 H/2 即把贴图整体上移一个 H（屏幕像素 dy → 锚点比例偏移）
+            s.rec.sp.center.set(ax, 0.5 - dy / (2 * hhp));
+            placed = { l, r, t, b };
+            break;
+          }
+          if (!placed) {
+            s.rec.sp.visible = false;
+            continue;
+          }
+          s.l = placed.l;
+          s.r = placed.r;
+          s.t = placed.t;
+          s.b = placed.b;
+          kept.push(s);
+          s.rec.sp.visible = true;
+          continue;
+        }
         let clash = false;
         for (const k of kept) {
           if (s.l < k.r + PAD && s.r > k.l - PAD && s.t < k.b + PAD && s.b > k.t - PAD) {
