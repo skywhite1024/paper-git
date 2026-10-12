@@ -11,6 +11,13 @@ export async function apiGet<T>(path: string, revalidate = 60): Promise<T> {
   return res.json() as Promise<T>;
 }
 
+/** Browser-side fetch (no Next.js caching options). */
+export async function clientGet<T>(path: string, signal?: AbortSignal): Promise<T> {
+  const res = await fetch(`${API_BASE}${path}`, { signal });
+  if (!res.ok) throw new Error(`API ${path} failed: ${res.status}`);
+  return res.json() as Promise<T>;
+}
+
 export type NodeDTO = {
   id: string;
   parent_id: string | null;
