@@ -19,6 +19,7 @@ export default function Error({
   return (
     <EmptyState
       icon="!"
+      titleLevel={1}
       title={offline ? "无法连接数据服务" : "页面加载失败"}
       description={
         offline

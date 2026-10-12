@@ -188,18 +188,22 @@ export function EmptyState({
   description,
   action,
   icon = "◎",
+  titleLevel = 2,
 }: {
   title: string;
   description?: string;
   action?: React.ReactNode;
   icon?: React.ReactNode;
+  /** Page-level empty states need an h1 so screen-reader heading navigation lands on them. */
+  titleLevel?: 1 | 2;
 }) {
+  const Heading = titleLevel === 1 ? "h1" : "h2";
   return (
     <div className="flex flex-col items-center justify-center rounded-card border border-dashed border-line bg-surface px-6 py-12 text-center">
       <span aria-hidden className="mb-3 grid h-10 w-10 place-items-center rounded-full bg-raised text-base text-subtle">
         {icon}
       </span>
-      <p className="text-sm font-semibold text-fg">{title}</p>
+      <Heading className="text-sm font-semibold text-fg">{title}</Heading>
       {description ? <p className="mt-1.5 max-w-md text-sm text-muted">{description}</p> : null}
       {action ? <div className="mt-4">{action}</div> : null}
     </div>

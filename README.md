@@ -70,6 +70,8 @@ node visual-qa.mjs <前缀> both light   # 9 个页面 × 1440/390 截图，检�
 node visual-qa.mjs <前缀> both dark    # 同上，深色主题
 node interaction-qa.mjs              # 14 项真实操作冒烟（主题持久化、即时检索、拓扑定位、
                                      # 分页筛选、关注撤销、移动端抽屉、404 恢复）
+node a11y-qa.mjs                     # 结构可达性审计（唯一 h1、地标与可访问名称、
+                                     # 重复 id、svg/图片替代文本、焦点可见性）
 ```
 
 截图输出到 `.qa/shots/`（已 gitignore）。

@@ -5,6 +5,7 @@ export default function NotFound() {
     <div className="py-10">
       <EmptyState
         icon="404"
+        titleLevel={1}
         title="未找到对应内容"
         description="该方向、路线或论文可能已被重命名、尚未收录，或链接已失效。"
         action={
