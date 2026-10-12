@@ -1,9 +1,22 @@
 import Link from "next/link";
 import TopologyExplorer, { type TopoData } from "@/components/TopologyExplorer";
+import { Button } from "@/components/ui";
 import { apiGet, type StatsDTO } from "@/lib/api";
 import { L } from "@/lib/lexicon";
 
 export const dynamic = "force-dynamic";
+
+/** 兼容三种入参写法：完整节点 id、route+论文代号、route+标签。 */
+function resolveNodeId(data: TopoData, route: string | undefined, node: string | undefined) {
+  if (!node) return undefined;
+  if (data.nodes.some((n) => n.id === node)) return node;
+  const scoped = `${route ?? ""}:${node}`;
+  if (data.nodes.some((n) => n.id === scoped)) return scoped;
+  const byLabel = data.nodes.find(
+    (n) => (!route || n.route === route) && n.label.toLowerCase() === node.toLowerCase()
+  );
+  return byLabel?.id;
+}
 
 export default async function TopologyHomePage({
   searchParams,
@@ -16,42 +29,55 @@ export default async function TopologyHomePage({
     apiGet<StatsDTO>("/api/stats"),
   ]);
 
-  const initialNode = sp.node ? `${sp.route ?? ""}:${sp.node}` : null;
-  const validNode = initialNode && topo.nodes.some((n) => n.id === initialNode) ? initialNode : undefined;
+  const initialNode = resolveNodeId(topo, sp.route, sp.node);
   const paperCount = topo.nodes.filter((n) => n.kind === "paper").length;
   const stageCount = topo.nodes.filter((n) => n.kind === "stage").length;
 
+  const facts = [
+    L.topology.routeCount(topo.routes_meta.length),
+    L.topology.stageCount(stageCount),
+    L.topology.nodeCount(paperCount),
+    L.topology.edgeCount(topo.links.length),
+    L.home.corpusStat(stats.paper_real.toLocaleString()),
+    L.home.recentStat(stats.recent_7d),
+  ];
+
   return (
     <div className="space-y-3">
-      <section className="flex flex-wrap items-center gap-x-6 gap-y-1 rounded-lg border border-[var(--pg-border)] bg-white px-5 py-2.5">
-        <div>
-          <span className="text-base font-bold">{L.topology.title}</span>
-          <span className="ml-3 text-xs text-gray-500">
-            {L.topology.routeCount(topo.routes_meta.length)} · {stageCount} 层地层 · {L.topology.nodeCount(paperCount)} ·{" "}
-            {L.topology.edgeCount(topo.links.length)}
+      <section className="flex flex-wrap items-center gap-x-5 gap-y-2 rounded-card border border-line bg-surface px-4 py-2.5 shadow-card">
+        <div className="min-w-0">
+          <h1 className="text-[15px] font-semibold tracking-tight text-fg">{L.topology.title}</h1>
+          <p className="mt-0.5 truncate text-[11px] text-subtle">{topo.family.name_zh}</p>
+        </div>
+        <ul className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs tabular-nums text-muted">
+          {facts.map((f) => (
+            <li key={f} className="whitespace-nowrap">
+              {f}
+            </li>
+          ))}
+        </ul>
+        <nav aria-label={L.topology.overview} className="ml-auto flex flex-wrap items-center gap-1.5">
+          <span className="hidden items-center gap-1.5 text-[11px] text-subtle sm:flex">
+            {L.topology.searchKbd}
+            <kbd className="rounded border border-line bg-raised px-1.5 py-0.5 font-mono text-[10px] text-muted">
+              Ctrl K
+            </kbd>
           </span>
-        </div>
-        <div className="ml-auto flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-gray-500">
-          <span>{L.home.corpusStat(stats.paper_real.toLocaleString())}</span>
-          <span>{L.home.taxonomyStat(stats.node_total)}</span>
-          <span>{L.home.recentStat(stats.recent_7d)}</span>
-          <span className="text-gray-300">|</span>
-          <Link href="/routes" className="text-blue-700 hover:underline">
+          <Button href="/routes" size="sm">
             {L.nav.routes}
-          </Link>
-          <Link href="/nodes/ai" className="hover:text-blue-700">
-            {L.nav.treeAI}
-          </Link>
-          <Link href="/nodes/cs" className="hover:text-blue-700">
-            {L.nav.treeCS}
-          </Link>
-          <Link href="/nodes/robotics" className="hover:text-blue-700">
-            {L.nav.treeRobotics}
-          </Link>
-        </div>
+          </Button>
+          <Button href="/watchlist" size="sm" variant="ghost">
+            {L.nav.watchlist}
+          </Button>
+          {sp.route && (
+            <Link href="/" className="text-[11px] text-muted underline-offset-4 hover:text-accent hover:underline">
+              {L.topology.showAll}
+            </Link>
+          )}
+        </nav>
       </section>
 
-      <TopologyExplorer data={topo} initialRoute={sp.route} initialNode={validNode} />
+      <TopologyExplorer data={topo} initialRoute={sp.route} initialNode={initialNode} />
     </div>
   );
 }

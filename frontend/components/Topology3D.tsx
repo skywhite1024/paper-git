@@ -1,9 +1,18 @@
 "use client";
 
-import { Component, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-import { computeLayout, STAGE_W, type Corridor } from "@/lib/layout3d";
+import {
+  CAMERA_FOV,
+  CORRIDOR_WIDTH,
+  STAGE_W,
+  computeLayout,
+  fitFrame,
+  type Corridor,
+  type Vec3,
+} from "@/lib/layout3d";
+import { L } from "@/lib/lexicon";
 
 export type TopoNode = {
   id: string;
@@ -29,40 +38,76 @@ export type TopoLink = { source: string; target: string; kind: string; label?: s
 
 export type TopoRouteMeta = { id: string; name_zh: string; stages: string[] };
 
-const BG = 0x0a0f1c;
+const TEX_FONT = 40;
+const DEG = Math.PI / 180;
 
-function makeTextSprite(text: string, opts: { size?: number; color?: string; bg?: string } = {}) {
-  const size = opts.size ?? 42;
-  const canvas = document.createElement("canvas");
-  const ctx = canvas.getContext("2d")!;
-  const font = `${size}px "Noto Sans SC", "Microsoft YaHei", system-ui, sans-serif`;
-  ctx.font = font;
-  const metrics = ctx.measureText(text);
-  canvas.width = Math.ceil(metrics.width) + 28;
-  canvas.height = Math.ceil(size * 1.5);
-  const c2 = canvas.getContext("2d")!;
-  c2.font = font;
-  if (opts.bg) {
-    c2.fillStyle = opts.bg;
-    if (typeof c2.roundRect === "function") {
-      c2.beginPath();
-      c2.roundRect(0, 0, canvas.width, canvas.height, 10);
-      c2.fill();
-    } else {
-      c2.fillRect(0, 0, canvas.width, canvas.height);
-    }
-  }
-  c2.fillStyle = opts.color ?? "#e2e8f0";
-  c2.textBaseline = "middle";
-  c2.fillText(text, 14, canvas.height / 2);
-  const texture = new THREE.CanvasTexture(canvas);
-  texture.anisotropy = 4;
-  const material = new THREE.SpriteMaterial({ map: texture, transparent: true, depthWrite: false });
-  const sprite = new THREE.Sprite(material);
-  const scale = 0.135;
-  sprite.scale.set(canvas.width * scale, canvas.height * scale, 1);
-  return sprite;
+/** 标签贴图盒的屏幕高度（CSS 像素）；贴图内字形占 1/1.5。 */
+const LABEL_PX = { hub: 25, stage: 22, paper: 20, num: 19 } as const;
+type LabelKind = keyof typeof LABEL_PX;
+
+type LabelRec = {
+  sp: THREE.Sprite;
+  kind: LabelKind;
+  aspect: number;
+  route?: string;
+  nodeId?: string;
+  /** 默认锚点：hub 名牌右对齐，向左延伸，避免与同走廊的阶段标签同行相撞。 */
+  cx: number;
+  maxLen?: number;
+};
+
+type Palette = {
+  bg: string;
+  fg: string;
+  muted: string;
+  accent: string;
+  dark: boolean;
+};
+
+function readPalette(): Palette {
+  const cs = getComputedStyle(document.documentElement);
+  const v = (name: string, fallback: string) => cs.getPropertyValue(name).trim() || fallback;
+  const theme = document.documentElement.getAttribute("data-theme");
+  return {
+    bg: v("--c-bg", "#f7f8fa"),
+    fg: v("--c-fg", "#14181f"),
+    muted: v("--c-muted", "#5b6472"),
+    accent: v("--c-accent", "#4f46e5"),
+    dark: theme ? theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches,
+  };
 }
+
+/** 白字加白色半透明底板，颜色由 SpriteMaterial.color 染色，换主题不必重绘贴图。 */
+function makeLabelTexture(text: string): { map: THREE.CanvasTexture; aspect: number } {
+  const canvas = document.createElement("canvas");
+  const probe = canvas.getContext("2d")!;
+  const font = `600 ${TEX_FONT}px "Noto Sans SC", "Microsoft YaHei", system-ui, sans-serif`;
+  probe.font = font;
+  const width = Math.ceil(probe.measureText(text).width) + Math.round(TEX_FONT * 0.7);
+  const height = Math.round(TEX_FONT * 1.5);
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext("2d")!;
+  ctx.fillStyle = "rgba(255,255,255,0.26)";
+  if (typeof ctx.roundRect === "function") {
+    ctx.beginPath();
+    ctx.roundRect(0, 0, width, height, height * 0.3);
+    ctx.fill();
+  } else {
+    ctx.fillRect(0, 0, width, height);
+  }
+  ctx.font = font;
+  ctx.fillStyle = "#ffffff";
+  ctx.textBaseline = "middle";
+  ctx.fillText(text, Math.round(TEX_FONT * 0.35), height / 2);
+  const map = new THREE.CanvasTexture(canvas);
+  map.colorSpace = THREE.SRGBColorSpace;
+  map.anisotropy = 4;
+  return { map, aspect: width / height };
+}
+
+const routeOf = (nodeId: string) =>
+  nodeId.startsWith("hub:") || nodeId.startsWith("stage:") ? nodeId.split(":")[1] : nodeId.split(":")[0];
 
 export default function Topology3D({
   nodes,
@@ -73,6 +118,7 @@ export default function Topology3D({
   activeRoutes,
   focusToken,
   resetToken,
+  onUnavailable,
 }: {
   nodes: TopoNode[];
   links: TopoLink[];
@@ -82,317 +128,535 @@ export default function Topology3D({
   activeRoutes: Set<string>;
   focusToken: { id: string; nonce: number } | null;
   resetToken: number;
+  onUnavailable: () => void;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [tooltip, setTooltip] = useState<{ x: number; y: number; label: string; sub: string } | null>(null);
+  const [cursorIdx, setCursorIdx] = useState(-1);
 
   const layout = useMemo(() => computeLayout(nodes, links, routesMeta), [nodes, links, routesMeta]);
-  const layoutRef = useRef(layout);
-  layoutRef.current = layout;
-  const selectRef = useRef(onSelect);
-  selectRef.current = onSelect;
+
+  const order = useMemo(() => {
+    const rank = new Map(routesMeta.map((r, i) => [r.id, i]));
+    const kindRank = { hub: 0, stage: 1, paper: 2 } as const;
+    return [...nodes].sort(
+      (a, b) =>
+        (rank.get(a.route ?? "") ?? 99) - (rank.get(b.route ?? "") ?? 99) ||
+        kindRank[a.kind] - kindRank[b.kind] ||
+        (a.stage_idx ?? -1) - (b.stage_idx ?? -1) ||
+        a.label.localeCompare(b.label)
+    );
+  }, [nodes, routesMeta]);
+
+  const adjacency = useMemo(() => {
+    const m = new Map<string, Set<string>>();
+    for (const n of nodes) m.set(n.id, new Set());
+    for (const l of links) {
+      m.get(l.source)?.add(l.target);
+      m.get(l.target)?.add(l.source);
+    }
+    return m;
+  }, [nodes, links]);
+
+  const live = useRef({ layout, nodes, adjacency, onSelect, activeRoutes, selectedId, focusToken });
+  live.current = { layout, nodes, adjacency, onSelect, activeRoutes, selectedId, focusToken };
 
   const engineRef = useRef<{
-    nodeMeshes: Map<string, THREE.Mesh>;
-    routeGroups: Map<string, THREE.Group>;
-    loopEdges: { mesh: THREE.Mesh; from: string; to: string }[];
-    flyTo: (id: string) => void;
+    flyTo: (id: string, immediate?: boolean) => void;
     resetView: () => void;
     setDim: (routes: Set<string>) => void;
     setSelected: (id: string | null) => void;
+    setCursor: (id: string | null) => void;
   } | null>(null);
 
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+    } catch {
+      onUnavailable();
+      return;
+    }
+    if (!renderer.getContext()) {
+      onUnavailable();
+      return;
+    }
+
+    const L0 = live.current.layout;
+    let pal = readPalette();
+
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(BG);
-    scene.fog = new THREE.Fog(BG, 190, 640);
+    scene.background = new THREE.Color(pal.bg);
+    scene.fog = new THREE.Fog(new THREE.Color(pal.bg), 1, 10);
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.setSize(container.clientWidth, container.clientHeight);
-    container.appendChild(renderer.domElement);
-
-    const camera = new THREE.PerspectiveCamera(52, container.clientWidth / container.clientHeight, 0.1, 2000);
-    const L = layoutRef.current;
-    camera.position.set(...L.initialCamera);
-
+    const camera = new THREE.PerspectiveCamera(CAMERA_FOV, 1, 0.5, 6000);
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
-    controls.dampingFactor = 0.08;
-    controls.maxDistance = 620;
-    controls.minDistance = 18;
-    controls.target.set(...L.center);
+    controls.dampingFactor = 0.09;
 
-    scene.add(new THREE.HemisphereLight(0xcfe0f5, 0x0b1220, 1.05));
-    const dir = new THREE.DirectionalLight(0xffffff, 0.55);
-    dir.position.set(80, 150, 60);
-    scene.add(dir);
+    scene.add(new THREE.HemisphereLight(0xffffff, 0x8f9aab, 1.25));
+    const sun = new THREE.DirectionalLight(0xffffff, 1.05);
+    sun.position.set(40, 110, 80);
+    scene.add(sun);
 
     const nodeMeshes = new Map<string, THREE.Mesh>();
     const routeGroups = new Map<string, THREE.Group>();
-    const loopEdges: { mesh: THREE.Mesh; from: string; to: string }[] = [];
+    const crossEdges: { mesh: THREE.Mesh; from: string; to: string }[] = [];
+    const edgesOfNode = new Map<string, THREE.Mesh[]>();
+    const labels: LabelRec[] = [];
+    const fgMaterials: THREE.SpriteMaterial[] = [];
 
-    const buildStatic = () => {
-      const world = new THREE.Group();
-      const current = layoutRef.current;
-
-      for (const c of current.corridors) {
-        buildCorridor(world, c);
-      }
-
-      // 节点
-      for (const n of current.nodes) {
-        const geo = new THREE.SphereGeometry(n.radius, 20, 16);
-        const mat = new THREE.MeshStandardMaterial({
-          color: new THREE.Color(n.color),
-          emissive: new THREE.Color(n.color),
-          emissiveIntensity: n.kind === "paper" ? 0.42 : 0.62,
-          roughness: 0.45,
-          metalness: 0.1,
-        });
-        const mesh = new THREE.Mesh(geo, mat);
-        mesh.position.set(n.x, n.y, n.z);
-        mesh.userData.nodeId = n.id;
-        (mesh.userData as { baseScale: number }).baseScale = 1;
-        world.add(mesh);
-        nodeMeshes.set(n.id, mesh);
-        routeGroups.get(n.route ?? "")?.add(mesh);
-
-        const needLabel = n.kind === "hub" || n.kind === "stage" || n.key;
-        if (needLabel) {
-          const sprite = makeTextSprite(n.label, {
-            size: n.kind === "hub" ? 46 : n.kind === "stage" ? 36 : 30,
-            color: n.kind === "hub" ? "#f8fafc" : n.kind === "stage" ? "#cbd5e1" : n.color,
-          });
-          sprite.position.set(n.x, n.y + (n.kind === "hub" ? 9.5 : n.kind === "stage" ? 7 : 3.4), n.z);
-          if (n.kind === "paper" && !n.key) continue;
-          world.add(sprite);
-          routeGroups.get(n.route ?? "")?.add(sprite);
-        }
-      }
-
-      // 连边
-      for (const e of current.edges) {
-        const curve = new THREE.QuadraticBezierCurve3(
-          new THREE.Vector3(...e.points[0]),
-          new THREE.Vector3(...e.points[1]),
-          new THREE.Vector3(...e.points[2]),
-        );
-        const radius = e.kind === "pipeline" ? 0.16 : e.kind === "loop" ? 0.34 : 0.24;
-        const geo = new THREE.TubeGeometry(curve, 28, radius, 8, false);
-        const mat = new THREE.MeshBasicMaterial({
-          color: new THREE.Color(e.color),
-          transparent: true,
-          opacity: e.kind === "pipeline" ? 0.4 : e.kind === "loop" ? 0.62 : 0.8,
-        });
-        const mesh = new THREE.Mesh(geo, mat);
-        mesh.userData.edge = e;
-        world.add(mesh);
-        const fromRoute = e.from.split(":")[0] === "hub" || e.from.startsWith("stage:") ? e.from.split(":")[1] : e.from.split(":")[0];
-        const toRoute = e.to.split(":")[0] === "hub" || e.to.startsWith("stage:") ? e.to.split(":")[1] : e.to.split(":")[0];
-        if (e.kind === "loop" || fromRoute !== toRoute) {
-          loopEdges.push({ mesh, from: e.from, to: e.to });
-        } else {
-          routeGroups.get(fromRoute)?.add(mesh);
-        }
-      }
-
-      scene.add(world);
+    const addLabel = (
+      parent: THREE.Object3D,
+      raw: string,
+      kind: LabelKind,
+      at: [number, number, number],
+      tint: THREE.Color,
+      rec: Partial<LabelRec> = {}
+    ) => {
+      const cap = rec.maxLen ?? 13;
+      const text = raw.length > cap ? `${raw.slice(0, cap - 1)}…` : raw;
+      const { map, aspect } = makeLabelTexture(text);
+      const mat = new THREE.SpriteMaterial({ map, transparent: true, depthWrite: false, color: tint });
+      const sp = new THREE.Sprite(mat);
+      sp.position.set(at[0], at[1], at[2]);
+      sp.renderOrder = 3;
+      parent.add(sp);
+      labels.push({ sp, kind, aspect, cx: kind === "hub" ? 1 : 0.5, ...rec });
+      if (kind === "hub" || kind === "stage" || kind === "paper") fgMaterials.push(mat);
     };
 
-    const buildCorridor = (world: THREE.Group, c: Corridor) => {
+    const buildCorridor = (c: Corridor) => {
       const group = new THREE.Group();
       routeGroups.set(c.route, group);
+      scene.add(group);
+      const color = new THREE.Color(c.color);
+      const w = Math.max(1, c.x1 - c.x0);
 
-      // 走廊地面
-      const w = c.x1 - c.x0;
       const floor = new THREE.Mesh(
         new THREE.PlaneGeometry(w, CORRIDOR_WIDTH),
-        new THREE.MeshBasicMaterial({ color: new THREE.Color(c.color), transparent: true, opacity: 0.05 }),
+        new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.1 })
       );
       floor.rotation.x = -Math.PI / 2;
-      floor.position.set((c.x0 + c.x1) / 2, 0.05, c.z);
+      floor.position.set((c.x0 + c.x1) / 2, 0, c.z);
       group.add(floor);
 
-      // 地面边线
-      const edge = new THREE.LineSegments(
+      const outline = new THREE.LineSegments(
         new THREE.EdgesGeometry(new THREE.PlaneGeometry(w, CORRIDOR_WIDTH)),
-        new THREE.LineBasicMaterial({ color: new THREE.Color(c.color), transparent: true, opacity: 0.4 }),
+        new THREE.LineBasicMaterial({ color, transparent: true, opacity: 0.55 })
       );
-      edge.rotation.x = -Math.PI / 2;
-      edge.position.copy(floor.position);
-      edge.position.y = 0.1;
-      group.add(edge);
+      outline.rotation.x = -Math.PI / 2;
+      outline.position.set(floor.position.x, 0.08, c.z);
+      group.add(outline);
 
-      // 阶段地层（薄板）与编号
       for (const s of c.stages) {
         const slab = new THREE.Mesh(
-          new THREE.BoxGeometry(STAGE_W * 0.8, 0.24, CORRIDOR_WIDTH * 0.8),
-          new THREE.MeshBasicMaterial({ color: new THREE.Color(c.color), transparent: true, opacity: 0.1 }),
+          new THREE.BoxGeometry(STAGE_W * 0.82, 0.2, CORRIDOR_WIDTH * 0.84),
+          new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.16 })
         );
-        slab.position.set(s.x, 0.14, c.z);
+        slab.position.set(s.x, 0.12, c.z);
         group.add(slab);
-        const num = makeTextSprite(`${s.idx + 1}`, { size: 30, color: c.color });
-        num.position.set(s.x - STAGE_W * 0.42, 2.2, c.z - CORRIDOR_WIDTH * 0.48);
-        num.scale.multiplyScalar(0.7);
-        group.add(num);
+        addLabel(group, String(s.idx + 1), "num", [s.x - STAGE_W * 0.42, 1.9, c.z + CORRIDOR_WIDTH * 0.44], color, {
+          route: c.route,
+        });
       }
 
-      // 路线名牌（入口）
-      const board = makeTextSprite(c.name, { size: 44, color: "#f8fafc", bg: hexA(c.color, 0.32) });
-      board.position.set(c.x0 - 2, 15.5, c.z);
-      group.add(board);
+      // 走廊名牌与 hub 标签同位，只保留 hub 标签，避免重复文字
+    };
+    for (const c of L0.corridors) buildCorridor(c);
 
-      world.add(group);
+    for (const n of L0.nodes) {
+      const group = routeGroups.get(n.route ?? "") ?? scene;
+      const mat = new THREE.MeshStandardMaterial({
+        color: new THREE.Color(n.color),
+        emissive: new THREE.Color(n.color),
+        emissiveIntensity: pal.dark ? 0.42 : 0.24,
+        roughness: 0.52,
+        metalness: 0.04,
+        transparent: true,
+        opacity: 1,
+      });
+      mat.userData.base = n.kind === "paper" ? (pal.dark ? 0.36 : 0.2) : pal.dark ? 0.5 : 0.28;
+      const mesh = new THREE.Mesh(new THREE.SphereGeometry(n.radius, 22, 16), mat);
+      mesh.position.set(n.x, n.y, n.z);
+      mesh.userData.nodeId = n.id;
+      group.add(mesh);
+      nodeMeshes.set(n.id, mesh);
+
+      const kind: LabelKind | null = n.kind === "hub" ? "hub" : n.kind === "stage" ? "stage" : n.key ? "paper" : null;
+      if (kind) {
+        // 阶段标签上下分层，避免同走廊 6 条标签挤在一行
+        const stagger = n.kind === "stage" && (n.stage_idx ?? 0) % 2 === 1 ? 13.6 : 0;
+        const lift = (n.kind === "hub" ? 9 : n.kind === "stage" ? 6.6 : 4.6) + stagger;
+        addLabel(group, n.label, kind, [n.x, n.y + lift, n.z], new THREE.Color(pal.fg), {
+          route: n.route,
+          nodeId: n.id,
+          maxLen: n.kind === "stage" ? 8 : n.kind === "hub" ? 12 : 10,
+        });
+      }
+    }
+
+    for (const e of L0.edges) {
+      if (e.points.length < 3) continue;
+      const curve = new THREE.QuadraticBezierCurve3(
+        new THREE.Vector3(...e.points[0]),
+        new THREE.Vector3(...e.points[1]),
+        new THREE.Vector3(...e.points[2])
+      );
+      const mat = new THREE.MeshBasicMaterial({
+        color: new THREE.Color(e.color),
+        transparent: true,
+        opacity: e.kind === "pipeline" ? 0.45 : e.kind === "loop" ? 0.7 : 0.85,
+      });
+      mat.userData.base = mat.opacity;
+      const mesh = new THREE.Mesh(
+        new THREE.TubeGeometry(curve, 24, e.kind === "pipeline" ? 0.14 : e.kind === "loop" ? 0.3 : 0.2, 8, false),
+        mat
+      );
+      mesh.userData.edgeKind = e.kind;
+      const r1 = routeOf(e.from);
+      const r2 = routeOf(e.to);
+      if (r1 === r2 && routeGroups.has(r1)) routeGroups.get(r1)!.add(mesh);
+      else {
+        scene.add(mesh);
+        crossEdges.push({ mesh, from: e.from, to: e.to });
+      }
+      for (const id of [e.from, e.to]) {
+        const arr = edgesOfNode.get(id);
+        if (arr) arr.push(mesh);
+        else edgesOfNode.set(id, [mesh]);
+      }
+    }
+
+    const makeHalo = (tint: string) => {
+      const m = new THREE.Mesh(
+        new THREE.RingGeometry(1.16, 1.36, 48),
+        new THREE.MeshBasicMaterial({
+          color: new THREE.Color(tint),
+          transparent: true,
+          opacity: 0.95,
+          side: THREE.DoubleSide,
+          depthTest: false,
+        })
+      );
+      m.renderOrder = 6;
+      m.visible = false;
+      scene.add(m);
+      return m;
+    };
+    const selHalo = makeHalo(pal.accent);
+    const curHalo = makeHalo(pal.muted);
+
+    let userMoved = false;
+    let lastSize = { w: 0, h: 0 };
+    let hovered: string | null = null;
+    let fit = L0.radius;
+    let home: Vec3 = [...L0.center];
+    const applyFrame = (aspect: number) => {
+      const f = fitFrame(L0, aspect);
+      fit = f.dist;
+      home = f.target;
+    };
+    applyFrame(1);
+    controls.addEventListener("start", () => {
+      userMoved = true;
+    });
+
+    const measure = () => {
+      const w = container.clientWidth;
+      const h = container.clientHeight;
+      return w > 0 && h > 0 ? { w, h } : null;
     };
 
-    buildStatic();
+    const applyScale = (w: number, h: number) => {
+      lastSize = { w, h };
+      renderer.setSize(w, h);
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+      applyFrame(camera.aspect);
+      const fog = scene.fog as THREE.Fog;
+      fog.near = fit * 1.15;
+      fog.far = fit * 3.2;
+      controls.minDistance = L0.radius * 0.06;
+      controls.maxDistance = fit * 3.6;
+    };
 
-    // ---- 交互 ----
+    const homePos = (): [number, number, number] => [
+      home[0] + L0.viewDir[0] * fit,
+      home[1] + L0.viewDir[1] * fit,
+      home[2] + L0.viewDir[2] * fit,
+    ];
+
+    const fly = { active: false, camGoal: new THREE.Vector3(), targetGoal: new THREE.Vector3() };
+
+    function frameHome(animated: boolean) {
+      const size = measure();
+      if (!size) return;
+      applyScale(size.w, size.h);
+      const goal = homePos();
+      if (animated) {
+        fly.targetGoal.set(...home);
+        fly.camGoal.set(...goal);
+        fly.active = true;
+      } else {
+        camera.position.set(...goal);
+        controls.target.set(...home);
+        fly.active = false;
+        controls.update();
+      }
+    }
+
+    function applySelected(id: string | null) {
+      const near = id ? live.current.adjacency.get(id) : undefined;
+      for (const [nid, mesh] of nodeMeshes) {
+        const mat = mesh.material as THREE.MeshStandardMaterial;
+        const base = mat.userData.base as number;
+        if (nid === id) mat.emissiveIntensity = 1;
+        else if (nid === hovered) mat.emissiveIntensity = base + 0.3;
+        else if (near?.has(nid)) mat.emissiveIntensity = base + 0.22;
+        else mat.emissiveIntensity = base;
+        mesh.scale.setScalar(nid === id ? 1.4 : nid === hovered ? 1.16 : 1);
+        mat.opacity = id && nid !== id && !near?.has(nid) ? 0.45 : 1;
+      }
+      const node = id ? L0.nodes.find((m) => m.id === id) : null;
+      if (node) {
+        selHalo.position.set(node.x, node.y, node.z);
+        selHalo.scale.setScalar(node.radius * 1.35);
+        selHalo.visible = true;
+      } else selHalo.visible = false;
+
+      const hot = id ? new Set(edgesOfNode.get(id)) : undefined;
+      for (const arr of edgesOfNode.values()) {
+        for (const mesh of arr) {
+          const mat = mesh.material as THREE.MeshBasicMaterial;
+          mat.opacity = !id ? (mat.userData.base as number) : hot?.has(mesh) ? 0.95 : 0.16;
+        }
+      }
+    }
+
+    function applyPalette() {
+      pal = readPalette();
+      (scene.background as THREE.Color).set(pal.bg);
+      (scene.fog as THREE.Fog).color.set(pal.bg);
+      const fg = new THREE.Color(pal.fg);
+      for (const mat of fgMaterials) mat.color.copy(fg);
+      (selHalo.material as THREE.MeshBasicMaterial).color.set(pal.accent);
+      (curHalo.material as THREE.MeshBasicMaterial).color.set(pal.muted);
+      for (const mesh of nodeMeshes.values()) {
+        const mat = mesh.material as THREE.MeshStandardMaterial;
+        const n = L0.nodes.find((m) => m.id === mesh.userData.nodeId);
+        mat.userData.base = n?.kind === "paper" ? (pal.dark ? 0.36 : 0.2) : pal.dark ? 0.5 : 0.28;
+      }
+      applySelected(live.current.selectedId);
+    }
+
     const raycaster = new THREE.Raycaster();
     const pointer = new THREE.Vector2();
-    let hoveredId: string | null = null;
 
     const pick = (event: PointerEvent): TopoNode | null => {
       const rect = renderer.domElement.getBoundingClientRect();
+      if (!rect.width || !rect.height) return null;
       pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
       pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
       raycaster.setFromCamera(pointer, camera);
-      const meshes = [...nodeMeshes.values()].filter((m) => m.visible && m.parent?.visible !== false);
+      const meshes = [...nodeMeshes.values()].filter((m) => m.parent?.visible !== false && m.visible);
       const hits = raycaster.intersectObjects(meshes, false);
       if (!hits.length) return null;
       const id = hits[0].object.userData.nodeId as string;
-      return nodesRef.current.find((n) => n.id === id) ?? null;
+      return live.current.nodes.find((n) => n.id === id) ?? null;
     };
 
-    const nodesRef: { current: TopoNode[] } = { current: nodes };
+    const kindLabel = (kind: TopoNode["kind"]) =>
+      kind === "hub" ? L.hud.hub : kind === "stage" ? L.hud.stage : L.hud.paper;
 
     const onPointerMove = (event: PointerEvent) => {
       const hit = pick(event);
       renderer.domElement.style.cursor = hit ? "pointer" : "grab";
-      if (hit) {
-        hoveredId = hit.id;
-        const rect = renderer.domElement.getBoundingClientRect();
-        setTooltip({
-          x: event.clientX - rect.left,
-          y: event.clientY - rect.top,
-          label: hit.label,
-          sub: hit.kind === "paper" ? `${hit.stage ?? ""}${hit.year ? ` · ${hit.year}` : ""}` : hit.kind === "stage" ? "阶段地层" : "路线走廊",
-        });
-      } else {
-        hoveredId = null;
+      if (!hit) {
+        if (hovered) {
+          hovered = null;
+          applySelected(live.current.selectedId);
+        }
         setTooltip(null);
+        return;
       }
+      if (hovered !== hit.id) {
+        hovered = hit.id;
+        applySelected(live.current.selectedId);
+      }
+      const rect = renderer.domElement.getBoundingClientRect();
+      setTooltip({
+        x: event.clientX - rect.left,
+        y: event.clientY - rect.top,
+        label: hit.label,
+        sub: `${kindLabel(hit.kind)}${hit.year ? ` · ${hit.year}` : ""}`,
+      });
     };
 
-    let downPos = { x: 0, y: 0 };
+    let downAt = { x: 0, y: 0 };
     const onPointerDown = (e: PointerEvent) => {
-      downPos = { x: e.clientX, y: e.clientY };
+      downAt = { x: e.clientX, y: e.clientY };
     };
     const onPointerUp = (e: PointerEvent) => {
-      if (Math.hypot(e.clientX - downPos.x, e.clientY - downPos.y) > 5) return;
+      if (Math.hypot(e.clientX - downAt.x, e.clientY - downAt.y) > 5) return;
       const hit = pick(e);
-      selectRef.current(hit ? hit.id : null);
+      live.current.onSelect(hit ? hit.id : null);
     };
-    const onDblClick = () => engine.resetView();
+    const onDblClick = () => {
+      userMoved = false;
+      frameHome(true);
+    };
 
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.domElement.style.cursor = "grab";
+    renderer.domElement.style.touchAction = "none";
+    renderer.domElement.style.display = "block";
+    renderer.domElement.setAttribute("aria-hidden", "true");
+    container.appendChild(renderer.domElement);
     renderer.domElement.addEventListener("pointermove", onPointerMove);
     renderer.domElement.addEventListener("pointerdown", onPointerDown);
     renderer.domElement.addEventListener("pointerup", onPointerUp);
     renderer.domElement.addEventListener("dblclick", onDblClick);
 
-    // ---- 相机飞行 ----
-    const fly = { active: false, camGoal: new THREE.Vector3(), targetGoal: new THREE.Vector3() };
-    const engine = {
-      nodeMeshes,
-      routeGroups,
-      loopEdges,
-      flyTo(id: string) {
-        const n = layoutRef.current.nodes.find((m) => m.id === id);
+    engineRef.current = {
+      flyTo(id, immediate = false) {
+        const n = L0.nodes.find((m) => m.id === id);
         if (!n) return;
+        const dir = new THREE.Vector3().copy(camera.position).sub(controls.target);
+        if (dir.lengthSq() < 1e-6) dir.set(...L0.viewDir);
+        dir.normalize();
+        const dist = Math.min(fit, Math.max(n.radius * 16, L0.radius * 0.5));
+        userMoved = true;
         fly.targetGoal.set(n.x, n.y, n.z);
-        fly.camGoal.set(n.x - 26, n.y + 22, n.z + 46);
-        fly.active = true;
+        fly.camGoal.set(n.x + dir.x * dist, n.y + dir.y * dist, n.z + dir.z * dist);
+        if (immediate) {
+          camera.position.copy(fly.camGoal);
+          controls.target.copy(fly.targetGoal);
+          fly.active = false;
+          controls.update();
+        } else fly.active = true;
       },
       resetView() {
-        const L2 = layoutRef.current;
-        fly.targetGoal.set(...L2.center);
-        fly.camGoal.set(...L2.initialCamera);
-        fly.active = true;
+        userMoved = false;
+        frameHome(true);
       },
       setDim(active: Set<string>) {
-        for (const [route, group] of routeGroups) {
-          group.visible = active.has(route);
-        }
-        for (const le of loopEdges) {
-          const r1 = le.from.startsWith("hub:") || le.from.startsWith("stage:") ? le.from.split(":")[1] : le.from.split(":")[0];
-          const r2 = le.to.startsWith("hub:") || le.to.startsWith("stage:") ? le.to.split(":")[1] : le.to.split(":")[0];
-          le.mesh.visible = active.has(r1) && active.has(r2);
-        }
+        for (const [route, group] of routeGroups) group.visible = active.has(route);
+        for (const ce of crossEdges) ce.mesh.visible = active.has(routeOf(ce.from)) && active.has(routeOf(ce.to));
       },
-      setSelected(id: string | null) {
-        for (const [nid, mesh] of nodeMeshes) {
-          const mat = mesh.material as THREE.MeshStandardMaterial;
-          const isSel = nid === id;
-          const isNeighbor = false;
-          mat.emissiveIntensity = isSel ? 1.15 : nid === hoveredId ? 0.8 : mat.userData.baseIntensity ?? 0.42;
-          const s = isSel ? 1.5 : 1;
-          mesh.scale.setScalar(s);
-          void isNeighbor;
+      setSelected(id) {
+        applySelected(id);
+      },
+      setCursor(id) {
+        const n = id ? L0.nodes.find((m) => m.id === id) : null;
+        if (!n) {
+          curHalo.visible = false;
+          return;
         }
+        curHalo.position.set(n.x, n.y, n.z);
+        curHalo.scale.setScalar(n.radius * 1.7);
+        curHalo.visible = true;
       },
     };
-    engineRef.current = engine;
-    for (const mesh of nodeMeshes.values()) {
-      const mat = mesh.material as THREE.MeshStandardMaterial;
-      const n = layoutRef.current.nodes.find((m) => m.id === mesh.userData.nodeId);
-      mat.userData.baseIntensity = n && n.kind !== "paper" ? 0.62 : 0.42;
-    }
 
-    // ---- 渲染循环 ----
-    let raf = 0;
-    const clock = new THREE.Clock();
-    const tick = () => {
-      const t = clock.getElapsedTime();
-      if (fly.active) {
-        camera.position.lerp(fly.camGoal, 0.06);
-        controls.target.lerp(fly.targetGoal, 0.08);
-        if (camera.position.distanceTo(fly.camGoal) < 0.6) fly.active = false;
+    const tmpWorld = new THREE.Vector3();
+
+    const renderLabels = (w: number, h: number) => {
+      const tanV = Math.tan((camera.fov * DEG) / 2);
+      const tanH = tanV * camera.aspect;
+      const zoom = camera.position.distanceTo(controls.target);
+      const narrow = w < 760;
+      const solo = live.current.activeRoutes.size === 1;
+      const sel = live.current.selectedId;
+      // 逐级揭示：默认只看到走廊名，推进后依次出现阶段名与关键方法名
+      const stageTier = solo || zoom < fit * 0.8;
+      const paperTier = solo || zoom < fit * 0.5;
+      for (const rec of labels) {
+        const show =
+          rec.kind === "hub"
+            ? true
+            : rec.kind === "num"
+              ? stageTier && !narrow
+              : rec.kind === "stage"
+                ? stageTier || rec.nodeId === sel
+                : paperTier || rec.nodeId === sel;
+        rec.sp.visible = show;
+        if (!show) continue;
+        const d = Math.max(0.001, camera.position.distanceTo(rec.sp.getWorldPosition(tmpWorld)));
+        const wpp = (2 * tanV * d) / h;
+        const px = LABEL_PX[rec.kind] * (narrow ? 0.82 : 1);
+        rec.sp.scale.set(px * rec.aspect * wpp, px * wpp, 1);
+        // 标签恒定像素尺寸后，再把锚点收进画布内，避免长标签在边缘被裁切
+        tmpWorld.project(camera);
+        const hw = rec.sp.scale.x / (2 * tanH * d);
+        const hh = rec.sp.scale.y / (2 * tanV * d);
+        const room = 0.97;
+        const W = 2 * hw;
+        const H = 2 * hh;
+        const cx = Math.min(Math.max(rec.cx, 1 - (room - tmpWorld.x) / W), (room + tmpWorld.x) / W);
+        const cy = Math.min(Math.max(0.5, 1 - (room - tmpWorld.y) / H), (room + tmpWorld.y) / H);
+        rec.sp.center.set(Math.min(1, Math.max(0, cx)), Math.min(1, Math.max(0, cy)));
       }
-      // 关键节点轻微呼吸
-      for (const [nid, mesh] of nodeMeshes) {
-        const n = layoutRef.current.nodes.find((m) => m.id === nid);
-        if (n?.key) {
-          mesh.rotation.y = t * 0.4;
-        }
+    };
+
+    const startedAt = performance.now();
+    let raf = 0;
+    const tick = () => {
+      raf = requestAnimationFrame(tick);
+      const size = measure();
+      if (!size) return;
+      if (fly.active) {
+        camera.position.lerp(fly.camGoal, 0.08);
+        controls.target.lerp(fly.targetGoal, 0.09);
+        if (camera.position.distanceTo(fly.camGoal) < L0.radius * 0.005) fly.active = false;
       }
       controls.update();
+      const t = (performance.now() - startedAt) / 1000;
+      for (const [id, mesh] of nodeMeshes) if (id.startsWith("hub:")) mesh.rotation.y = t * 0.3;
+      scene.updateMatrixWorld();
+      camera.updateMatrixWorld();
+      if (selHalo.visible) selHalo.quaternion.copy(camera.quaternion);
+      if (curHalo.visible) curHalo.quaternion.copy(camera.quaternion);
+      renderLabels(size.w, size.h);
       renderer.render(scene, camera);
-      raf = requestAnimationFrame(tick);
     };
+
+    frameHome(false);
+    engineRef.current.setDim(live.current.activeRoutes);
+    applySelected(live.current.selectedId);
+    const deepLink = live.current.focusToken?.id ?? live.current.selectedId;
+    if (deepLink) engineRef.current.flyTo(deepLink, true);
     tick();
 
-    const onResize = () => {
-      if (!container) return;
-      camera.aspect = container.clientWidth / container.clientHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(container.clientWidth, container.clientHeight);
-    };
-    const observer = new ResizeObserver(onResize);
-    observer.observe(container);
+    const ro = new ResizeObserver(() => {
+      const size = measure();
+      if (!size || (size.w === lastSize.w && size.h === lastSize.h)) return;
+      lastSize = size;
+      applyScale(size.w, size.h);
+      if (!userMoved) {
+        camera.position.set(...homePos());
+        controls.target.set(...home);
+        fly.active = false;
+      }
+      controls.update();
+    });
+    ro.observe(container);
+
+    const mo = new MutationObserver(applyPalette);
+    mo.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
 
     return () => {
       cancelAnimationFrame(raf);
-      observer.disconnect();
+      ro.disconnect();
+      mo.disconnect();
       renderer.domElement.removeEventListener("pointermove", onPointerMove);
       renderer.domElement.removeEventListener("pointerdown", onPointerDown);
       renderer.domElement.removeEventListener("pointerup", onPointerUp);
       renderer.domElement.removeEventListener("dblclick", onDblClick);
       controls.dispose();
-      renderer.dispose();
       scene.traverse((obj) => {
         const mesh = obj as THREE.Mesh;
         if (mesh.geometry) mesh.geometry.dispose();
@@ -400,7 +664,8 @@ export default function Topology3D({
         if (Array.isArray(mat)) mat.forEach((m) => m.dispose());
         else mat?.dispose();
       });
-      container.removeChild(renderer.domElement);
+      renderer.dispose();
+      if (renderer.domElement.parentNode === container) container.removeChild(renderer.domElement);
       engineRef.current = null;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -408,11 +673,11 @@ export default function Topology3D({
 
   useEffect(() => {
     engineRef.current?.setDim(activeRoutes);
-  }, [activeRoutes, layout]);
+  }, [activeRoutes]);
 
   useEffect(() => {
     engineRef.current?.setSelected(selectedId);
-  }, [selectedId, layout]);
+  }, [selectedId]);
 
   useEffect(() => {
     if (focusToken) engineRef.current?.flyTo(focusToken.id);
@@ -422,50 +687,72 @@ export default function Topology3D({
     if (resetToken > 0) engineRef.current?.resetView();
   }, [resetToken]);
 
+  const scoped = useMemo(() => {
+    const inView = order.filter((n) => activeRoutes.has(n.route ?? ""));
+    return inView.length ? inView : order;
+  }, [order, activeRoutes]);
+
+  useEffect(() => {
+    const node = cursorIdx >= 0 ? scoped[cursorIdx] : null;
+    engineRef.current?.setCursor(node?.id ?? null);
+  }, [cursorIdx, scoped]);
+
+  const onKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Tab") return;
+    const count = scoped.length;
+    if (!count) return;
+    const go = (delta: number) => {
+      e.preventDefault();
+      setCursorIdx((prev) => (prev < 0 ? (delta > 0 ? 0 : count - 1) : (prev + delta + count) % count));
+    };
+    if (e.key === "ArrowRight") go(1);
+    else if (e.key === "ArrowLeft") go(-1);
+    else if (e.key === "ArrowDown") go(5);
+    else if (e.key === "ArrowUp") go(-5);
+    else if (e.key === "Home") go(-count);
+    else if (e.key === "End") go(count);
+    else if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      const node = scoped[cursorIdx];
+      if (node) {
+        onSelect(node.id);
+        engineRef.current?.flyTo(node.id);
+      }
+    } else if (e.key === "Escape") {
+      setCursorIdx(-1);
+      onSelect(null);
+    }
+  };
+
+  const cursorNode = cursorIdx >= 0 ? scoped[cursorIdx] : null;
+
   return (
-    <div ref={containerRef} className="relative h-full w-full">
+    <div
+      ref={containerRef}
+      tabIndex={0}
+      role="img"
+      aria-label={L.topology.sceneAria(routesMeta.length, nodes.length)}
+      onKeyDown={onKeyDown}
+      className="relative h-full w-full"
+    >
       {tooltip && (
         <div
-          className="pointer-events-none absolute z-10 rounded-md border border-slate-700 bg-slate-900/95 px-2.5 py-1.5 text-xs text-slate-100 shadow-lg"
-          style={{ left: tooltip.x + 14, top: tooltip.y + 10 }}
+          className="pointer-events-none absolute z-20 max-w-[260px] rounded-lg border border-line bg-surface/95 px-2.5 py-1.5 shadow-pop"
+          style={{ left: tooltip.x + 14, top: tooltip.y + 12 }}
         >
-          <div className="font-semibold">{tooltip.label}</div>
-          {tooltip.sub && <div className="text-[10px] text-slate-400">{tooltip.sub}</div>}
+          <div className="text-xs font-semibold leading-snug text-fg">{tooltip.label}</div>
+          <div className="mt-0.5 text-[11px] text-subtle">{tooltip.sub}</div>
+        </div>
+      )}
+      <div aria-live="polite" className="sr-only">
+        {cursorNode ? `${L.topology.cursorPrefix}${cursorNode.label}` : ""}
+      </div>
+      {cursorNode && (
+        <div className="pointer-events-none absolute bottom-3 left-1/2 z-20 max-w-[calc(100%-24px)] -translate-x-1/2 truncate rounded-full border border-line bg-surface/95 px-3 py-1 text-[11px] text-muted shadow-pop">
+          {L.topology.cursorPrefix}
+          <span className="font-semibold text-fg">{cursorNode.label}</span> · {L.topology.cursorPick}
         </div>
       )}
     </div>
   );
-}
-
-const CORRIDOR_WIDTH = 46;
-
-function hexA(hex: string, alpha: number): string {
-  const r = parseInt(hex.slice(1, 3), 16);
-  const g = parseInt(hex.slice(3, 5), 16);
-  const b = parseInt(hex.slice(5, 7), 16);
-  return `rgba(${r},${g},${b},${alpha})`;
-}
-
-/** WebGL 初始化失败时给出可读提示，而非空白页面。 */
-export class Topology3DBoundary extends Component<{ children: ReactNode }, { error: Error | null }> {
-  state = { error: null as Error | null };
-  static getDerivedStateFromError(error: Error) {
-    return { error };
-  }
-  render() {
-    if (this.state.error) {
-      return (
-        <div className="flex h-full w-full items-center justify-center p-8 text-center">
-          <div className="max-w-md">
-            <p className="text-sm font-semibold text-slate-200">三维场景初始化失败</p>
-            <p className="mt-2 text-xs leading-relaxed text-slate-400">
-              当前环境可能不支持 WebGL。请使用支持硬件加速的现代浏览器访问；路线分析视图（技术路线页）不受影响。
-            </p>
-            <p className="mt-2 text-[10px] text-slate-600">{String(this.state.error?.message ?? "")}</p>
-          </div>
-        </div>
-      );
-    }
-    return this.props.children;
-  }
 }
