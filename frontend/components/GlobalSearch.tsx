@@ -9,11 +9,26 @@ import { cx } from "@/components/ui";
 
 type Hits = { papers: PaperDTO[]; nodes: NodeDTO[] };
 
+type RouteHit = { id: string; name_zh: string; name_en: string; description: string };
+
 type Row =
-  | { kind: "node"; id: string; primary: string; secondary: string; href: string }
-  | { kind: "paper"; id: string; primary: string; secondary: string; href: string };
+  | { kind: "route" | "node" | "paper"; id: string; primary: string; secondary: string; href: string };
 
 const EMPTY: Hits = { papers: [], nodes: [] };
+
+/** Routes are a small static set, so the index is fetched once and filtered locally. */
+let routeIndex: Promise<RouteHit[]> | null = null;
+function loadRoutes(): Promise<RouteHit[]> {
+  if (!routeIndex) {
+    routeIndex = clientGet<{ routes: RouteHit[] }>("/api/routes")
+      .then((d) => d.routes)
+      .catch(() => {
+        routeIndex = null;
+        return [];
+      });
+  }
+  return routeIndex;
+}
 
 export default function GlobalSearch({ className, compact }: { className?: string; compact?: boolean }) {
   const router = useRouter();
@@ -25,11 +40,32 @@ export default function GlobalSearch({ className, compact }: { className?: strin
   const [busy, setBusy] = useState(false);
   const [failed, setFailed] = useState(false);
   const [cursor, setCursor] = useState(0);
+  const [routes, setRoutes] = useState<RouteHit[]>([]);
+
+  useEffect(() => {
+    if (routes.length) return;
+    loadRoutes().then(setRoutes);
+  }, [routes.length]);
 
   const trimmed = query.trim();
   const tooShort = trimmed.length < 2;
+  const lower = trimmed.toLowerCase();
 
   const rows: Row[] = [
+    ...routes
+      .filter(
+        (r) =>
+          lower.length > 0 &&
+          `${r.name_zh} ${r.name_en} ${r.id} ${r.description}`.toLowerCase().includes(lower)
+      )
+      .slice(0, 3)
+      .map((r) => ({
+        kind: "route" as const,
+        id: r.id,
+        primary: r.name_zh,
+        secondary: r.name_en,
+        href: `/routes/${r.id}`,
+      })),
     ...hits.nodes.map((n) => ({
       kind: "node" as const,
       id: n.id,
@@ -187,7 +223,7 @@ export default function GlobalSearch({ className, compact }: { className?: strin
               )}
             >
               <span className="mt-0.5 shrink-0 text-[10px] uppercase tracking-wider text-subtle">
-                {r.kind === "node" ? L.search.tagNode : L.search.tagPaper}
+                {r.kind === "route" ? L.search.tagRoute : r.kind === "node" ? L.search.tagNode : L.search.tagPaper}
               </span>
               <span className="min-w-0">
                 <span className="block truncate">{r.primary}</span>

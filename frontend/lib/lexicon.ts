@@ -27,6 +27,7 @@ export const L = {
     searching: "检索中…",
     failed: "检索服务暂不可用，请稍后重试。",
     tagNode: "方向",
+    tagRoute: "路线",
     tagPaper: "论文",
     viewAll: (q: string) => `查看全部 “${q}” 的结果`,
   },
@@ -61,6 +62,10 @@ export const L = {
     hiddenAll: "已隐藏全部走廊",
     legendCollapse: "收起图例",
     legendExpand: "展开图例",
+    legendBar: "走廊与关系边图例",
+    corridorShown: (shown: number, total: number) =>
+      shown === total ? `${total} 条走廊全部显示` : `显示 ${shown} / ${total} 条走廊`,
+    listHint: "列表视图按走廊分组罗列阶段与代表工作，单击节点可在三维中定位",
     linkKinds: {
       pipeline: "阶段推进",
       evolve: "方法演进",
@@ -179,6 +184,7 @@ export const L = {
     feedHint: (days: number, n: number) => `近 ${days} 天新增收录 ${n} 条`,
     treeTitle: "领域树",
     treeCount: (n: number) => `${n} 个节点`,
+    treeCountHint: "该方向含全部子方向的论文条目数",
     treeFilterLabel: "过滤领域节点",
     treeFilterPlaceholder: "输入名称或节点编号…",
     treeNoMatch: "没有匹配的节点",
@@ -190,6 +196,22 @@ export const L = {
     watchHint: (name: string) => `关注「${name}」后在关注页汇总新进展`,
     watchBusy: "处理中…",
     watchFailed: "关注状态暂不可用，请稍后重试。",
+    /* --- 第二轮：计数口径与分页 --- */
+    statPapersDistinctHint: "含全部子方向，同一论文只计一次",
+    statLinked: "方向挂载条目",
+    statLinkedHint: "按方向重复计数，反映覆盖广度",
+    scopeNote: "论文列表含该方向及其全部子方向，同一论文归属多个方向时只计一次。",
+    linkedNote: (n: number) => `方向挂载 ${n.toLocaleString()} 条`,
+    linkedNoteHint: "同一论文可归属多个方向，按方向重复计数，故条目数高于独立论文数。",
+    perPageGroupLabel: "每页条数",
+    perPageOption: (n: number) => `${n} 条`,
+    perPageAria: (n: number) => `每页显示 ${n} 条`,
+    rangeSummary: (from: number, to: number, total: number) =>
+      `第 ${from.toLocaleString()}–${to.toLocaleString()} 篇 · 共 ${total.toLocaleString()} 篇`,
+    pagerJumpLabel: (total: number) => `共 ${total.toLocaleString()} 页`,
+    yearFilterNote: "年份可选项来自该方向（含子方向）有发表年份的条目。",
+    yearFilterNoteLinked: "年份计数按方向挂载条目统计，同一论文挂多个方向会重复计入。",
+    trendHintLinked: "按发表年份统计，含子方向；同一论文挂多个方向时按方向计数。",
   },
   paper: {
     eyebrow: "论文条目",
@@ -222,6 +244,9 @@ export const L = {
     nodesTitle: "所属研究方向",
     nodesHint: "进入方向页查看论文列表、时间线与年度趋势。",
     metaFallback: "论文条目详情：作者、年份、引用数与所属研究方向。",
+    /* --- 第二轮：引用为 0 时弱化 --- */
+    citesNoneShort: "暂未收录",
+    citesNoneHint: "新收录条目通常尚无引用数，增量 ingest 后会在此补齐。",
   },
   routes: {
     hubTitle: "闭环",
@@ -321,6 +346,14 @@ export const L = {
     noPapers: "该检索词下没有论文命中",
     noNodes: "该检索词下没有方向命中",
     nodePapers: (n: number) => `${n} 篇`,
+    /* --- 第二轮：结果排序与无结果建议 --- */
+    sortGroupLabel: "结果排序",
+    sortCitations: "按引用",
+    sortYear: "按年份",
+    sortCitationsHint: (n: number) => `按引用量降序，共 ${n} 篇`,
+    sortYearHint: (n: number) => `按发表年份降序（同年按引用），共 ${n} 篇`,
+    suggestTitle: "活跃方向",
+    suggestHint: "语料近期收录最多的方向，可直接进入浏览。",
   },
   watchlist: {
     title: "我的关注",
@@ -343,11 +376,26 @@ export const L = {
     loading: "正在加载关注内容…",
     sectionTotal: (n: number) => `${n} 个关注方向`,
     ingestHint: "如需更早的条目，可运行增量 ingest 后刷新。",
+    /* --- 第二轮：时间窗口语义 --- */
+    windowEmpty: (d: number) => `近 ${d} 天无新增收录，以下为该方向近期代表工作。`,
+    windowEmptyPage: (d: number) =>
+      `已关注方向近 ${d} 天均无新增收录，以下展示各方向的近期代表工作，并非没有关注。`,
+    freshInWindow: (n: number) => `窗口内新增 ${n} 条`,
+    fallbackTag: "窗口外 · 近期代表",
+    ingestNewest: (d: string) => `语料最近一次收录为 ${d}，晚于该日的新条目需运行增量 ingest。`,
   },
   home: {
     corpusStat: (n: string) => `${n} 篇论文语料`,
     taxonomyStat: (n: number) => `${n} 个领域节点`,
     recentStat: (n: number) => `近 7 日新增 ${n} 篇`,
+    heroSubtitle: (family: string) =>
+      `以「走廊 — 地层 — 节点」三级结构呈现${family}路线网，可旋转、按走廊筛选并逐层展开方法脉络`,
+    statCorpus: "论文语料",
+    statRoutes: "路线",
+    statStages: "阶段地层",
+    statMethods: "方法节点",
+    statEdges: "关系边",
+    statRecent: "近 7 日新增",
   },
   common: {
     none: "暂无",
