@@ -7,7 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "qa": "node visual-qa.mjs"
+    "qa": "node visual-qa.mjs",
+    "qa:interaction": "node interaction-qa.mjs",
+    "qa:a11y": "node a11y-qa.mjs",
+    "qa:all": "tsc --noEmit && node visual-qa.mjs qa both light && node visual-qa.mjs qa both dark && node interaction-qa.mjs && node a11y-qa.mjs"
   },
   "dependencies": {
     "echarts": "^5.5.1",

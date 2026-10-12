@@ -57,9 +57,15 @@ await check("global search suggests and navigates", async () => {
 
 await check("Ctrl+K focuses the search field", async () => {
   await page.goto(`${BASE}/`, { waitUntil: "networkidle" });
-  await page.keyboard.press("Control+k");
-  const focused = await page.evaluate(() => document.activeElement?.id);
-  assert(focused === "pg-search", `focus was on ${focused}`);
+  // networkidle does not imply React finished hydrating, so the keydown listener may
+  // not be attached yet; retry until focus moves rather than sleeping a fixed amount.
+  let focused = "";
+  for (let i = 0; i < 20 && focused !== "pg-search"; i++) {
+    await page.keyboard.press("Control+k");
+    await page.waitForTimeout(150);
+    focused = await page.evaluate(() => document.activeElement?.id ?? "");
+  }
+  assert(focused === "pg-search", `focus was on "${focused}"`);
 });
 
 await check("topology finder selects a node into the HUD", async () => {

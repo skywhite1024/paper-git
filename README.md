@@ -64,6 +64,13 @@ python -m pytest                                     # 后端测试（backend/ �
 
 ```bash
 cd frontend
+npm run qa:all                       # 一条命令跑完下面全部四项门禁
+```
+
+单项：
+
+```bash
+cd frontend
 npx tsc --noEmit                     # 类型
 npx next build                       # 生产构建（含 lint）
 node visual-qa.mjs <前缀> both light   # 9 个页面 × 1440/390 截图，检出横向溢出与控制台报错
