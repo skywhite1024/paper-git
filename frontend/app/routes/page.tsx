@@ -126,14 +126,14 @@ export default async function RoutesHubPage() {
       </section>
 
       <section className="grid gap-4 lg:grid-cols-2">
-        <Card as="section" className="p-5">
+        <Card as="section" className="min-w-0 p-5">
           <SectionTitle>{L.routes.contract}</SectionTitle>
-          <pre className="overflow-x-auto rounded-lg bg-raised px-4 py-3 font-mono text-xs leading-relaxed text-fg">
+          <pre className="max-w-full overflow-x-auto rounded-lg bg-raised px-4 py-3 font-mono text-xs leading-relaxed text-fg">
             <code>{family.contract.formula}</code>
           </pre>
           <p className="mt-3 text-sm leading-relaxed text-muted">{family.contract.note}</p>
         </Card>
-        <Card as="section" className="p-5">
+        <Card as="section" className="min-w-0 p-5">
           <SectionTitle hint={L.routes.matrix}>{L.routes.matrix}</SectionTitle>
           <div className="overflow-x-auto">
             <table className="w-full border-collapse text-left text-xs">

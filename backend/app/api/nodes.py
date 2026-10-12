@@ -53,10 +53,12 @@ def get_node_detail(node_id: str, db: Session = Depends(get_db)):
     ids = subtree_ids(index, node_id)
     counts = aggregate_counts(index, direct_paper_counts(db))
 
+    # A paper can be a milestone under several nodes in the subtree; collapse to distinct papers.
     milestones = db.scalars(
         select(Paper)
         .join(PaperNode, PaperNode.paper_id == Paper.id)
         .where(PaperNode.node_id.in_(ids), PaperNode.is_milestone.is_(True))
+        .distinct()
         .order_by(Paper.citation_count.desc())
         .limit(10)
     ).all()

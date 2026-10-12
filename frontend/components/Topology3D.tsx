@@ -294,7 +294,7 @@ export default function Topology3D({
         addLabel(group, n.label, kind, [n.x, n.y + lift, n.z], new THREE.Color(pal.fg), {
           route: n.route,
           nodeId: n.id,
-          maxLen: n.kind === "stage" ? 8 : n.kind === "hub" ? 12 : 10,
+          maxLen: n.kind === "stage" ? 10 : n.kind === "hub" ? 24 : 12,
         });
       }
     }
