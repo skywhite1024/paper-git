@@ -1,8 +1,14 @@
 "use client";
 
 /**
- * 阶段/路线原理示意小图：按路线类型渲染自绘 SVG 流程（无版权风险，可随处嵌入）。
- * 配色取自主题令牌，切换 data-theme 时随 CSS 变量自动重绘。
+ * 阶段/路线原理示意小图：按路线类型渲染自绘流程（无版权风险，可随处嵌入）。
+ *
+ * 排版策略（纯 CSS，随容器宽度自适应，无需测量节点）：
+ *  - 宽容器：单行横向流程链，块与块之间给出方向箭头；
+ *  - 窄容器（侧栏 / HUD，约 300px）：流程链自动折行成 2-3 行，编号与箭头保留，
+ *    顺序仍然可读；名称过长时在块内省略，完整文字由 title 与可访问列表暴露。
+ * 不再使用等比缩放的 SVG 文字：那种做法在 300px 容器里会把字压到 6px 以下，完全不可读。
+ * 配色全部走主题令牌，深浅色均由 CSS 变量驱动，切换 data-theme 时自动重绘。
  */
 
 import { L } from "@/lib/lexicon";
@@ -18,81 +24,64 @@ const DIAGRAMS: Record<string, string[]> = {
 
 const LOOP_ROUTES = new Set(["usd", "guided", "taskgen", "compose"]);
 
-function Flow({ steps, loop }: { steps: string[]; loop?: boolean }) {
-  const n = steps.length;
-  const boxW = Math.min(56, Math.floor(196 / n) - 10);
-  const gap = (196 - n * boxW) / (n - 1);
-  return (
-    <svg viewBox="0 0 220 84" className="h-full w-full">
-      <defs>
-        <marker id="sd-arrow" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
-          <path d="M0,0 L7,3.5 L0,7 z" fill="var(--c-subtle)" />
-        </marker>
-      </defs>
-      {steps.map((s, i) => {
-        const x = 12 + i * (boxW + gap);
-        return (
-          <g key={s}>
-            <rect x={x} y={26} width={boxW} height={30} rx={5} fill="var(--c-accent-soft)" stroke="var(--c-accent)" strokeOpacity={0.45} />
-            <text x={x + boxW / 2} y={40} fontSize={8} textAnchor="middle" fill="var(--c-accent)">
-              {s.length > 7 ? s.slice(0, 6) + "…" : s}
-            </text>
-            <text x={x + boxW / 2} y={51} fontSize={7} textAnchor="middle" fill="var(--c-subtle)">
-              {L.hud.stepOf(i + 1)}
-            </text>
-            {i < n - 1 && (
-              <line
-                x1={x + boxW + 1}
-                y1={41}
-                x2={x + boxW + gap - 3}
-                y2={41}
-                stroke="var(--c-subtle)"
-                strokeWidth={1.2}
-                markerEnd="url(#sd-arrow)"
-              />
-            )}
-          </g>
-        );
-      })}
-      {loop && (
-        <>
-          <path
-            d="M 20 62 L 200 62"
-            stroke="var(--c-ok)"
-            strokeWidth={1.2}
-            strokeDasharray="4 3"
-            fill="none"
-            markerEnd="url(#sd-arrow)"
-          />
-          <text x={110} y={76} fontSize={7.5} fill="var(--c-ok)" textAnchor="middle">
-            {L.hud.loopNote}
-          </text>
-        </>
-      )}
-    </svg>
-  );
+/** 供 title / aria 使用的完整流程文字，缩略时不丢信息。 */
+function fullFlow(steps: string[], loop: boolean) {
+  return steps.map((s, i) => `${L.hud.stepOf(i + 1)} ${s}`).join(" → ") + (loop ? " → ↺" : "");
 }
 
 export default function StageDiagram({
   route,
   caption,
-  height = 84,
+  height = 92,
 }: {
   route: string;
   caption?: string;
+  /** 期望高度，作为 min-height 使用：内容需要更多行时允许自然增高，避免文字被裁切。 */
   height?: number;
 }) {
   const steps = DIAGRAMS[route] ?? DIAGRAMS.usd;
+  const loop = LOOP_ROUTES.has(route);
   const label = L.hud.diagramOf(caption ?? route);
+
   return (
     <div
-      role="img"
+      role="group"
       aria-label={label}
-      title={label}
-      className="w-full rounded-lg border border-line bg-bg p-1"
-      style={{ height }}
+      title={`${label}：${fullFlow(steps, loop)}`}
+      className="w-full rounded-lg border border-line bg-bg px-2 py-2"
+      style={{ minHeight: height }}
     >
-      <Flow steps={steps} loop={LOOP_ROUTES.has(route)} />
+      <ol className="flex flex-wrap items-center gap-x-1 gap-y-1.5">
+        {steps.map((s, i) => (
+          <li key={s} className="flex min-w-0 max-w-full items-center gap-1">
+            <span
+              title={`${L.hud.stepOf(i + 1)} ${s}`}
+              className="flex min-w-0 max-w-full items-center gap-1 rounded-md border border-line bg-surface py-[3px] pl-1 pr-1.5"
+            >
+              <span
+                aria-hidden
+                className="grid h-[15px] w-[15px] shrink-0 place-items-center rounded-full bg-accent-soft text-[9px] font-semibold leading-none tabular-nums text-accent"
+              >
+                {i + 1}
+              </span>
+              <span className="truncate text-[11px] font-medium leading-4 text-fg">{s}</span>
+            </span>
+            {i < steps.length - 1 && (
+              <span aria-hidden className="shrink-0 text-[11px] leading-4 text-subtle">
+                →
+              </span>
+            )}
+          </li>
+        ))}
+      </ol>
+      {loop && (
+        <p className="mt-1.5 flex items-center gap-1 border-t border-dashed border-line pt-1.5 text-[11px] leading-4 text-ok">
+          <span aria-hidden className="text-[12px]">
+            ↺
+          </span>
+          <span className="min-w-0 truncate">{L.hud.loopNote}</span>
+        </p>
+      )}
     </div>
   );
 }

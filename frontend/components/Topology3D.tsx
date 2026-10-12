@@ -9,7 +9,9 @@ import {
   STAGE_W,
   computeLayout,
   fitFrame,
+  frameBoxFor,
   type Corridor,
+  type FrameBox,
   type Vec3,
 } from "@/lib/layout3d";
 import { L } from "@/lib/lexicon";
@@ -45,6 +47,15 @@ const DEG = Math.PI / 180;
 const LABEL_PX = { hub: 25, stage: 22, paper: 20, num: 19 } as const;
 type LabelKind = keyof typeof LABEL_PX;
 
+/**
+ * 名牌截断上限（字符）。上限按「最长阶段名 / hub 名完整可读」设定，
+ * 真正的重叠交给 renderLabels 的屏幕空间避让处理，不再靠砍字数避让。
+ */
+const LABEL_CAP: Record<LabelKind, number> = { hub: 26, stage: 14, paper: 14, num: 2 };
+
+/** 屏幕避让优先级：选中 > 走廊 > 阶段 > 层号 > 关键方法。数值越小越先占位。 */
+const LABEL_PRIO: Record<LabelKind, number> = { hub: 1, stage: 2, num: 3, paper: 4 };
+
 type LabelRec = {
   sp: THREE.Sprite;
   kind: LabelKind;
@@ -53,7 +64,6 @@ type LabelRec = {
   nodeId?: string;
   /** 默认锚点：hub 名牌右对齐，向左延伸，避免与同走廊的阶段标签同行相撞。 */
   cx: number;
-  maxLen?: number;
 };
 
 type Palette = {
@@ -164,7 +174,7 @@ export default function Topology3D({
   const engineRef = useRef<{
     flyTo: (id: string, immediate?: boolean) => void;
     resetView: () => void;
-    setDim: (routes: Set<string>) => void;
+    setDim: (routes: Set<string>, animate?: boolean) => void;
     setSelected: (id: string | null) => void;
     setCursor: (id: string | null) => void;
   } | null>(null);
@@ -217,7 +227,7 @@ export default function Topology3D({
       tint: THREE.Color,
       rec: Partial<LabelRec> = {}
     ) => {
-      const cap = rec.maxLen ?? 13;
+      const cap = LABEL_CAP[kind];
       const text = raw.length > cap ? `${raw.slice(0, cap - 1)}…` : raw;
       const { map, aspect } = makeLabelTexture(text);
       const mat = new THREE.SpriteMaterial({ map, transparent: true, depthWrite: false, color: tint });
@@ -294,7 +304,6 @@ export default function Topology3D({
         addLabel(group, n.label, kind, [n.x, n.y + lift, n.z], new THREE.Color(pal.fg), {
           route: n.route,
           nodeId: n.id,
-          maxLen: n.kind === "stage" ? 10 : n.kind === "hub" ? 24 : 12,
         });
       }
     }
@@ -353,10 +362,12 @@ export default function Topology3D({
     let userMoved = false;
     let lastSize = { w: 0, h: 0 };
     let hovered: string | null = null;
+    // 取景盒：默认全场景，筛选出部分走廊后收缩到可见走廊的包围盒（见 setDim）
+    let box: FrameBox = L0;
     let fit = L0.radius;
     let home: Vec3 = [...L0.center];
     const applyFrame = (aspect: number) => {
-      const f = fitFrame(L0, aspect);
+      const f = fitFrame(box, aspect);
       fit = f.dist;
       home = f.target;
     };
@@ -407,6 +418,37 @@ export default function Topology3D({
         fly.active = false;
         controls.update();
       }
+    }
+
+    function flyToNode(id: string, immediate = false) {
+      const n = L0.nodes.find((m) => m.id === id);
+      if (!n) return false;
+      const dir = new THREE.Vector3().copy(camera.position).sub(controls.target);
+      if (dir.lengthSq() < 1e-6) dir.set(...L0.viewDir);
+      dir.normalize();
+      const dist = Math.min(fit, Math.max(n.radius * 16, box.radius * 0.5));
+      fly.targetGoal.set(n.x, n.y, n.z);
+      fly.camGoal.set(n.x + dir.x * dist, n.y + dir.y * dist, n.z + dir.z * dist);
+      if (immediate) {
+        camera.position.copy(fly.camGoal);
+        controls.target.copy(fly.targetGoal);
+        fly.active = false;
+        controls.update();
+      } else fly.active = true;
+      return true;
+    }
+
+    /** 走廊显隐变化后重算取景：可见节点铺满画布，名牌间距随之拉开。 */
+    function refitToActive(active: Set<string>, animate = true) {
+      const next = frameBoxFor(L0, active);
+      const changed = next !== box;
+      box = next;
+      const sel = live.current.selectedId;
+      const selNode = sel ? L0.nodes.find((m) => m.id === sel) : null;
+      const keepNode = selNode && active.has(selNode.route ?? "") ? selNode.id : null;
+      if (keepNode) flyToNode(keepNode, !animate);
+      else frameHome(changed && animate);
+      if (changed) userMoved = false;
     }
 
     function applySelected(id: string | null) {
@@ -523,29 +565,16 @@ export default function Topology3D({
 
     engineRef.current = {
       flyTo(id, immediate = false) {
-        const n = L0.nodes.find((m) => m.id === id);
-        if (!n) return;
-        const dir = new THREE.Vector3().copy(camera.position).sub(controls.target);
-        if (dir.lengthSq() < 1e-6) dir.set(...L0.viewDir);
-        dir.normalize();
-        const dist = Math.min(fit, Math.max(n.radius * 16, L0.radius * 0.5));
-        userMoved = true;
-        fly.targetGoal.set(n.x, n.y, n.z);
-        fly.camGoal.set(n.x + dir.x * dist, n.y + dir.y * dist, n.z + dir.z * dist);
-        if (immediate) {
-          camera.position.copy(fly.camGoal);
-          controls.target.copy(fly.targetGoal);
-          fly.active = false;
-          controls.update();
-        } else fly.active = true;
+        if (flyToNode(id, immediate)) userMoved = true;
       },
       resetView() {
         userMoved = false;
         frameHome(true);
       },
-      setDim(active: Set<string>) {
+      setDim(active: Set<string>, animate = true) {
         for (const [route, group] of routeGroups) group.visible = active.has(route);
         for (const ce of crossEdges) ce.mesh.visible = active.has(routeOf(ce.from)) && active.has(routeOf(ce.to));
+        refitToActive(active, animate);
       },
       setSelected(id) {
         applySelected(id);
@@ -563,7 +592,18 @@ export default function Topology3D({
     };
 
     const tmpWorld = new THREE.Vector3();
+    const tmpView = new THREE.Vector3();
 
+    type LabelSlot = { rec: LabelRec; rank: number; depth: number; l: number; r: number; b: number; t: number };
+    const slots: LabelSlot[] = [];
+    const kept: LabelSlot[] = [];
+
+    /**
+     * 名牌绘制：恒定像素尺寸 + 屏幕空间避让。
+     * 先按层级与距离排序（选中 > 走廊 > 阶段 > 层号 > 关键方法，近者优先），
+     * 再贪心丢弃与已放置名牌相交的候选——重叠改为「隐藏」而不是「叠字」，
+     * 完整名单始终可以在右侧详情面板与列表视图里读到。
+     */
     const renderLabels = (w: number, h: number) => {
       const tanV = Math.tan((camera.fov * DEG) / 2);
       const tanH = tanV * camera.aspect;
@@ -572,20 +612,38 @@ export default function Topology3D({
       const solo = live.current.activeRoutes.size === 1;
       const sel = live.current.selectedId;
       // 逐级揭示：默认只看到走廊名，推进后依次出现阶段名与关键方法名
-      const stageTier = solo || zoom < fit * 0.8;
-      const paperTier = solo || zoom < fit * 0.5;
+      const stageTier = solo || zoom < fit * 0.85;
+      const paperTier = zoom < fit * 0.55;
+      slots.length = 0;
+      kept.length = 0;
       for (const rec of labels) {
+        // 隐藏走廊的名牌不参与避让：它们不可见，却会投影到可见走廊上方抢走位置
+        if (rec.route && !live.current.activeRoutes.has(rec.route)) {
+          rec.sp.visible = false;
+          continue;
+        }
+        const pinned = sel !== null && rec.nodeId === sel;
         const show =
+          pinned ||
           rec.kind === "hub"
             ? true
             : rec.kind === "num"
               ? stageTier && !narrow
               : rec.kind === "stage"
-                ? stageTier || rec.nodeId === sel
-                : paperTier || rec.nodeId === sel;
-        rec.sp.visible = show;
-        if (!show) continue;
-        const d = Math.max(0.001, camera.position.distanceTo(rec.sp.getWorldPosition(tmpWorld)));
+                ? stageTier
+                : paperTier;
+        if (!show) {
+          rec.sp.visible = false;
+          continue;
+        }
+        rec.sp.getWorldPosition(tmpWorld);
+        tmpView.copy(tmpWorld).applyMatrix4(camera.matrixWorldInverse);
+        if (tmpView.z > -0.5) {
+          rec.sp.visible = false;
+          continue;
+        }
+        // 用视深（而非欧氏距离）换算恒定像素尺寸：否则偏心名牌的实际绘制会比避让矩形大 20% 左右
+        const d = Math.max(0.001, -tmpView.z);
         const wpp = (2 * tanV * d) / h;
         const px = LABEL_PX[rec.kind] * (narrow ? 0.82 : 1);
         rec.sp.scale.set(px * rec.aspect * wpp, px * wpp, 1);
@@ -598,7 +656,35 @@ export default function Topology3D({
         const H = 2 * hh;
         const cx = Math.min(Math.max(rec.cx, 1 - (room - tmpWorld.x) / W), (room + tmpWorld.x) / W);
         const cy = Math.min(Math.max(0.5, 1 - (room - tmpWorld.y) / H), (room + tmpWorld.y) / H);
-        rec.sp.center.set(Math.min(1, Math.max(0, cx)), Math.min(1, Math.max(0, cy)));
+        const ax = Math.min(1, Math.max(0, cx));
+        const ay = Math.min(1, Math.max(0, cy));
+        rec.sp.center.set(ax, ay);
+        slots.push({
+          rec,
+          rank: (pinned ? 0 : 100) + LABEL_PRIO[rec.kind],
+          depth: -tmpView.z,
+          l: ((tmpWorld.x - W * ax + 1) / 2) * w,
+          r: ((tmpWorld.x + W * (1 - ax) + 1) / 2) * w,
+          b: ((1 - (tmpWorld.y - H * ay)) / 2) * h,
+          t: ((1 - (tmpWorld.y + H * (1 - ay))) / 2) * h,
+        });
+      }
+      slots.sort((a, b) => a.rank - b.rank || a.depth - b.depth);
+      const PAD = 2;
+      for (const s of slots) {
+        let clash = false;
+        for (const k of kept) {
+          if (s.l < k.r + PAD && s.r > k.l - PAD && s.t < k.b + PAD && s.b > k.t - PAD) {
+            clash = true;
+            break;
+          }
+        }
+        if (clash) {
+          s.rec.sp.visible = false;
+          continue;
+        }
+        kept.push(s);
+        s.rec.sp.visible = true;
       }
     };
 
@@ -625,7 +711,7 @@ export default function Topology3D({
     };
 
     frameHome(false);
-    engineRef.current.setDim(live.current.activeRoutes);
+    engineRef.current.setDim(live.current.activeRoutes, false);
     applySelected(live.current.selectedId);
     const deepLink = live.current.focusToken?.id ?? live.current.selectedId;
     if (deepLink) engineRef.current.flyTo(deepLink, true);

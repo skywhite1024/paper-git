@@ -100,6 +100,51 @@ function paperLattice(routeZ: number, stageX: number, index: number): Vec3 {
 
 export type Frame = { dist: number; target: Vec3 };
 
+/** 相机取景只需要包围盒与视角方向，故把「可取景的盒子」抽成独立类型：全场景与其子集共用 fitFrame。 */
+export type FrameBox = Pick<SceneLayout, "center" | "min" | "max" | "viewDir" | "radius">;
+
+/** 标签浮在节点上方，取景盒需要留出这段高度，否则上层名牌会被压到画布边缘。 */
+const LABEL_HEADROOM = 13;
+
+/**
+ * 按当前可见走廊收缩取景盒：筛选到一条路线时相机自动推近，
+ * 阶段名牌随之拉开间距（沿用全局取景会让单条走廊只占画面 1/4，名牌全部叠在一起）。
+ * 无可见走廊或全选时退回全局包围盒。
+ */
+export function frameBoxFor(scene: SceneLayout, active: Set<string>): FrameBox {
+  if (active.size === 0 || active.size >= scene.corridors.length) return scene;
+  const min: Vec3 = [Infinity, Infinity, Infinity];
+  const max: Vec3 = [-Infinity, -Infinity, -Infinity];
+  const grow = (p: Vec3, rx = 0, ry = 0, rz = 0) => {
+    min[0] = Math.min(min[0], p[0] - rx);
+    min[1] = Math.min(min[1], p[1] - ry);
+    min[2] = Math.min(min[2], p[2] - rz);
+    max[0] = Math.max(max[0], p[0] + rx);
+    max[1] = Math.max(max[1], p[1] + ry);
+    max[2] = Math.max(max[2], p[2] + rz);
+  };
+  for (const c of scene.corridors) {
+    if (!active.has(c.route)) continue;
+    grow([c.x0, 0, c.z - CORRIDOR_WIDTH / 2]);
+    grow([c.x1, 0, c.z + CORRIDOR_WIDTH / 2]);
+  }
+  for (const n of scene.nodes) {
+    if (!active.has(n.route ?? "")) continue;
+    if (n.kind === "hub") {
+      // hub 名牌右对齐、向左延伸约一个走廊宽度，取景盒留出这段空间才不会压住首段地层
+      grow([n.x, n.y, n.z], LABEL_HEADROOM * 2.4, LABEL_HEADROOM, n.radius);
+    } else if (n.kind === "stage") {
+      grow([n.x, n.y, n.z], n.radius, n.radius + LABEL_HEADROOM, n.radius);
+    } else {
+      grow([n.x, n.y, n.z], n.radius, n.radius, n.radius);
+    }
+  }
+  if (!Number.isFinite(min[0])) return scene;
+  const center: Vec3 = [(min[0] + max[0]) / 2, (min[1] + max[1]) / 2, (min[2] + max[2]) / 2];
+  const half: Vec3 = [(max[0] - min[0]) / 2, (max[1] - min[1]) / 2, (max[2] - min[2]) / 2];
+  return { center, min, max, viewDir: scene.viewDir, radius: Math.max(1, Math.hypot(...half)) };
+}
+
 /**
  * 取景求解：给定容器宽高比与视场，反解「沿 viewDir 观察整个包围盒」所需的机位距离与注视点。
  * 逐角点做透视反解（近侧角点最吃距离），再把投影后的画面中心平移回视口中央，

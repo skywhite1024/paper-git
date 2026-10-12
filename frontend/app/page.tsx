@@ -34,35 +34,30 @@ export default async function TopologyHomePage({
   const stageCount = topo.nodes.filter((n) => n.kind === "stage").length;
 
   const facts = [
-    L.topology.routeCount(topo.routes_meta.length),
-    L.topology.stageCount(stageCount),
-    L.topology.nodeCount(paperCount),
-    L.topology.edgeCount(topo.links.length),
-    L.home.corpusStat(stats.paper_real.toLocaleString()),
-    L.home.recentStat(stats.recent_7d),
+    { label: L.home.statCorpus, value: stats.paper_real.toLocaleString() },
+    { label: L.home.statRoutes, value: topo.routes_meta.length },
+    { label: L.home.statStages, value: stageCount },
+    { label: L.home.statMethods, value: paperCount },
+    { label: L.home.statEdges, value: topo.links.length },
+    ...(stats.recent_7d > 0 ? [{ label: L.home.statRecent, value: stats.recent_7d }] : []),
   ];
 
   return (
     <div className="space-y-3">
-      <section className="flex flex-wrap items-center gap-x-5 gap-y-2 rounded-card border border-line bg-surface px-4 py-2.5 shadow-card">
-        <div className="min-w-0">
+      <section className="flex flex-wrap items-center gap-x-6 gap-y-2 rounded-card border border-line bg-surface px-4 py-2.5 shadow-card">
+        <div className="min-w-0 flex-1 basis-[300px]">
           <h1 className="text-[15px] font-semibold tracking-tight text-fg">{L.topology.title}</h1>
-          <p className="mt-0.5 truncate text-[11px] text-subtle">{topo.family.name_zh}</p>
+          <p className="mt-0.5 truncate text-[11px] text-subtle">{L.home.heroSubtitle(topo.family.name_zh)}</p>
         </div>
-        <ul className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs tabular-nums text-muted">
+        <dl className="flex flex-wrap items-center gap-x-5 gap-y-1">
           {facts.map((f) => (
-            <li key={f} className="whitespace-nowrap">
-              {f}
-            </li>
+            <div key={f.label} className="flex items-baseline gap-1.5">
+              <dd className="text-[15px] font-semibold leading-5 tabular-nums text-fg">{f.value}</dd>
+              <dt className="text-[11px] text-subtle">{f.label}</dt>
+            </div>
           ))}
-        </ul>
+        </dl>
         <nav aria-label={L.topology.overview} className="ml-auto flex flex-wrap items-center gap-1.5">
-          <span className="hidden items-center gap-1.5 text-[11px] text-subtle sm:flex">
-            {L.topology.searchKbd}
-            <kbd className="rounded border border-line bg-raised px-1.5 py-0.5 font-mono text-[10px] text-muted">
-              Ctrl K
-            </kbd>
-          </span>
           <Button href="/routes" size="sm">
             {L.nav.routes}
           </Button>

@@ -201,16 +201,16 @@ export const L = {
     statLinked: "方向挂载条目",
     statLinkedHint: "按方向重复计数，反映覆盖广度",
     scopeNote: "论文列表含该方向及其全部子方向，同一论文归属多个方向时只计一次。",
+    listScopeNote: "如需更窄范围请进入子方向页；关键词与年份筛选不改变该口径。",
     linkedNote: (n: number) => `方向挂载 ${n.toLocaleString()} 条`,
     linkedNoteHint: "同一论文可归属多个方向，按方向重复计数，故条目数高于独立论文数。",
     perPageGroupLabel: "每页条数",
-    perPageOption: (n: number) => `${n} 条`,
     perPageAria: (n: number) => `每页显示 ${n} 条`,
     rangeSummary: (from: number, to: number, total: number) =>
       `第 ${from.toLocaleString()}–${to.toLocaleString()} 篇 · 共 ${total.toLocaleString()} 篇`,
     pagerJumpLabel: (total: number) => `共 ${total.toLocaleString()} 页`,
-    yearFilterNote: "年份可选项来自该方向（含子方向）有发表年份的条目。",
-    yearFilterNoteLinked: "年份计数按方向挂载条目统计，同一论文挂多个方向会重复计入。",
+    timelineSubtreeNote:
+      "时间线含子方向，按方向挂载条目统计，同一论文挂多个方向会重复计入；单年条目过多时仅作趋势参考，论文数以「论文列表」为准。",
     trendHintLinked: "按发表年份统计，含子方向；同一论文挂多个方向时按方向计数。",
   },
   paper: {

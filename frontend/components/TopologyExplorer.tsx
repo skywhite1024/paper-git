@@ -125,7 +125,6 @@ export default function TopologyExplorer({
   const [activeRoutes, setActiveRoutes] = useState<Set<string>>(
     () => new Set(initialRoute ? [initialRoute] : routesMeta.map((r) => r.id))
   );
-  const [legendOpen, setLegendOpen] = useState(true);
   const [panelOpen, setPanelOpen] = useState(Boolean(initialNode));
   const [peersOpen, setPeersOpen] = useState(false);
 
@@ -135,7 +134,6 @@ export default function TopologyExplorer({
   useEffect(() => {
     const probe = document.createElement("canvas");
     const supported = Boolean(probe.getContext("webgl2") ?? probe.getContext("webgl"));
-    setLegendOpen(window.innerWidth >= 768);
     if (!supported) {
       setWebglOff(true);
       setMode("2d");
@@ -213,7 +211,7 @@ export default function TopologyExplorer({
         <div className="mr-auto min-w-0">
           <div className="truncate text-[13px] font-semibold text-fg">{L.topology.subtitle}</div>
           <div className="mt-0.5 hidden truncate text-[11px] text-subtle lg:block">
-            {L.topology.controlsHint} · {L.topology.kbdHint}
+            {mode === "3d" ? `${L.topology.controlsHint} · ${L.topology.kbdHint}` : L.topology.listHint}
           </div>
         </div>
 
@@ -263,112 +261,106 @@ export default function TopologyExplorer({
       </div>
 
       <div className="flex flex-col md:flex-row">
-        <div className="relative h-[52vh] min-h-[380px] md:h-[calc(100vh-300px)] md:min-h-[440px] md:flex-1">
-          {mode === "3d" ? (
-            <SceneBoundary
-              onFail={() => {
-                setWebglOff(true);
-                setMode("2d");
-              }}
-            >
-              <Topology3D
-                nodes={data.nodes}
-                links={data.links}
-                routesMeta={routesMeta}
-                selectedId={selectedId}
-                onSelect={select}
-                activeRoutes={activeRoutes}
-                focusToken={focusToken}
-                resetToken={resetToken}
-                onUnavailable={() => {
+        <div className="flex min-w-0 flex-col md:flex-1">
+          <div className="relative h-[52vh] min-h-[380px] md:h-[calc(100vh-336px)] md:min-h-[420px]">
+            {mode === "3d" ? (
+              <SceneBoundary
+                onFail={() => {
                   setWebglOff(true);
                   setMode("2d");
                 }}
-              />
-            </SceneBoundary>
-          ) : (
-            <Topology2D
-              nodes={data.nodes}
-              routesMeta={routesMeta}
-              activeRoutes={activeRoutes}
-              selectedId={selectedId}
-              onSelect={select}
-            />
-          )}
-
-          {mode === "3d" && (
-          <div className="absolute bottom-3 right-3 z-10 w-[min(300px,calc(100%-24px))] rounded-card border border-line bg-surface/92 p-2.5 shadow-card backdrop-blur">
-            <div className="flex items-center gap-2">
-              <Eyebrow>{L.topology.legendTitle}</Eyebrow>
-              {activeRoutes.size < routesMeta.length && (
-                <button type="button" onClick={showAll} className="text-[11px] text-accent hover:underline">
-                  {L.topology.showAll}
-                </button>
-              )}
-              <button
-                type="button"
-                onClick={() => setLegendOpen((v) => !v)}
-                aria-expanded={legendOpen}
-                className="ml-auto text-[11px] text-muted hover:text-fg"
               >
-                {legendOpen ? L.topology.legendCollapse : L.topology.legendExpand}
-              </button>
-            </div>
-            {legendOpen && (
-              <>
-                <div className="mt-2 flex flex-wrap gap-1.5">
-                  {routesMeta.map((r) => {
-                    const on = activeRoutes.has(r.id);
-                    return (
-                      <button
-                        key={r.id}
-                        type="button"
-                        onClick={() =>
-                          setActiveRoutes((prev) => {
-                            const next = new Set(prev);
-                            if (next.has(r.id)) next.delete(r.id);
-                            else next.add(r.id);
-                            return next;
-                          })
-                        }
-                        aria-pressed={on}
-                        className={cx(
-                          "flex items-center gap-1.5 rounded-md border px-1.5 py-1 text-[11px] leading-4 transition-colors",
-                          on ? "border-line bg-raised text-fg" : "border-line-soft text-subtle"
-                        )}
-                      >
-                        <Dot color={on ? routeColor(r.id) : "var(--c-subtle)"} />
-                        {r.name_zh}
-                      </button>
-                    );
-                  })}
-                </div>
-                <div className="mt-2 border-t border-line-soft pt-2">
-                  <Eyebrow>{L.topology.linkLegendTitle}</Eyebrow>
-                  <ul className="mt-1.5 flex flex-wrap gap-x-3 gap-y-1">
-                    {Object.entries(L.topology.linkKinds).map(([kind, name]) => (
-                      <li key={kind} className="flex items-center gap-1.5 text-[11px] text-muted">
-                        <span
-                          aria-hidden
-                          className="h-0.5 w-4 rounded-full"
-                          style={{ background: LINK_COLORS[kind] ?? "var(--c-subtle)" }}
-                        />
-                        {name}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                <p className="mt-2 text-[11px] leading-4 text-subtle">{L.topology.legendHint}</p>
-              </>
+                <Topology3D
+                  nodes={data.nodes}
+                  links={data.links}
+                  routesMeta={routesMeta}
+                  selectedId={selectedId}
+                  onSelect={select}
+                  activeRoutes={activeRoutes}
+                  focusToken={focusToken}
+                  resetToken={resetToken}
+                  onUnavailable={() => {
+                    setWebglOff(true);
+                    setMode("2d");
+                  }}
+                />
+              </SceneBoundary>
+            ) : (
+              <Topology2D
+                nodes={data.nodes}
+                routesMeta={routesMeta}
+                activeRoutes={activeRoutes}
+                selectedId={selectedId}
+                onSelect={select}
+              />
+            )}
+
+            {webglOff && mode === "2d" && (
+              <p className="absolute right-3 top-3 z-10 max-w-[220px] rounded-lg border border-line bg-surface/92 px-2.5 py-1.5 text-[11px] leading-4 text-muted shadow-card">
+                {L.topology.webglAbsent}
+              </p>
             )}
           </div>
-          )}
 
-          {webglOff && mode === "2d" && (
-            <p className="absolute right-3 top-3 z-10 max-w-[220px] rounded-lg border border-line bg-surface/92 px-2.5 py-1.5 text-[11px] leading-4 text-muted shadow-card">
-              {L.topology.webglAbsent}
-            </p>
-          )}
+          {/* 图例与走廊筛选：放在画布外的工具条里，任何视口都不会压住节点 */}
+          <div
+            role="group"
+            aria-label={L.topology.legendBar}
+            className="flex flex-wrap items-center gap-x-3 gap-y-1.5 border-t border-line px-3 py-2"
+          >
+            <Eyebrow className="shrink-0">{L.topology.legendTitle}</Eyebrow>
+            <div className="flex min-w-0 flex-wrap items-center gap-1.5">
+              {routesMeta.map((r) => {
+                const on = activeRoutes.has(r.id);
+                return (
+                  <button
+                    key={r.id}
+                    type="button"
+                    onClick={() =>
+                      setActiveRoutes((prev) => {
+                        const next = new Set(prev);
+                        if (next.has(r.id)) next.delete(r.id);
+                        else next.add(r.id);
+                        return next;
+                      })
+                    }
+                    aria-pressed={on}
+                    className={cx(
+                      "flex items-center gap-1.5 rounded-md border px-1.5 py-1 text-[11px] leading-4 transition-colors",
+                      on ? "border-line bg-raised text-fg" : "border-line-soft text-subtle"
+                    )}
+                  >
+                    <Dot color={on ? routeColor(r.id) : "var(--c-subtle)"} />
+                    {r.name_zh}
+                  </button>
+                );
+              })}
+            </div>
+            {activeRoutes.size < routesMeta.length && (
+              <button type="button" onClick={showAll} className="text-[11px] text-accent hover:underline">
+                {L.topology.showAll}
+              </button>
+            )}
+            <span className="text-[11px] text-subtle">
+              {L.topology.corridorShown(activeRoutes.size, routesMeta.length)}
+            </span>
+
+            <span aria-hidden className="hidden h-4 w-px shrink-0 bg-line lg:block" />
+            <Eyebrow className="shrink-0">{L.topology.linkLegendTitle}</Eyebrow>
+            <ul className="flex flex-wrap items-center gap-x-3 gap-y-1">
+              {Object.entries(L.topology.linkKinds).map(([kind, name]) => (
+                <li key={kind} className="flex items-center gap-1.5 text-[11px] text-muted">
+                  <span
+                    aria-hidden
+                    className="h-0.5 w-4 rounded-full"
+                    style={{ background: LINK_COLORS[kind] ?? "var(--c-subtle)" }}
+                  />
+                  {name}
+                </li>
+              ))}
+            </ul>
+            <p className="ml-auto hidden text-[11px] leading-4 text-subtle lg:block">{L.topology.legendHint}</p>
+          </div>
         </div>
 
         <aside
@@ -392,7 +384,7 @@ export default function TopologyExplorer({
             </button>
           </div>
 
-          <div className={cx("pg-scroll max-h-[40vh] overflow-y-auto px-3 py-3 md:max-h-[calc(100vh-356px)]", !panelOpen && "hidden md:block")}>
+          <div className={cx("pg-scroll max-h-[40vh] overflow-y-auto px-3 py-3 md:max-h-[calc(100vh-320px)]", !panelOpen && "hidden md:block")}>
             {!selected && (
               <div className="space-y-4">
                 <div>
