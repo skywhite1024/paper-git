@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import PaperCard from "@/components/PaperCard";
+import PapersFeed from "@/components/PapersFeed";
 import TrendChart from "@/components/TrendChart";
 import TreeView from "@/components/TreeView";
 import WatchButton from "@/components/WatchButton";
@@ -344,6 +345,7 @@ async function PapersTab({ slug, query, scope }: { slug: string; query: PaperQue
   });
   if (query.year) api.set("year", query.year);
   if (query.q) api.set("q", query.q);
+  const apiWithoutPage = new URLSearchParams(api);
   const data = await apiGet<PapersResponse>(`/api/nodes/${encodeURIComponent(slug)}/papers?${api.toString()}`);
 
   const perPage = data.per_page || query.perPage;
@@ -448,11 +450,14 @@ async function PapersTab({ slug, query, scope }: { slug: string; query: PaperQue
       </Card>
 
       {data.items.length > 0 ? (
-        <div className="space-y-2">
-          {data.items.map((p) => (
-            <PaperCard key={p.id} paper={p} />
-          ))}
-        </div>
+        <PapersFeed
+          slug={slug}
+          apiQuery={apiWithoutPage.toString()}
+          startPage={query.page}
+          totalPages={totalPages}
+          total={data.total}
+          initial={data.items}
+        />
       ) : (
         <EmptyState
           title={L.node.emptyPapers}

@@ -170,6 +170,11 @@ export const L = {
     emptyPapersFiltered: "当前筛选组合下没有命中，可放宽年份或清空关键词。",
     emptyPapersAll: "该方向暂无收录条目，运行增量 ingest 后会出现在此。",
     pagerLabel: "分页导航",
+    loadMore: (n: number) => `加载更多（剩余 ${n.toLocaleString()} 篇）`,
+    loadMoreBusy: "加载中…",
+    loadMoreFailed: "追加失败，可重试或使用下方分页。",
+    loadMoreProgress: (shown: number, total: number) =>
+      `已加载 ${shown.toLocaleString()} / ${total.toLocaleString()} 篇`,
     pagerPrev: "上一页",
     pagerNext: "下一页",
     pagerPageLabel: (p: number) => `第 ${p} 页`,
