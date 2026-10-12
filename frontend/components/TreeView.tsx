@@ -2,67 +2,118 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
+import { Button, Eyebrow, cx, inputCls } from "@/components/ui";
+import { L } from "@/lib/lexicon";
 import type { NodeDTO } from "@/lib/api";
 
-function collectMatches(node: NodeDTO, q: string): boolean {
+function subtreeMatches(node: NodeDTO, q: string): boolean {
   const hit =
     node.name_zh.toLowerCase().includes(q) ||
     node.name_en.toLowerCase().includes(q) ||
     node.id.toLowerCase().includes(q);
-  return hit || (node.children ?? []).some((c) => collectMatches(c, q));
+  return hit || (node.children ?? []).some((c) => subtreeMatches(c, q));
 }
 
-function TreeNode({
+function TreeNodeRow({
   node,
+  depth,
   activeId,
   expanded,
+  query,
   onToggle,
-  depth,
 }: {
   node: NodeDTO;
+  depth: number;
   activeId: string | null;
   expanded: Set<string>;
+  query: string;
   onToggle: (id: string) => void;
-  depth: number;
 }) {
   const children = node.children ?? [];
   const hasChildren = children.length > 0;
-  const isOpen = expanded.has(node.id);
+  const forcedOpen = query.length > 0 && subtreeMatches(node, query);
+  const isOpen = forcedOpen || expanded.has(node.id);
   const isActive = node.id === activeId;
-  const isAncestorOfActive = !!activeId && activeId.startsWith(node.id + ".");
+  const isAncestor = !!activeId && activeId.startsWith(node.id + ".");
+  const shown = children.length > 0 && isOpen ? children : [];
 
   return (
-    <div>
+    <li>
       <div
-        className={`flex items-center gap-1 rounded-md px-1 py-0.5 text-sm ${
-          isActive ? "bg-blue-100 font-semibold" : isAncestorOfActive ? "bg-blue-50" : "hover:bg-gray-100"
-        }`}
-        style={{ paddingLeft: depth * 14 + 4 }}
+        className={cx(
+          "flex items-center gap-1 rounded-md py-1 pr-1.5 transition-colors",
+          isActive ? "bg-accent-soft" : "hover:bg-raised"
+        )}
       >
         {hasChildren ? (
           <button
+            type="button"
             onClick={() => onToggle(node.id)}
-            className="w-4 shrink-0 text-center text-gray-400 hover:text-gray-700"
-            aria-label={isOpen ? "折叠" : "展开"}
+            aria-expanded={isOpen}
+            aria-label={(isOpen ? L.node.treeCollapse : L.node.treeExpand)(node.name_zh)}
+            className="grid h-5 w-5 shrink-0 place-items-center rounded text-subtle transition-colors hover:bg-line-soft hover:text-fg"
           >
-            {isOpen ? "▾" : "▸"}
+            <svg
+              viewBox="0 0 12 12"
+              aria-hidden
+              className={cx("h-2.5 w-2.5 transition-transform duration-150", isOpen && "rotate-90")}
+            >
+              <path d="M4 2.5 8 6l-4 3.5" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
           </button>
         ) : (
-          <span className="w-4 shrink-0 text-center text-gray-300">·</span>
+          <span aria-hidden className="h-5 w-5 shrink-0 grid place-items-center">
+            <span className="h-1 w-1 rounded-full bg-line" />
+          </span>
         )}
-        <Link href={`/nodes/${node.id}`} className={`min-w-0 flex-1 truncate ${isActive ? "text-blue-800" : ""}`}>
+
+        <Link
+          href={`/nodes/${node.id}`}
+          aria-current={isActive ? "page" : undefined}
+          title={`${node.name_zh} · ${node.name_en}`}
+          className={cx(
+            "min-w-0 flex-1 truncate rounded text-[13px] leading-5",
+            isActive
+              ? "font-semibold text-accent"
+              : isAncestor
+                ? "font-medium text-fg"
+                : "text-muted hover:text-fg"
+          )}
+        >
           {node.name_zh}
-          <span className="ml-1 text-xs text-gray-400">{node.paper_count ?? 0}</span>
         </Link>
+
+        <span
+          className={cx(
+            "shrink-0 text-right text-[11px] tabular-nums",
+            isActive ? "font-semibold text-accent" : "text-subtle"
+          )}
+        >
+          {(node.paper_count ?? 0).toLocaleString()}
+        </span>
       </div>
-      {hasChildren && isOpen && (
-        <div>
-          {children.map((c) => (
-            <TreeNode key={c.id} node={c} activeId={activeId} expanded={expanded} onToggle={onToggle} depth={depth + 1} />
+
+      {shown.length > 0 && (
+        <ul
+          className={cx(
+            "mt-0.5 space-y-0.5 border-l border-line pl-2",
+            depth >= 1 && "ml-2.5"
+          )}
+        >
+          {shown.map((c) => (
+            <TreeNodeRow
+              key={c.id}
+              node={c}
+              depth={depth + 1}
+              activeId={activeId}
+              expanded={expanded}
+              query={query}
+              onToggle={onToggle}
+            />
           ))}
-        </div>
+        </ul>
       )}
-    </div>
+    </li>
   );
 }
 
@@ -88,7 +139,9 @@ export default function TreeView({ roots, activeId }: { roots: NodeDTO[]; active
     return m;
   }, [roots]);
 
-  const [expanded, setExpanded] = useState<Set<string>>(() => new Set(ancestorsOf(index, activeId ?? "")));
+  const [expanded, setExpanded] = useState<Set<string>>(
+    () => new Set([...ancestorsOf(index, activeId ?? ""), ...roots.map((r) => r.id)])
+  );
 
   const toggle = (id: string) =>
     setExpanded((prev) => {
@@ -99,28 +152,56 @@ export default function TreeView({ roots, activeId }: { roots: NodeDTO[]; active
     });
 
   const q = query.trim().toLowerCase();
-  const visibleRoots = q
-    ? roots.filter((r) => collectMatches(r, q))
-    : roots;
+  const visibleRoots = q ? roots.filter((r) => subtreeMatches(r, q)) : roots;
 
   return (
-    <div className="rounded-lg border border-[var(--pg-border)] bg-white p-3">
-      <div className="mb-2 flex items-center justify-between">
-        <span className="text-sm font-semibold text-gray-700">领域树</span>
-        <span className="text-xs text-gray-400">{index.size} 个节点</span>
+    <nav
+      aria-label={L.node.treeTitle}
+      className="flex flex-col gap-2.5 rounded-card border border-line bg-surface p-3 shadow-card"
+    >
+      <div className="flex items-baseline justify-between gap-2">
+        <Eyebrow>{L.node.treeTitle}</Eyebrow>
+        <span className="text-[11px] tabular-nums text-subtle">{L.node.treeCount(index.size)}</span>
       </div>
-      <input
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        placeholder="过滤节点…"
-        className="mb-2 w-full rounded border border-[var(--pg-border)] px-2 py-1 text-sm focus:border-blue-400 focus:outline-none"
-      />
-      <div className="max-h-[70vh] overflow-y-auto pr-1">
-        {visibleRoots.map((r) => (
-          <TreeNode key={r.id} node={r} activeId={activeId} expanded={expanded} onToggle={toggle} depth={0} />
-        ))}
-        {visibleRoots.length === 0 && <p className="p-2 text-sm text-gray-400">无匹配节点</p>}
+
+      <div>
+        <label className="sr-only" htmlFor="tree-filter">
+          {L.node.treeFilterLabel}
+        </label>
+        <input
+          id="tree-filter"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder={L.node.treeFilterPlaceholder}
+          className={cx(inputCls, "h-8 text-[13px]")}
+        />
       </div>
-    </div>
+
+      <div className="pg-scroll -mr-1 max-h-[calc(100vh-13rem)] overflow-y-auto pr-1">
+        {visibleRoots.length > 0 ? (
+          <ul className="space-y-0.5">
+            {visibleRoots.map((r) => (
+              <TreeNodeRow
+                key={r.id}
+                node={r}
+                depth={0}
+                activeId={activeId}
+                expanded={expanded}
+                query={q}
+                onToggle={toggle}
+              />
+            ))}
+          </ul>
+        ) : (
+          <div className="px-1 py-6 text-center">
+            <p className="text-sm text-muted">{L.node.treeNoMatch}</p>
+            <p className="mt-1 text-xs text-subtle">{L.node.treeNoMatchHint}</p>
+            <Button size="sm" className="mt-3" onClick={() => setQuery("")}>
+              {L.node.treeClearFilter}
+            </Button>
+          </div>
+        )}
+      </div>
+    </nav>
   );
 }

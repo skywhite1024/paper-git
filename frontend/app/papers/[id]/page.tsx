@@ -1,79 +1,227 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import PaperCard from "@/components/PaperCard";
-import { apiGet, type PaperDTO } from "@/lib/api";
+import WatchButton from "@/components/WatchButton";
+import { Badge, Breadcrumbs, Button, Card, Eyebrow, SectionTitle, cx } from "@/components/ui";
+import { apiGet, type NodeDetailDTO, type PaperDTO } from "@/lib/api";
+import { L } from "@/lib/lexicon";
 
 export const dynamic = "force-dynamic";
 
+async function getPaper(id: string): Promise<PaperDTO> {
+  try {
+    return await apiGet<PaperDTO>(`/api/papers/${encodeURIComponent(id)}`);
+  } catch (e) {
+    if (e instanceof Error && /: 404$/.test(e.message)) notFound();
+    throw e;
+  }
+}
+
+async function getNode(slug: string): Promise<NodeDetailDTO> {
+  try {
+    return await apiGet<NodeDetailDTO>(`/api/nodes/${encodeURIComponent(slug)}`);
+  } catch (e) {
+    if (e instanceof Error && /: 404$/.test(e.message)) notFound();
+    throw e;
+  }
+}
+
+function nodeHref(id: string) {
+  return `/nodes/${encodeURIComponent(id)}`;
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const paper = await getPaper(id);
+  return {
+    title: paper.title,
+    description: paper.abstract ? paper.abstract.slice(0, 150) : L.paper.metaFallback,
+  };
+}
+
 export default async function PaperPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  let paper: PaperDTO;
-  try {
-    paper = await apiGet<PaperDTO>(`/api/papers/${id}`);
-  } catch {
-    notFound();
-  }
+  const paper = await getPaper(id);
+  const primary = paper.nodes[0];
+  const chain = primary ? await getNode(primary.id) : null;
+
+  const crumbs = chain
+    ? chain.ancestors.map((a, i) => ({
+        label: a.name_zh,
+        href: i < chain.ancestors.length - 1 ? nodeHref(a.id) : undefined,
+      }))
+    : [];
+
+  const metaRows: { key: string; label: string; value: string; mono?: boolean }[] = [
+    { key: "year", label: L.paper.yearField, value: String(paper.year) },
+    { key: "cites", label: L.paper.citesField, value: paper.citation_count.toLocaleString() },
+    { key: "venue", label: L.paper.venueField, value: paper.venue ?? L.common.none },
+    { key: "pub", label: L.paper.pubField, value: paper.published ? paper.published.slice(0, 10) : L.common.none },
+    { key: "source", label: L.paper.sourceField, value: paper.source },
+  ];
+  if (paper.arxiv_id) metaRows.push({ key: "arxiv", label: L.paper.arxivField, value: paper.arxiv_id, mono: true });
 
   return (
-    <div className="mx-auto max-w-4xl">
-      <div className="rounded-xl border border-[var(--pg-border)] bg-white p-6">
-        <h1 className="text-2xl font-bold leading-snug">
-          {paper.is_milestone && (<span className="mr-1.5 rounded bg-amber-100 px-1.5 py-0.5 align-middle text-[10px] font-medium text-amber-700">里程碑</span>)}
-          {paper.title}
-        </h1>
-        <p className="mt-2 text-sm text-gray-600">{paper.authors.join(", ")}</p>
-        <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-sm text-gray-500">
-          <span>{paper.year}</span>
-          {paper.venue && <span className="italic">{paper.venue}</span>}
-          <span>引用 {paper.citation_count.toLocaleString()}</span>
-          {paper.published && <span>发布于 {paper.published.slice(0, 10)}</span>}
-        </div>
-        <div className="mt-3 flex flex-wrap gap-2 text-sm">
-          {paper.abs_url && (
-            <a href={paper.abs_url} target="_blank" rel="noreferrer" className="rounded bg-blue-600 px-3 py-1 text-white hover:bg-blue-700">
-              arXiv 页面 ↗
-            </a>
-          )}
-          {paper.pdf_url && (
-            <a href={paper.pdf_url} target="_blank" rel="noreferrer" className="rounded border border-[var(--pg-border)] px-3 py-1 hover:bg-gray-50">
-              PDF ↗
-            </a>
-          )}
-        </div>
+    <div className="grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_300px]">
+      <div className="min-w-0 space-y-5">
+        <Breadcrumbs
+          items={[
+            { label: L.node.crumbHome, href: "/" },
+            ...crumbs,
+            { label: `${L.paper.crumbSelf} #${paper.id}` },
+          ]}
+        />
 
-        {paper.nodes.length > 0 && (
-          <div className="mt-4">
-            <span className="text-xs font-semibold text-gray-500">所属研究方向</span>
-            <div className="mt-1 flex flex-wrap gap-1">
-              {paper.nodes.map((n) => (
-                <Link
-                  key={n.id}
-                  href={`/nodes/${n.id}`}
-                  className="rounded-full bg-blue-50 px-2.5 py-1 text-sm text-blue-700 hover:bg-blue-100"
-                >
-                  {n.name_zh} · {n.name_en}
-                </Link>
+        <header className="space-y-2.5">
+          <div className="flex flex-wrap items-center gap-1.5">
+            {paper.is_milestone ? (
+              <Badge tone="warn" title={L.paper.milestoneHint}>
+                {L.paper.milestone}
+              </Badge>
+            ) : null}
+            {paper.is_demo ? <Badge tone="neutral">{L.node.demo}</Badge> : null}
+            <Eyebrow>{L.paper.eyebrow}</Eyebrow>
+          </div>
+
+          <h1 className="text-[22px] font-bold leading-snug tracking-tight text-fg sm:text-[26px]">
+            {paper.title}
+          </h1>
+
+          {paper.authors.length > 0 ? (
+            <p className="text-sm text-muted">{paper.authors.join(", ")}</p>
+          ) : null}
+
+          <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-subtle">
+            <span className="font-medium tabular-nums text-muted">{paper.year}</span>
+            {paper.venue ? (
+              <>
+                <span aria-hidden className="text-line">
+                  ·
+                </span>
+                <span className="italic">{paper.venue}</span>
+              </>
+            ) : null}
+            <span aria-hidden className="text-line">
+              ·
+            </span>
+            <span className="tabular-nums">
+              {L.node.citations} {paper.citation_count.toLocaleString()}
+            </span>
+            {paper.nodes.length > 0 ? (
+              <>
+                <span aria-hidden className="text-line">
+                  ·
+                </span>
+                <span>{L.paper.nodeCount(paper.nodes.length)}</span>
+              </>
+            ) : null}
+          </p>
+        </header>
+
+        <section>
+          <SectionTitle hint={paper.abstract ? L.paper.abstractLen(paper.abstract.length) : undefined}>
+            {L.paper.abstractTitle}
+          </SectionTitle>
+          <Card className="px-4 py-3.5">
+            {paper.abstract ? (
+              <p className="max-w-[78ch] text-[15px] leading-7 text-fg">{paper.abstract}</p>
+            ) : (
+              <p className="text-sm text-muted">{L.paper.noAbstract}</p>
+            )}
+          </Card>
+        </section>
+
+        {paper.related && paper.related.length > 0 ? (
+          <section>
+            <SectionTitle hint={L.paper.relatedHint}>{L.paper.relatedTitle}</SectionTitle>
+            <div className="space-y-2">
+              {paper.related.map((p) => (
+                <PaperCard key={p.id} paper={p} compact showNodes={false} />
               ))}
             </div>
-          </div>
-        )}
+          </section>
+        ) : null}
       </div>
 
-      <section className="mt-4 rounded-xl border border-[var(--pg-border)] bg-white p-6">
-        <h2 className="mb-2 text-sm font-semibold text-gray-700">摘要</h2>
-        <p className="text-sm leading-relaxed text-gray-800">{paper.abstract || "（暂无摘要）"}</p>
-      </section>
-
-      {paper.related && paper.related.length > 0 && (
-        <section className="mt-4">
-          <h2 className="mb-2 text-sm font-semibold text-gray-700">相关论文（同方向高引用）</h2>
-          <div className="space-y-2">
-            {paper.related.map((p) => (
-              <PaperCard key={p.id} paper={p} />
-            ))}
+      <aside className="min-w-0 space-y-4 lg:sticky lg:top-[72px]">
+        <Card className="p-3.5">
+          <Eyebrow className="mb-2 block">{L.paper.metaTitle}</Eyebrow>
+          <div className="mb-2.5 flex items-baseline gap-2">
+            <span className="text-2xl font-semibold tabular-nums tracking-tight text-fg">
+              {paper.citation_count.toLocaleString()}
+            </span>
+            <span className="text-xs text-subtle">{L.paper.citesUnit}</span>
           </div>
-        </section>
-      )}
+          <dl className="divide-y divide-line-soft">
+            {metaRows.map((row) => (
+              <div key={row.key} className="flex items-baseline justify-between gap-3 py-1.5">
+                <dt className="shrink-0 text-xs text-subtle">{row.label}</dt>
+                <dd
+                  className={cx(
+                    "min-w-0 truncate text-right text-[13px] text-fg",
+                    row.mono && "font-mono text-xs",
+                    row.key === "year" && "tabular-nums"
+                  )}
+                  title={row.value}
+                >
+                  {row.value}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </Card>
+
+        {(paper.abs_url || paper.pdf_url || paper.code_url) && (
+          <Card className="p-3.5">
+            <Eyebrow className="mb-2 block">{L.paper.linksTitle}</Eyebrow>
+            <div className="flex flex-col gap-1.5">
+              {paper.abs_url ? (
+                <Button href={paper.abs_url} variant="primary" size="sm" className="w-full">
+                  {L.paper.linkAbsFull}
+                </Button>
+              ) : null}
+              {paper.pdf_url ? (
+                <Button href={paper.pdf_url} size="sm" className="w-full">
+                  {L.paper.linkPdf}
+                </Button>
+              ) : null}
+              {paper.code_url ? (
+                <Button href={paper.code_url} size="sm" className="w-full">
+                  {L.paper.linkCode}
+                </Button>
+              ) : null}
+            </div>
+          </Card>
+        )}
+
+        {primary ? (
+          <Card className="p-3.5">
+            <Eyebrow className="mb-2 block">{L.paper.watchTitle}</Eyebrow>
+            <WatchButton nodeId={primary.id} nodeName={primary.name_zh} />
+            <p className="mt-2 text-[11px] leading-4 text-subtle">{L.paper.watchHint}</p>
+          </Card>
+        ) : null}
+
+        {paper.nodes.length > 0 ? (
+          <Card className="p-3.5">
+            <Eyebrow className="mb-2 block">{L.paper.nodesTitle}</Eyebrow>
+            <ul className="flex flex-wrap gap-1.5">
+              {paper.nodes.map((n) => (
+                <li key={n.id}>
+                  <Link
+                    href={nodeHref(n.id)}
+                    title={n.name_en}
+                    className="inline-flex max-w-full items-center gap-1 rounded-md bg-accent-soft px-2 py-1 text-xs font-medium text-accent transition-colors hover:bg-accent hover:text-accent-fg"
+                  >
+                    <span className="truncate">{n.name_zh}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <p className="mt-2 text-[11px] leading-4 text-subtle">{L.paper.nodesHint}</p>
+          </Card>
+        ) : null}
+      </aside>
     </div>
   );
 }

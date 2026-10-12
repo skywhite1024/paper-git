@@ -1,64 +1,116 @@
 import Link from "next/link";
+import { Badge, Button, Card, cx } from "@/components/ui";
+import { L } from "@/lib/lexicon";
 import type { PaperDTO } from "@/lib/api";
 
-function formatDate(iso: string | null) {
-  if (!iso) return null;
-  return iso.slice(0, 10);
+const chipCls =
+  "inline-flex max-w-full items-center gap-1 rounded-md bg-accent-soft px-1.5 py-0.5 " +
+  "text-[11px] font-medium text-accent transition-colors hover:bg-accent hover:text-accent-fg";
+
+function authorLine(authors: string[]) {
+  const shown = authors.slice(0, 3).join(", ");
+  const rest = authors.length - 3;
+  return rest > 0 ? `${shown} ${L.paper.moreAuthors(rest)}` : shown;
 }
 
-export default function PaperCard({ paper, showNodes = true }: { paper: PaperDTO; showNodes?: boolean }) {
+export default function PaperCard({
+  paper,
+  showNodes = true,
+  compact = false,
+}: {
+  paper: PaperDTO;
+  showNodes?: boolean;
+  compact?: boolean;
+}) {
+  const published = paper.published ? paper.published.slice(0, 10) : null;
+  const meta: { key: string; text: string; className?: string }[] = [
+    { key: "year", text: String(paper.year), className: "font-medium tabular-nums text-muted" },
+  ];
+  if (paper.venue) meta.push({ key: "venue", text: paper.venue, className: "italic" });
+  meta.push({
+    key: "cites",
+    text: `${L.node.citations} ${paper.citation_count.toLocaleString()}`,
+    className: "tabular-nums",
+  });
+  if (published) meta.push({ key: "pub", text: published, className: "tabular-nums" });
+  if (paper.is_demo) meta.push({ key: "demo", text: L.node.demo });
+
   return (
-    <div className="rounded-lg border border-[var(--pg-border)] bg-white p-4 hover:shadow-sm">
-      <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0">
-          <Link href={`/papers/${paper.id}`} className="font-semibold text-blue-700 hover:underline">
-            {paper.is_milestone && (
-              <span className="mr-1.5 rounded bg-amber-100 px-1.5 py-0.5 align-middle text-[10px] font-medium text-amber-700">
-                里程碑
-              </span>
-            )}
-            {paper.title}
-          </Link>
-          <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-500">
-            <span className="max-w-xl truncate">{paper.authors.join(", ")}</span>
-            <span>{paper.year}</span>
-            {paper.venue && <span className="italic">{paper.venue}</span>}
-            <span>引用 {paper.citation_count.toLocaleString()}</span>
-            {paper.published && <span>{formatDate(paper.published)}</span>}
-            {paper.is_demo && <span className="rounded bg-amber-100 px-1.5 text-amber-700">示例数据</span>}
-          </div>
-          {showNodes && paper.nodes.length > 0 && (
-            <div className="mt-2 flex flex-wrap gap-1">
-              {paper.nodes.slice(0, 4).map((n) => (
+    <Card
+      as="article"
+      className={cx(
+        "group transition-[border-color,box-shadow] hover:border-accent/45 hover:shadow-pop",
+        compact ? "px-3 py-2.5" : "px-4 py-3.5"
+      )}
+    >
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:gap-4">
+        <div className="min-w-0 flex-1">
+          {(paper.is_milestone || showNodes) && (
+            <div className="mb-1.5 flex flex-wrap items-center gap-1.5">
+              {paper.is_milestone ? (
+                <Badge tone="warn" title={L.paper.milestoneHint}>
+                  {L.paper.milestone}
+                </Badge>
+              ) : null}
+              {showNodes &&
+                paper.nodes.slice(0, compact ? 2 : 3).map((n) => (
+                  <Link key={n.id} href={`/nodes/${n.id}`} className={chipCls} title={n.name_en}>
+                    <span className="truncate">{n.name_zh}</span>
+                  </Link>
+                ))}
+              {showNodes && paper.nodes.length > (compact ? 2 : 3) ? (
                 <Link
-                  key={n.id}
-                  href={`/nodes/${n.id}`}
-                  className="rounded-full bg-blue-50 px-2 py-0.5 text-xs text-blue-700 hover:bg-blue-100"
+                  href={`/papers/${paper.id}`}
+                  className="text-[11px] font-medium text-subtle hover:text-accent"
                 >
-                  {n.name_zh}
+                  {L.paper.moreNodes(paper.nodes.length - (compact ? 2 : 3))}
                 </Link>
-              ))}
+              ) : null}
             </div>
           )}
+
+          <h3 className="text-[15px] leading-snug font-semibold text-fg">
+            <Link href={`/papers/${paper.id}`} title={paper.title} className="line-clamp-2 rounded-sm hover:text-accent">
+              {paper.title}
+            </Link>
+          </h3>
+
+          {paper.authors.length > 0 ? (
+            <p className="mt-1 truncate text-xs text-muted" title={paper.authors.join(", ")}>
+              {authorLine(paper.authors)}
+            </p>
+          ) : null}
+
+          <p className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-subtle">
+            {meta.map((m, i) => (
+              <span key={m.key} className={cx("flex items-center gap-2", m.className)}>
+                {i > 0 ? (
+                  <span aria-hidden className="text-line">
+                    ·
+                  </span>
+                ) : null}
+                {m.text}
+              </span>
+            ))}
+          </p>
         </div>
-        <div className="flex shrink-0 flex-col gap-1 text-xs">
-          {paper.abs_url && (
-            <a href={paper.abs_url} target="_blank" rel="noreferrer" className="text-blue-600 hover:underline">
-              arXiv ↗
-            </a>
-          )}
-          {paper.pdf_url && (
-            <a href={paper.pdf_url} target="_blank" rel="noreferrer" className="text-gray-500 hover:underline">
-              PDF ↗
-            </a>
-          )}
-          {paper.code_url && (
-            <a href={paper.code_url} target="_blank" rel="noreferrer" className="text-gray-500 hover:underline">
-              Code ↗
-            </a>
-          )}
-        </div>
+
+        {(paper.abs_url || paper.pdf_url || paper.code_url) && (
+          <div className="flex shrink-0 flex-wrap gap-1.5 sm:flex-col sm:items-end">
+            {paper.abs_url ? <Button size="sm" href={paper.abs_url}>{L.paper.linkAbs}</Button> : null}
+            {paper.pdf_url ? (
+              <Button size="sm" href={paper.pdf_url} variant="ghost">
+                {L.paper.linkPdf}
+              </Button>
+            ) : null}
+            {paper.code_url ? (
+              <Button size="sm" href={paper.code_url} variant="ghost">
+                {L.paper.linkCode}
+              </Button>
+            ) : null}
+          </div>
+        )}
       </div>
-    </div>
+    </Card>
   );
 }
