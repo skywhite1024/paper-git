@@ -158,7 +158,7 @@ export default function SiteHeader() {
 
       {menuOpen && (
         <nav
-          aria-label={L.nav.primary}
+          aria-label={L.nav.mobile}
           className="pg-enter border-t border-line bg-surface px-4 py-2 md:hidden"
         >
           <div className="flex flex-col gap-0.5">

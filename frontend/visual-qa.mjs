@@ -11,6 +11,7 @@ mkdirSync(OUT, { recursive: true });
 
 const prefix = process.argv[2] ?? "run";
 const which = process.argv[3] ?? "both";
+const scheme = process.argv[4] ?? "light";
 
 const PAGES = [
   ["home", "/"],
@@ -39,7 +40,7 @@ const browser = await chromium.launch({ channel: "chrome" });
 const problems = [];
 
 for (const [wtag, viewport] of VIEWPORTS) {
-  const ctx = await browser.newContext({ viewport, deviceScaleFactor: 1 });
+  const ctx = await browser.newContext({ viewport, deviceScaleFactor: 1, colorScheme: scheme });
   const page = await ctx.newPage();
   const errors = [];
   page.on("pageerror", (e) => errors.push(`pageerror: ${e.message}`));

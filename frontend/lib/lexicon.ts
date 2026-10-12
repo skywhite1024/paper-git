@@ -15,6 +15,7 @@ export const L = {
     treeRobotics: "机器人学",
     watchlist: "关注",
     primary: "主导航",
+    mobile: "移动端导航",
     menu: "展开导航菜单",
     themeDark: "切换为深色主题",
     themeLight: "切换为浅色主题",
