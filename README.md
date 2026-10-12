@@ -64,7 +64,8 @@ python -m pytest                                     # 后端测试（backend/ �
 
 ```bash
 cd frontend
-npm run qa:all                       # 一条命令跑完下面全部四项门禁
+npm run qa:all                       # 一条命令跑完：类型 → 生产构建 → 双主题视觉回归
+                                     # → 交互冒烟 → 可达性审计
 ```
 
 单项：
@@ -72,7 +73,8 @@ npm run qa:all                       # 一条命令跑完下面全部四项门�
 ```bash
 cd frontend
 npx tsc --noEmit                     # 类型
-npx next build                       # 生产构建（含 lint）
+npm run build:check                  # 生产构建（含 lint），构建到一次性目录，可与 dev 并存
+npx next build                       # 常规生产构建（会占用 .next）
 node visual-qa.mjs <前缀> both light   # 9 个页面 × 1440/390 截图，检出横向溢出与控制台报错
 node visual-qa.mjs <前缀> both dark    # 同上，深色主题
 node interaction-qa.mjs              # 14 项真实操作冒烟（主题持久化、即时检索、拓扑定位、
