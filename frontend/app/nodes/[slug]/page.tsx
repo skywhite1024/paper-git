@@ -123,6 +123,28 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   };
 }
 
+/**
+ * Boundary pager cells must not be focusable links: `pointer-events-none` only
+ * swallows mouse clicks, so keyboard users could still activate `?page=0`,
+ * which the API rejects with 422.
+ */
+function PagerEdge({ href, label }: { href: string | null; label: string }) {
+  const cls =
+    "inline-flex h-8 items-center rounded-lg border border-line px-2.5 text-xs text-muted transition-colors";
+  if (!href) {
+    return (
+      <span aria-disabled="true" className={cx(cls, "opacity-45")}>
+        {label}
+      </span>
+    );
+  }
+  return (
+    <Link href={href} aria-label={label} className={cx(cls, "hover:bg-raised hover:text-fg")}>
+      {label}
+    </Link>
+  );
+}
+
 function pageWindow(current: number, total: number): (number | null)[] {
   const out: (number | null)[] = [];
   for (let p = 1; p <= total; p++) {
@@ -477,16 +499,10 @@ async function PapersTab({ slug, query, scope }: { slug: string; query: PaperQue
           {totalPages > 1 ? (
             <ul className="flex flex-wrap items-center justify-center gap-1">
               <li>
-                <Link
-                  href={paperHref(slug, { ...query, page: query.page - 1 })}
-                  aria-label={L.node.pagerPrev}
-                  className={cx(
-                    "inline-flex h-8 items-center rounded-lg border border-line px-2.5 text-xs text-muted transition-colors hover:bg-raised hover:text-fg",
-                    query.page <= 1 && "pointer-events-none opacity-45"
-                  )}
-                >
-                  {L.node.pagerPrev}
-                </Link>
+                <PagerEdge
+                  href={query.page > 1 ? paperHref(slug, { ...query, page: query.page - 1 }) : null}
+                  label={L.node.pagerPrev}
+                />
               </li>
               {pageWindow(query.page, totalPages).map((p, i) =>
                 p === null ? (
@@ -512,16 +528,10 @@ async function PapersTab({ slug, query, scope }: { slug: string; query: PaperQue
                 )
               )}
               <li>
-                <Link
-                  href={paperHref(slug, { ...query, page: query.page + 1 })}
-                  aria-label={L.node.pagerNext}
-                  className={cx(
-                    "inline-flex h-8 items-center rounded-lg border border-line px-2.5 text-xs text-muted transition-colors hover:bg-raised hover:text-fg",
-                    query.page >= totalPages && "pointer-events-none opacity-45"
-                  )}
-                >
-                  {L.node.pagerNext}
-                </Link>
+                <PagerEdge
+                  href={query.page < totalPages ? paperHref(slug, { ...query, page: query.page + 1 }) : null}
+                  label={L.node.pagerNext}
+                />
               </li>
             </ul>
           ) : null}
