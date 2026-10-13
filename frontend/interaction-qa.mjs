@@ -125,6 +125,25 @@ await check("pagination advances a page", async () => {
   await page.waitForURL(/page=2/, { timeout: 8000 });
 });
 
+await check("pager never exposes an activatable page=0 link", async () => {
+  await page.goto(`${BASE}/nodes/ai?tab=papers`, { waitUntil: "networkidle" });
+  await page.waitForTimeout(800);
+  const hrefs = await page.locator("nav[aria-label] a").evaluateAll((as) =>
+    as.map((a) => a.getAttribute("href") || "")
+  );
+  assert(!hrefs.some((h) => /[?&]page=0(&|$)/.test(h)), "page=0 link reachable on first page");
+  // Boundary cells must not be focusable: pointer-events-none alone still lets
+  // Enter activate the anchor, which the API rejects with 422.
+  assert(
+    (await page.locator("nav[aria-label] a[aria-label='上一页']").count()) === 0,
+    "previous-page control is still an anchor on page 1"
+  );
+  assert(
+    (await page.locator("nav[aria-label] span[aria-disabled='true']").count()) > 0,
+    "no aria-disabled boundary cell"
+  );
+});
+
 await check("watch then unwatch with undo", async () => {
   // Start from a clean slate so the check is repeatable.
   await page.request.delete(`${API}/api/watch/cs`).catch(() => {});
