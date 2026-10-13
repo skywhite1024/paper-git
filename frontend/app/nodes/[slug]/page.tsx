@@ -79,7 +79,7 @@ function nodeHref(id: string) {
   return `/nodes/${encodeURIComponent(id)}`;
 }
 
-function hiddenFields(query: PaperQuery) {
+function hiddenFields(query: PaperQuery, exclude: string[] = []) {
   const fields: { name: string; value: string }[] = [
     { name: "tab", value: "papers" },
     { name: "sort", value: query.sort },
@@ -87,7 +87,9 @@ function hiddenFields(query: PaperQuery) {
   if (query.perPage !== DEFAULT_PER_PAGE) fields.push({ name: "per_page", value: String(query.perPage) });
   if (query.year) fields.push({ name: "year", value: query.year });
   if (query.q) fields.push({ name: "q", value: query.q });
-  return fields;
+  // A second control with the same name would emit `sort=x&sort=y` and the
+  // visible select's choice would be silently overridden by the hidden value.
+  return fields.filter((f) => !exclude.includes(f.name));
 }
 
 async function getNode(slug: string): Promise<NodeDetailDTO> {
@@ -368,6 +370,7 @@ async function PapersTab({ slug, query, scope }: { slug: string; query: PaperQue
   if (query.year) api.set("year", query.year);
   if (query.q) api.set("q", query.q);
   const apiWithoutPage = new URLSearchParams(api);
+  apiWithoutPage.delete("page");
   const data = await apiGet<PapersResponse>(`/api/nodes/${encodeURIComponent(slug)}/papers?${api.toString()}`);
 
   const perPage = data.per_page || query.perPage;
@@ -394,7 +397,7 @@ async function PapersTab({ slug, query, scope }: { slug: string; query: PaperQue
     <div className="space-y-3">
       <Card as="section" className="p-3">
         <form action={`/nodes/${encodeURIComponent(slug)}`} method="get" className="flex flex-wrap items-end gap-2">
-          {hiddenFields(query).map((f) => (
+          {hiddenFields(query, ["sort"]).map((f) => (
             <input key={f.name} type="hidden" name={f.name} value={f.value} />
           ))}
 
@@ -473,6 +476,7 @@ async function PapersTab({ slug, query, scope }: { slug: string; query: PaperQue
 
       {data.items.length > 0 ? (
         <PapersFeed
+          key={`${apiWithoutPage.toString()}|${query.page}`}
           slug={slug}
           apiQuery={apiWithoutPage.toString()}
           startPage={query.page}

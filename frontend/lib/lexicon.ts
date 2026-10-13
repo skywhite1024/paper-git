@@ -173,6 +173,9 @@ export const L = {
     loadMore: (n: number) => `加载更多（剩余 ${n.toLocaleString()} 篇）`,
     loadMoreBusy: "加载中…",
     loadMoreFailed: "追加失败，可重试或使用下方分页。",
+    loadMoreCapped: (n: number) => `已加载 ${n.toLocaleString()} 条上限。继续浏览请用上方筛选缩小范围，或使用分页跳转。`,
+    loadMoreEnd: "已到达列表末尾。",
+    listLabel: "论文列表",
     loadMoreProgress: (shown: number, total: number) =>
       `已加载 ${shown.toLocaleString()} / ${total.toLocaleString()} 篇`,
     pagerPrev: "上一页",

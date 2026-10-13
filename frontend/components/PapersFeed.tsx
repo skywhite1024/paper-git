@@ -1,15 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import PaperCard from "@/components/PaperCard";
 import { Button } from "@/components/ui";
 import { clientGet, type PaperDTO, type PapersResponse } from "@/lib/api";
 import { L } from "@/lib/lexicon";
 
+/** Appending past this point costs more scrolling than narrowing the filter. */
+const MAX_LOADED = 500;
+
 /**
  * Appends pages below the server-rendered first page so scanning a large subtree
- * does not require clicking through hundreds of pager pages. The pager stays for
- * deep links and no-JS use; `?page=N` remains the source of truth for position.
+ * does not require clicking through hundreds of pager pages. The caller keys this
+ * component by the query identity so a filter or page change remounts it with
+ * fresh state instead of keeping a stale, divergent list.
  */
 export default function PapersFeed({
   slug,
@@ -28,15 +32,16 @@ export default function PapersFeed({
 }) {
   const [items, setItems] = useState(initial);
   const [page, setPage] = useState(startPage);
-  const [loading, setLoading] = useState(false);
-  const [failed, setFailed] = useState(false);
+  const [status, setStatus] = useState<"idle" | "loading" | "failed">("idle");
+  const listRef = useRef<HTMLDivElement>(null);
 
-  const remaining = Math.max(0, total - items.length);
-  const canLoad = page < totalPages;
+  const atCap = items.length >= MAX_LOADED;
+  const atEnd = page >= totalPages;
+  const busy = status === "loading";
 
   const loadMore = async () => {
-    setLoading(true);
-    setFailed(false);
+    if (busy || atEnd || atCap) return;
+    setStatus("loading");
     try {
       const next = page + 1;
       const data = await clientGet<PapersResponse>(
@@ -47,32 +52,42 @@ export default function PapersFeed({
         return [...prev, ...data.items.filter((p) => !seen.has(p.id))];
       });
       setPage(next);
+      setStatus("idle");
+      // Keep the caret with the reader rather than dropping it to <body>, which
+      // is what disabling the button would do on every append.
+      listRef.current?.focus();
     } catch {
-      setFailed(true);
-    } finally {
-      setLoading(false);
+      setStatus("failed");
     }
   };
 
+  const message = atCap
+    ? L.node.loadMoreCapped(MAX_LOADED)
+    : atEnd
+      ? L.node.loadMoreEnd
+      : status === "failed"
+        ? L.node.loadMoreFailed
+        : L.node.loadMoreProgress(items.length, total);
+
   return (
     <div className="space-y-3">
-      <div className="space-y-2">
+      <div ref={listRef} tabIndex={-1} className="space-y-2 focus:outline-none" aria-label={L.node.listLabel}>
         {items.map((p) => (
           <PaperCard key={p.id} paper={p} />
         ))}
       </div>
 
-      {canLoad ? (
+      {!atEnd && !atCap ? (
         <div className="flex flex-col items-center gap-1.5">
-          {failed && <p className="text-xs text-danger">{L.node.loadMoreFailed}</p>}
-          <Button onClick={loadMore} disabled={loading}>
-            {loading ? L.node.loadMoreBusy : L.node.loadMore(remaining)}
+          <Button onClick={loadMore} aria-disabled={busy || undefined}>
+            {busy ? L.node.loadMoreBusy : L.node.loadMore(Math.min(MAX_LOADED - items.length, total - items.length))}
           </Button>
-          <p aria-live="polite" className="text-[11px] tabular-nums text-subtle">
-            {L.node.loadMoreProgress(items.length, total)}
-          </p>
         </div>
       ) : null}
+
+      <p aria-live="polite" className="text-center text-[11px] tabular-nums text-subtle">
+        {message}
+      </p>
     </div>
   );
 }
