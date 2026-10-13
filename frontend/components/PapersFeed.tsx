@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import PaperCard from "@/components/PaperCard";
 import { Button } from "@/components/ui";
 import { clientGet, type PaperDTO, type PapersResponse } from "@/lib/api";
@@ -8,6 +8,9 @@ import { L } from "@/lib/lexicon";
 
 /** Appending past this point costs more scrolling than narrowing the filter. */
 const MAX_LOADED = 500;
+
+/** A stalled append would otherwise leave the button stuck on "loading" forever. */
+const REQUEST_TIMEOUT_MS = 15000;
 
 /**
  * Appends pages below the server-rendered first page so scanning a large subtree
@@ -34,6 +37,9 @@ export default function PapersFeed({
   const [page, setPage] = useState(startPage);
   const [status, setStatus] = useState<"idle" | "loading" | "failed">("idle");
   const listRef = useRef<HTMLDivElement>(null);
+  const inflight = useRef<AbortController | null>(null);
+
+  useEffect(() => () => inflight.current?.abort(), []);
 
   const atCap = items.length >= MAX_LOADED;
   const atEnd = page >= totalPages;
@@ -41,11 +47,15 @@ export default function PapersFeed({
 
   const loadMore = async () => {
     if (busy || atEnd || atCap) return;
+    const ctrl = new AbortController();
+    inflight.current = ctrl;
+    const timer = setTimeout(() => ctrl.abort(), REQUEST_TIMEOUT_MS);
     setStatus("loading");
     try {
       const next = page + 1;
       const data = await clientGet<PapersResponse>(
-        `/api/nodes/${encodeURIComponent(slug)}/papers?${apiQuery}&page=${next}`
+        `/api/nodes/${encodeURIComponent(slug)}/papers?${apiQuery}&page=${next}`,
+        ctrl.signal
       );
       setItems((prev) => {
         const seen = new Set(prev.map((p) => p.id));
@@ -58,6 +68,9 @@ export default function PapersFeed({
       listRef.current?.focus();
     } catch {
       setStatus("failed");
+    } finally {
+      clearTimeout(timer);
+      if (inflight.current === ctrl) inflight.current = null;
     }
   };
 
