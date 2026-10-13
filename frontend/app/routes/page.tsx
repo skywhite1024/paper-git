@@ -128,7 +128,9 @@ export default async function RoutesHubPage() {
       <section className="grid gap-4 lg:grid-cols-2">
         <Card as="section" className="min-w-0 p-5">
           <SectionTitle>{L.routes.contract}</SectionTitle>
-          <pre className="max-w-full overflow-x-auto rounded-lg bg-raised px-4 py-3 font-mono text-xs leading-relaxed text-fg">
+          {/* The contract is a single formula meant to be read in full; a
+              horizontally scrolling <pre> hides its tail with no cue. */}
+          <pre className="max-w-full whitespace-pre-wrap break-words rounded-lg bg-raised px-4 py-3 font-mono text-xs leading-relaxed text-fg">
             <code>{family.contract.formula}</code>
           </pre>
           <p className="mt-3 text-sm leading-relaxed text-muted">{family.contract.note}</p>
