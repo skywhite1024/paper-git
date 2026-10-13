@@ -9,6 +9,7 @@ const PAGES = [
   ["route_detail", "/routes/usd"],
   ["node_ai", "/nodes/ai"],
   ["node_papers", "/nodes/ai?tab=papers"],
+  ["node_feed", "/nodes/ai?tab=feed"],
   ["search", "/search?q=diffusion"],
   ["watchlist", "/watchlist"],
   ["paper_detail", "/papers/1"],

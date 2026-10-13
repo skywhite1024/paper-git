@@ -39,6 +39,7 @@ const PAGES = [
   ["node_ai", "/nodes/ai"],
   ["node_papers", "/nodes/ai?tab=papers"],
   ["node_timeline", "/nodes/ai?tab=timeline"],
+  ["node_feed", "/nodes/ai?tab=feed"],
   ["search", "/search?q=diffusion"],
   ["watchlist", "/watchlist"],
   ["paper_detail", "/papers/1"],
