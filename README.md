@@ -2,8 +2,10 @@
 
 以 GitHub 式体验追踪学术论文进展：领域树（领域 → 子领域 → 研究路线）自动聚合论文、时间线脉络、趋势与动态，覆盖 **AI / 计算机科学 / 机器人** 三大方向，可扩展至任意领域。
 
-- 调研与产品方案：[`docs/research-and-plan.md`](docs/research-and-plan.md)
+- 调研与产品方案：[`docs/research-and-plan.md`](docs/research-and-plan.md)（v0.1，2026-08-23 的历史快照；当前实现以代码与下列文档为准）
 - API 契约：[`docs/api-contract.md`](docs/api-contract.md)
+- 设计系统与前端约定：[`docs/design-system.md`](docs/design-system.md)
+- 三维拓扑实现说明：[`docs/topology3d.md`](docs/topology3d.md)
 
 ## 功能
 
