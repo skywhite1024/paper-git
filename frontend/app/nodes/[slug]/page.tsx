@@ -386,8 +386,6 @@ async function PapersTab({ slug, query, scope }: { slug: string; query: PaperQue
 
   const hasFilter = Boolean(query.q || query.year);
   const clearedHref = paperHref(slug, { page: 1, sort: query.sort, perPage: query.perPage });
-  const from = data.total === 0 ? 0 : (query.page - 1) * perPage + 1;
-  const to = Math.min(data.total, (query.page - 1) * perPage + data.items.length);
   const linkedShown = scope.linked > scope.distinct;
   /* 年份桶在后端是按「论文 × 方向」计数聚合的，可能高于去重后的论文数——此时只展示年份本身。 */
   const yearSum = data.years.reduce((acc, y) => acc + y.count, 0);
@@ -447,8 +445,11 @@ async function PapersTab({ slug, query, scope }: { slug: string; query: PaperQue
         </form>
 
         <div className="mt-2.5 flex flex-wrap items-center gap-x-3 gap-y-2 border-t border-line-soft pt-2.5">
+          {/* The served-page range would go stale once PapersFeed appends, so the
+              header states only what the server knows; loaded count lives in the
+              feed's live region. */}
           <p className="text-xs text-muted tabular-nums">
-            {L.node.rangeSummary(from, to, data.total)}
+            {L.node.resultCount(data.total)}
             <span className="text-subtle"> · </span>
             {L.node.pageSummary(query.page, totalPages)}
           </p>
