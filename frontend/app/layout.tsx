@@ -4,6 +4,7 @@ import SiteHeader from "@/components/SiteHeader";
 import ReadingProvider from "@/components/ReadingProvider";
 import "./globals.css";
 import "./atlas.css";
+import "./canvas.css";
 
 export const metadata: Metadata = {
   title: { default: "PaperGit · 个人研究资料库", template: "%s · PaperGit" },
