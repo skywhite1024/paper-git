@@ -3,6 +3,7 @@ import Link from "next/link";
 import SiteHeader from "@/components/SiteHeader";
 import ReadingProvider from "@/components/ReadingProvider";
 import "./globals.css";
+import "./atlas.css";
 
 export const metadata: Metadata = {
   title: { default: "PaperGit · 个人研究资料库", template: "%s · PaperGit" },
@@ -10,7 +11,7 @@ export const metadata: Metadata = {
 };
 export const viewport: Viewport = { width: "device-width", initialScale: 1, themeColor: "#faf9f5" };
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return <html lang="zh-CN"><body><ReadingProvider>
+  return <html lang="zh-CN" data-scroll-behavior="smooth"><body><ReadingProvider>
     <a className="skip-link" href="#main">跳到主内容</a>
     <SiteHeader />
     <main id="main" className="container">{children}</main>

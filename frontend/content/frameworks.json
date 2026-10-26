@@ -1,0 +1,173 @@
+{
+  "world-models": {
+    "figure": {
+      "file": "world-models.svg",
+      "url": "https://worldmodels.github.io/assets/world_model_overview.svg",
+      "source": "https://worldmodels.github.io/",
+      "credit": "World Models · 项目页",
+      "title": "视觉、记忆与控制器",
+      "caption": "VAE 压缩观测，MDN-RNN 预测潜状态，控制器依据表示选择动作。"
+    },
+    "steps": [
+      "视觉压缩",
+      "潜空间预测",
+      "控制器行动"
+    ],
+    "inputs": "观测图像、动作历史",
+    "mechanism": "VAE + MDN-RNN + Controller",
+    "outputs": "低维控制动作",
+    "change": "将视觉表示、动态记忆与控制分开建模；理解 Dreamer 前可以先看这种模块划分。"
+  },
+  "dreamer": {
+    "figure": {
+      "file": "dreamer.png",
+      "url": "https://storage.googleapis.com/gweb-research2023-media/original_images/7ac92242718f992130a1f9d88e0c2196-image2.png",
+      "source": "https://research.google/blog/introducing-dreamer-scalable-reinforcement-learning-using-world-models/",
+      "credit": "Google Research · Dreamer",
+      "title": "Dreamer 的三个学习过程",
+      "caption": "从经验学习世界模型，在想象中学习价值与策略，再回到环境收集经验。"
+    },
+    "steps": [
+      "学习世界模型",
+      "想象中优化行为",
+      "执行并收集经验"
+    ],
+    "inputs": "图像、动作与奖励",
+    "mechanism": "潜空间动力学 + Actor / Value",
+    "outputs": "直接执行的策略",
+    "change": "与 PlaNet 在线搜索动作序列相比，Dreamer 在想象轨迹上训练 actor，执行时直接输出动作。"
+  },
+  "vjepa2": {
+    "figure": {
+      "file": "vjepa2.png",
+      "url": "https://raw.githubusercontent.com/facebookresearch/vjepa2/main/assets/flowchart.png",
+      "source": "https://github.com/facebookresearch/vjepa2",
+      "credit": "Meta · V-JEPA 2",
+      "title": "视频预训练与动作条件后训练",
+      "caption": "通用视频表示与机器人动作条件模型分阶段训练；控制时在表征空间规划。"
+    },
+    "steps": [
+      "视频表征预训练",
+      "动作条件后训练",
+      "目标条件规划"
+    ],
+    "inputs": "视频；后训练加入机器人状态与动作",
+    "mechanism": "表征预测 + 动作条件世界模型",
+    "outputs": "视觉表征与规划动作",
+    "change": "相对像素生成路线，它主要预测视觉特征；动作条件后训练与通用视频预训练需要分开理解。"
+  },
+  "rt2": {
+    "figure": {
+      "file": "rt2.png",
+      "url": "https://robotics-transformer2.github.io/img/fig1.png",
+      "source": "https://robotics-transformer2.github.io/",
+      "credit": "RT-2 · 项目页",
+      "title": "视觉语言与动作的联合训练",
+      "caption": "将动作表示为 token，与视觉语言任务共同训练，并用于闭环机器人控制。"
+    },
+    "steps": [
+      "视觉语言预训练",
+      "动作转为 token",
+      "闭环机器人控制"
+    ],
+    "inputs": "图像与语言指令",
+    "mechanism": "VLM 与机器人轨迹共同微调",
+    "outputs": "离散动作 token",
+    "change": "把机器人动作放入语言模型的输出格式，让视觉语言预训练连接低层控制。"
+  },
+  "openvla": {
+    "figure": {
+      "file": "openvla.jpg",
+      "url": "https://openvla.github.io/static/images/openvla_model.jpg",
+      "source": "https://openvla.github.io/",
+      "credit": "OpenVLA · 项目页",
+      "title": "OpenVLA 模型架构",
+      "caption": "双视觉编码器经 projector 连接语言模型，预测的动作 token 再解码为控制量。"
+    },
+    "steps": [
+      "DINOv2 + SigLIP",
+      "Projector + Llama 2",
+      "动作 token 解码"
+    ],
+    "inputs": "观测图像与语言指令",
+    "mechanism": "融合视觉编码器 + 7B VLM",
+    "outputs": "7 维机器人动作",
+    "change": "在 VLA 路线上提供开放权重与训练适配方案；观察视觉编码、动作离散化和微调成本。"
+  },
+  "pi0": {
+    "figure": {
+      "file": "pi0.png",
+      "url": "https://arxiv.org/html/2410.24164v1/overview.png",
+      "source": "https://arxiv.org/html/2410.24164v1#S2.F3",
+      "credit": "π0 · 论文 Figure 3",
+      "title": "视觉语言模型与动作专家",
+      "caption": "预训练视觉语言模型连接动作专家，通过 flow matching 生成连续动作块。"
+    },
+    "steps": [
+      "编码视觉与语言",
+      "动作专家去噪",
+      "执行连续动作块"
+    ],
+    "inputs": "多视角图像、语言、机器人状态",
+    "mechanism": "VLM + Flow matching 动作专家",
+    "outputs": "连续动作序列",
+    "change": "与 OpenVLA 的离散动作 token 对照，重点看连续动作块的生成方式和控制频率。"
+  },
+  "saycan": {
+    "figure": {
+      "file": "saycan.png",
+      "url": "https://say-can.github.io/img/saycan.png",
+      "source": "https://say-can.github.io/",
+      "credit": "SayCan · 项目页",
+      "title": "语言相关性与技能可供性",
+      "caption": "语言模型评估任务相关性，价值函数评估技能可执行性，两者共同决定下一步。"
+    },
+    "steps": [
+      "理解指令",
+      "评估技能可供性",
+      "选择并执行技能"
+    ],
+    "inputs": "语言指令与环境状态",
+    "mechanism": "语言概率 × 技能价值",
+    "outputs": "已有技能的执行顺序",
+    "change": "让语言规划受机器人能力约束；它选择技能，而不是直接生成每个低层控制量。"
+  },
+  "voxposer": {
+    "figure": {
+      "file": "voxposer.jpg",
+      "url": "https://voxposer.github.io/media/figures/method.jpg",
+      "source": "https://voxposer.github.io/",
+      "credit": "VoxPoser · 项目页",
+      "title": "语言生成三维价值图",
+      "caption": "语言模型生成代码并结合视觉模型构建三维价值图，再由规划器求解运动轨迹。"
+    },
+    "steps": [
+      "语言生成代码",
+      "构建三维价值图",
+      "规划与闭环执行"
+    ],
+    "inputs": "RGB-D 观测与语言指令",
+    "mechanism": "3D affordance / constraint maps",
+    "outputs": "机器人末端轨迹",
+    "change": "相对预定义技能选择，将任务描述转成空间代价与约束，让运动规划器合成轨迹。"
+  },
+  "rekep": {
+    "figure": {
+      "file": "rekep.jpg",
+      "url": "https://rekep-robot.github.io/media/figures/method.jpg",
+      "source": "https://rekep-robot.github.io/",
+      "credit": "ReKep · 项目页",
+      "title": "关系关键点约束与分层优化",
+      "caption": "从视觉提取关键点，由视觉语言模型生成约束函数，分层优化求解子目标与动作。"
+    },
+    "steps": [
+      "提取三维关键点",
+      "生成关系约束",
+      "分层优化执行"
+    ],
+    "inputs": "视觉观测与任务指令",
+    "mechanism": "关键点约束 + 分层优化",
+    "outputs": "多阶段机器人动作",
+    "change": "与 VoxPoser 的稠密价值图对照，ReKep 用关键点关系表达任务约束。"
+  }
+}

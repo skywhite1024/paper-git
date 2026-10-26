@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import { getPaper, getTrack, kindNames, nextPapers, papers } from "@/lib/catalog";
 import { PaperBadges } from "@/components/PaperCard";
 import ReadingEditor from "@/components/ReadingEditor";
+import FrameworkFigure from "@/components/FrameworkFigure";
+import { frameworks } from "@/lib/atlas";
 export function generateStaticParams() { return papers.map(({ id }) => ({ id })); }
 export const dynamicParams = false;
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) { return { title: getPaper((await params).id)?.name ?? "资料详情" }; }
@@ -16,7 +18,8 @@ export default async function PaperPage({ params }: { params: Promise<{ id: stri
   return <div className={`tone-${paper.track}`}>
     <Link className="back-link" href={`/tracks/${track.id}#${stage.id}`}>← {track.name} / {stage.name}</Link>
     <header className="paper-hero"><p className="eyebrow">{kindNames[paper.kind]} / {track.english}</p><h1>{paper.name}</h1><p className="full-title">{paper.title}</p><PaperBadges paper={paper} /><div className="button-row">{links.map((link, i) => <a key={link.url} className={`button ${i === 0 ? "primary" : ""}`} href={link.url} target="_blank" rel="noreferrer">{link.label} ↗</a>)}</div></header>
-    <div className="paper-detail-grid"><div>
+    <div className="paper-detail-grid"><div className="paper-body">
+      {frameworks[paper.id] && <FrameworkFigure paper={paper} />}
       <section className="detail-section"><p className="eyebrow">THE IDEA</p><h2>它在解决什么</h2><p className="lead">{paper.summary}</p></section>
       <section className="detail-section"><p className="eyebrow">WHY READ IT</p><h2>为什么放在这条路线</h2><p>{paper.why}</p><div className="route-context"><span>当前阶段</span><Link href={`/tracks/${track.id}#${stage.id}`}>{stage.name} ↗</Link><p>{stage.question}</p></div></section>
       <section className="detail-section caveat"><p className="eyebrow">READ WITH A QUESTION</p><h2>读的时候，留意什么</h2><p>{paper.watchFor}</p></section>

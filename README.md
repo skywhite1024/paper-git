@@ -1,6 +1,6 @@
 # PaperGit · 个人研究资料库
 
-围绕 **世界模型、VLA、Robot Agentic** 的本地阅读资料库。用问题驱动的阶段路线组织资料，提供论文导读、来源记录、阅读状态和个人笔记。
+围绕 **世界模型、VLA、Robot Agentic** 的个人阅读资料库。首页以浅色「研究群岛」地图组织论文，配合原始框架图、方法对照、阶段导读和个人笔记，支持本地与 GitHub Pages 访问。
 
 当前目录：43 篇论文与技术报告、16 个配套资料入口。资料最后核验于 2026-10-26。已参考用户提供的 8 份可lip文字稿，具体阅读范围见应用「资料与来源」及 [文字稿阅读记录](docs/transcript-review.md)。
 
@@ -43,7 +43,9 @@ npm run dev -- --help
 
 ## 怎样使用
 
-- **研究路线**：三个方向各四个阶段，点击方法进入导读。箭头表示建议阅读顺序，不代表引用或严格的历史继承关系。
+- **研究群岛**：三个方向分为浅绿、暖杏、淡紫区域，默认显示 9 篇地标论文；其余论文通过搜索或「探索全部论文」选中后显示在地图中。地图支持缩放、放大后拖动和窄屏滑动。
+- **论文面板**：9 篇地标论文提供作者原始框架图、放大查看、三步读图和输入／机制／输出对照。其余论文保留导读和原文入口，缺图时明确提示。实线表示建议阅读，虚线表示方法对照，不代表已核验的引用关系。
+- **阶段路线**：三个方向各四个阶段，由论文面板中的阶段链接进入。
 - **资料库**：按方向、类型、阅读状态、荣誉筛选；搜索名称、方法、会议或年份。
 - **论文详情**：查看核心问题、入选理由、阅读边界、原始来源与后续阅读。
 - **阅读记录**：标记待读、在读、已读；记笔记，导入或导出 JSON 备份。笔记输入框失焦时保存，也可点击保存。
@@ -83,6 +85,8 @@ npm --prefix "frontend" start
 
 ```text
 frontend/content/catalog.json    人工维护的论文、路线、资料
+frontend/content/frameworks.json 框架图出处、读图步骤、结构化方法对照
+frontend/public/figures/         作者原图与出处说明
 frontend/app/                    首页、资料库、阅读记录与详情
 frontend/components/             路线、卡片、筛选和阅读交互
 frontend/lib/                    目录访问与笔记格式
@@ -91,6 +95,6 @@ scripts/dev.mjs                  单命令启动与浏览器预览
 docs/                            配色、来源边界与验收记录
 ```
 
-本次按个人资料库目标替换了旧 FastAPI、全领域聚合、自动抓取、技能发现六路线和 3D 拓扑。采用直接可读的二维阶段图，减少遮挡与操作成本。原有 data/papergit.db 保留，未删除、未迁移进精选目录；旧数据库不再参与应用运行。
+应用采用 Next.js 静态页面、React 与原生 SVG 群岛地图，不需要图谱引擎或 WebGL。原有 data/papergit.db 保留，未删除、未迁移进精选目录；旧数据库不再参与应用运行。
 
-视觉参考：[paper-figure 的 ASPIRE 架构图](https://github.com/skywhite1024/paper-figure/blob/main/output/aspire/aspire-figure-1.png)。借鉴浅色分组、蓝绿暖橙与清晰连线；界面独立实现，不复制论文插图或品牌图标。
+视觉参考：[paper-figure 的 ASPIRE 架构图](https://github.com/skywhite1024/paper-figure/blob/main/output/aspire/aspire-figure-1.png) 的浅色学术配色，以及用户选定的「2D-07 研究群岛地图」样例。地图、等高线与界面独立实现；论文图来自各自官方项目／论文，出处见 [框架图说明](frontend/public/figures/README.md)。
