@@ -1,69 +1,34 @@
-# PaperGit 前端设计系统
+# PaperGit 明亮学术风格
 
-面向贡献者的改造约束。目标：全站统一的视觉语言与可达性基线。
+设计围绕阅读和研究路线，而非全领域节点探索。参考 Claude 类界面的暖白纸感，以及 [paper-figure/output/aspire](https://github.com/skywhite1024/paper-figure/blob/main/output/aspire/aspire-figure-1.png) 中蓝、绿、暖橙分组和清晰的架构连线。参考图已在浏览器实际查看；不复用原论文图像或图标。
 
-## 1. 主题令牌
+## 色彩
 
-`app/globals.css` 用 Tailwind v4 的 `@theme inline` 把 CSS 变量注册为工具类，
-深浅色由 `<html data-theme="light|dark">` 切换（`components/SiteHeader.tsx` 的 ThemeToggle 负责写入
-`localStorage['pg-theme']`，`app/layout.tsx` 的内联脚本在首屏前应用，避免闪烁）。
-
-**禁止再写死颜色**（`bg-white` / `text-gray-700` / `border-[var(--pg-border)]` / `#0d1117`）。一律使用令牌类：
-
-| 令牌类 | 用途 |
+| 用途 | 色值 |
 | --- | --- |
-| `bg-bg` | 页面底色 |
-| `bg-surface` | 卡片、面板 |
-| `bg-raised` | 悬浮/内嵌分区、hover 底 |
-| `border-line` `border-line-soft` | 描边 |
-| `text-fg` `text-muted` `text-subtle` | 三级文字 |
-| `text-accent` `bg-accent` `bg-accent-soft` `text-accent-fg` | 主强调色（品牌靛蓝） |
-| `text-warn` `text-ok` `text-danger` | 语义色 |
-| `rounded-card` `shadow-card` `shadow-pop` | 圆角与层级阴影 |
+| 页面底色 | #FAF9F5 |
+| 卡片纸面 | #FFFEFA |
+| 正文 | #302F2A |
+| 次要文字 | #706D64 |
+| 陶土主按钮 | #A14E35 |
+| 世界模型 | #416882 / #E7EFF4 |
+| VLA | #4F715A / #EAF0E7 |
+| Robot Agentic | #88472F / #F6E9DF |
+| 技术报告 | #6A527E / #ECE7F1 |
+| 预印本 | #845E20 / #F7E7CE |
 
-ECharts / Three.js 等 canvas 内无法用 Tailwind 类，需从
-`getComputedStyle(document.documentElement).getPropertyValue('--c-fg')` 一类方式取色，
-并在 `data-theme` 变化时重绘。
+色彩不单独承担意义：每条路线均有编号与名称，论文类型及荣誉有文字徽标，阅读状态也显示文字。连接箭头表达推荐阅读顺序，不表达未经核验的引用关系。
 
-## 2. 原语
+## 布局
 
-`components/ui.tsx`（服务端安全，无 `"use client"`）导出：
-`cx` `Card` `SectionTitle` `Eyebrow` `Button` `Badge` `Dot` `Skeleton` `EmptyState`
-`Stat` `Tabs` `Breadcrumbs` `inputCls` `selectCls`。
+- 暖白背景、细描边、适量留白。主标题使用本地衬线字体；正文采用系统无衬线字体，不请求外部字体。
+- 桌面阶段横向连接；窄屏转为纵向流程，避免强制横向拖动。
+- 概念图用 HTML/CSS 渲染，键盘可访问的阅读入口独立于图形。
+- 首页展示三条主线、交汇问题与前沿观察。论文详情把导读和来源分栏；手机按阅读顺序堆叠。
+- 不保留深色主题或自动跟随系统的暗色切换。
+- 可聚焦控件提供可见轮廓，尊重 prefers-reduced-motion。
+- 没有背景视频、远程装饰图片、动态粒子或无目的自动动画。
 
-- `Button` 传 `href` 渲染 `next/link`，外链自动加 `rel="noopener noreferrer"`。
-- `Tabs` 是链接式（状态进 URL，可分享/后退），不是本地 state。
-- 表单控件复用 `inputCls` / `selectCls`，不要各写一套 focus 样式。
+## 内容边界
 
-## 3. 文案
-
-全站面向用户的中文文案集中在 `lib/lexicon.ts` 的 `L`。新增文案请追加键，不要在组件里造词。
-约定：学术中性、中文为主英文辅注、不用表情符号、不写「点击这里」式空话。
-
-## 4. 布局与可达性
-
-- **文字对比度必须满足 WCAG AA**：正文与小号标签 ≥ 4.5:1，≥24px 或 ≥18.66px 粗体 ≥ 3:1。
-  `text-subtle` 是三级文字里最容易失守的一档，改色前先算对比度。
-  `visual-qa.mjs` 已内置探针，会在任何页面文字不达标时报告元素选择器与实测比值；
-  装饰性分隔符（`aria-hidden` 或不含字母数字）不计入。
-- 外壳 `app/layout.tsx`：`max-w-[1400px]`，含跳转链接、`<main id="main">`、页脚。页面不要再自设外层容器宽度。
-- 断点：`md`(768) 折叠导航为抽屉，`sm`(640) 收窄信息密度。任何页面在 390px 下不得横向溢出。
-- 交互元素需 `:focus-visible`（全局已给描边）；图标按钮必须有 `aria-label`；
-  图形容器用 `role="img"` + `aria-label` 或提供等价的列表视图。
-- 数据图需有文字/表格替代路径，不能只靠颜色区分（路线色同时给出图例文字）。
-
-## 5. 状态
-
-- `app/loading.tsx` 提供骨架；页面级异步用 `Suspense` 分区，避免整页白屏。
-- `app/error.tsx` 区分「后端不可达」与一般异常；`app/not-found.tsx` 给出下一步入口。
-- 空态统一用 `EmptyState`，必须带一个可执行的下一步。
-
-## 6. 验证
-
-```bash
-cd frontend && npx tsc --noEmit          # 类型
-bash .qa/shoot.sh <prefix> 1440,900      # 桌面截图 -> .qa/shots/
-bash .qa/shoot.sh <prefix> 390,844       # 移动端截图
-```
-
-需前后端已在 `localhost:3000` / `localhost:8000` 运行。截图目录已 gitignore。
+研究路线依据项目与论文证据，结合用户提供的 8 份可lip文字稿组织。来源页逐项记录阅读范围与路线关联，详细调整见 transcript-review.md；原始转写不替代学术事实核验。

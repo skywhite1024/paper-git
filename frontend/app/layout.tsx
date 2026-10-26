@@ -1,63 +1,19 @@
 import type { Metadata, Viewport } from "next";
 import Link from "next/link";
 import SiteHeader from "@/components/SiteHeader";
+import ReadingProvider from "@/components/ReadingProvider";
 import "./globals.css";
-import { L } from "@/lib/lexicon";
 
 export const metadata: Metadata = {
-  title: {
-    default: `${L.brand} · ${L.brandSub}`,
-    template: `%s · ${L.brand}`,
-  },
-  description: "三维知识拓扑与领域树：追踪人工智能、计算机科学、机器人学的研究路线与进展。",
+  title: { default: "PaperGit · 个人研究资料库", template: "%s · PaperGit" },
+  description: "世界模型、VLA 与 Robot Agentic 的精选研究路线、论文和本地阅读笔记。",
 };
-
-export const viewport: Viewport = {
-  width: "device-width",
-  initialScale: 1,
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f7f8fa" },
-    { media: "(prefers-color-scheme: dark)", color: "#0a0d14" },
-  ],
-};
-
-// Applies the stored theme before first paint so the shell never flashes.
-const THEME_INIT = `try{var t=localStorage.getItem('pg-theme');if(!t)t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.setAttribute('data-theme',t);}catch(e){}`;
-
+export const viewport: Viewport = { width: "device-width", initialScale: 1, themeColor: "#faf9f5" };
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <html lang="zh-CN" suppressHydrationWarning>
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: THEME_INIT }} />
-      </head>
-      <body className="min-h-screen bg-bg antialiased">
-        <a
-          href="#main"
-          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-3 focus:z-50 focus:rounded-lg focus:bg-accent focus:px-3 focus:py-1.5 focus:text-sm focus:text-accent-fg"
-        >
-          跳到主内容
-        </a>
-        <SiteHeader />
-        <main id="main" className="mx-auto w-full max-w-[1400px] px-4 py-5 sm:py-6">
-          {children}
-        </main>
-        <footer className="mt-10 border-t border-line py-6">
-          <div className="mx-auto flex max-w-[1400px] flex-wrap items-center justify-between gap-2 px-4 text-xs text-subtle">
-            <p>数据来源：arXiv · OpenAlex ／ {L.brand} 开源研究脉络项目 · 元数据仅用于研究目的</p>
-            <p className="flex items-center gap-2">
-              <Link href="/routes" className="rounded hover:text-accent">
-                {L.nav.routes}
-              </Link>
-              <span aria-hidden className="text-line">
-                /
-              </span>
-              <Link href="/watchlist" className="rounded hover:text-accent">
-                {L.nav.watchlist}
-              </Link>
-            </p>
-          </div>
-        </footer>
-      </body>
-    </html>
-  );
+  return <html lang="zh-CN"><body><ReadingProvider>
+    <a className="skip-link" href="#main">跳到主内容</a>
+    <SiteHeader />
+    <main id="main" className="container">{children}</main>
+    <footer className="site-footer"><div className="container"><span><strong>PaperGit</strong> / 一点一点，读出脉络。</span><Link href="/sources">精选资料 · 来源可查 · 笔记留在本地 ↗</Link></div></footer>
+  </ReadingProvider></body></html>;
 }

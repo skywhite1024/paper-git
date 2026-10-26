@@ -1,248 +1,29 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import PaperCard from "@/components/PaperCard";
-import WatchButton from "@/components/WatchButton";
-import { Badge, Breadcrumbs, Button, Card, Eyebrow, SectionTitle, cx } from "@/components/ui";
-import { apiGet, type NodeDetailDTO, type PaperDTO } from "@/lib/api";
-import { L } from "@/lib/lexicon";
-
-export const dynamic = "force-dynamic";
-
-async function getPaper(id: string): Promise<PaperDTO> {
-  try {
-    return await apiGet<PaperDTO>(`/api/papers/${encodeURIComponent(id)}`);
-  } catch (e) {
-    if (e instanceof Error && /: 404$/.test(e.message)) notFound();
-    throw e;
-  }
-}
-
-async function getNode(slug: string): Promise<NodeDetailDTO> {
-  try {
-    return await apiGet<NodeDetailDTO>(`/api/nodes/${encodeURIComponent(slug)}`);
-  } catch (e) {
-    if (e instanceof Error && /: 404$/.test(e.message)) notFound();
-    throw e;
-  }
-}
-
-function nodeHref(id: string) {
-  return `/nodes/${encodeURIComponent(id)}`;
-}
-
-/** 面包屑末端用截断后的标题，避免出现「论文 #1」这类无意义标识。 */
-function crumbTitle(title: string, max = 40) {
-  const clean = title.replace(/\s+/g, " ").trim();
-  return clean.length > max ? `${clean.slice(0, max).trimEnd()}…` : clean;
-}
-
-export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
-  const paper = await getPaper(id);
-  return {
-    title: paper.title,
-    description: paper.abstract ? paper.abstract.slice(0, 150) : L.paper.metaFallback,
-  };
-}
-
+import { getPaper, getTrack, kindNames, nextPapers, papers } from "@/lib/catalog";
+import { PaperBadges } from "@/components/PaperCard";
+import ReadingEditor from "@/components/ReadingEditor";
+export function generateStaticParams() { return papers.map(({ id }) => ({ id })); }
+export const dynamicParams = false;
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) { return { title: getPaper((await params).id)?.name ?? "资料详情" }; }
 export default async function PaperPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
-  const paper = await getPaper(id);
-  const primary = paper.nodes[0];
-  const chain = primary ? await getNode(primary.id) : null;
-
-  const crumbs = chain
-    ? chain.ancestors.map((a, i) => ({
-        label: a.name_zh,
-        href: i < chain.ancestors.length - 1 ? nodeHref(a.id) : undefined,
-      }))
-    : [];
-
-  const hasCites = paper.citation_count > 0;
-
-  const metaRows: { key: string; label: string; value: string; mono?: boolean; muted?: boolean; hint?: string }[] = [
-    { key: "year", label: L.paper.yearField, value: String(paper.year) },
-    {
-      key: "cites",
-      label: L.paper.citesField,
-      value: hasCites ? paper.citation_count.toLocaleString() : L.paper.citesNoneShort,
-      muted: !hasCites,
-      hint: hasCites ? undefined : L.paper.citesNoneHint,
-    },
-    { key: "venue", label: L.paper.venueField, value: paper.venue ?? L.common.none },
-    { key: "pub", label: L.paper.pubField, value: paper.published ? paper.published.slice(0, 10) : L.common.none },
-    { key: "source", label: L.paper.sourceField, value: paper.source },
-  ];
-  if (paper.arxiv_id) metaRows.push({ key: "arxiv", label: L.paper.arxivField, value: paper.arxiv_id, mono: true });
-
-  return (
-    <div className="grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_300px]">
-      <div className="min-w-0 space-y-5">
-        <Breadcrumbs
-          items={[
-            { label: L.node.crumbHome, href: "/" },
-            ...crumbs,
-            { label: crumbTitle(paper.title) },
-          ]}
-        />
-
-        <header className="space-y-2.5">
-          <div className="flex flex-wrap items-center gap-1.5">
-            {paper.is_milestone ? (
-              <Badge tone="warn" title={L.paper.milestoneHint}>
-                {L.paper.milestone}
-              </Badge>
-            ) : null}
-            {paper.is_demo ? <Badge tone="neutral">{L.node.demo}</Badge> : null}
-            <Eyebrow>{L.paper.eyebrow}</Eyebrow>
-          </div>
-
-          <h1 className="text-[22px] font-bold leading-snug tracking-tight text-fg sm:text-[26px]">
-            {paper.title}
-          </h1>
-
-          {paper.authors.length > 0 ? (
-            <p className="text-sm text-muted">{paper.authors.join(", ")}</p>
-          ) : null}
-
-          <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-subtle">
-            <span className="font-medium tabular-nums text-muted">{paper.year}</span>
-            {paper.venue ? (
-              <>
-                <span aria-hidden className="text-line">
-                  ·
-                </span>
-                <span className="italic">{paper.venue}</span>
-              </>
-            ) : null}
-            {hasCites ? (
-              <>
-                <span aria-hidden className="text-line">
-                  ·
-                </span>
-                <span className="font-medium tabular-nums text-muted">
-                  {L.node.citations} {paper.citation_count.toLocaleString()}
-                </span>
-              </>
-            ) : null}
-            {paper.nodes.length > 0 ? (
-              <>
-                <span aria-hidden className="text-line">
-                  ·
-                </span>
-                <span>{L.paper.nodeCount(paper.nodes.length)}</span>
-              </>
-            ) : null}
-          </p>
-        </header>
-
-        <section>
-          <SectionTitle hint={paper.abstract ? L.paper.abstractLen(paper.abstract.length) : undefined}>
-            {L.paper.abstractTitle}
-          </SectionTitle>
-          <Card className="px-4 py-3.5">
-            {paper.abstract ? (
-              <p className="max-w-[78ch] text-[15px] leading-7 text-fg">{paper.abstract}</p>
-            ) : (
-              <p className="text-sm text-muted">{L.paper.noAbstract}</p>
-            )}
-          </Card>
-        </section>
-
-        {paper.related && paper.related.length > 0 ? (
-          <section>
-            <SectionTitle hint={L.paper.relatedHint}>{L.paper.relatedTitle}</SectionTitle>
-            <div className="space-y-2">
-              {paper.related.map((p) => (
-                <PaperCard key={p.id} paper={p} compact showNodes={false} />
-              ))}
-            </div>
-          </section>
-        ) : null}
-      </div>
-
-      <aside className="min-w-0 space-y-4 lg:sticky lg:top-[72px]">
-        <Card className="p-3.5">
-          <Eyebrow className="mb-2 block">{L.paper.metaTitle}</Eyebrow>
-          {hasCites ? (
-            <div className="mb-2.5 flex items-baseline gap-2">
-              <span className="text-2xl font-semibold tabular-nums tracking-tight text-fg">
-                {paper.citation_count.toLocaleString()}
-              </span>
-              <span className="text-xs text-subtle">{L.paper.citesUnit}</span>
-            </div>
-          ) : null}
-          <dl className="divide-y divide-line-soft">
-            {metaRows.map((row) => (
-              <div key={row.key} className="flex items-baseline justify-between gap-3 py-1.5">
-                <dt className="shrink-0 text-xs text-subtle">{row.label}</dt>
-                <dd
-                  className={cx(
-                    "min-w-0 truncate text-right text-[13px]",
-                    row.muted ? "text-subtle" : "text-fg",
-                    row.mono && "font-mono text-xs",
-                    row.key === "year" && "tabular-nums"
-                  )}
-                  title={row.hint ?? row.value}
-                >
-                  {row.value}
-                </dd>
-              </div>
-            ))}
-          </dl>
-        </Card>
-
-        {(paper.abs_url || paper.pdf_url || paper.code_url) && (
-          <Card className="p-3.5">
-            <Eyebrow className="mb-2 block">{L.paper.linksTitle}</Eyebrow>
-            <div className="flex flex-col gap-1.5">
-              {paper.abs_url ? (
-                <Button href={paper.abs_url} variant="primary" size="sm" className="w-full">
-                  {L.paper.linkAbsFull}
-                </Button>
-              ) : null}
-              {paper.pdf_url ? (
-                <Button href={paper.pdf_url} size="sm" className="w-full">
-                  {L.paper.linkPdf}
-                </Button>
-              ) : null}
-              {paper.code_url ? (
-                <Button href={paper.code_url} size="sm" className="w-full">
-                  {L.paper.linkCode}
-                </Button>
-              ) : null}
-            </div>
-          </Card>
-        )}
-
-        {primary ? (
-          <Card className="p-3.5">
-            <Eyebrow className="mb-2 block">{L.paper.watchTitle}</Eyebrow>
-            <WatchButton nodeId={primary.id} nodeName={primary.name_zh} />
-            <p className="mt-2 text-[11px] leading-4 text-subtle">{L.paper.watchHint}</p>
-          </Card>
-        ) : null}
-
-        {paper.nodes.length > 0 ? (
-          <Card className="p-3.5">
-            <Eyebrow className="mb-2 block">{L.paper.nodesTitle}</Eyebrow>
-            <ul className="flex flex-wrap gap-1.5">
-              {paper.nodes.map((n) => (
-                <li key={n.id}>
-                  <Link
-                    href={nodeHref(n.id)}
-                    title={n.name_en}
-                    className="inline-flex max-w-full items-center gap-1 rounded-md bg-accent-soft px-2 py-1 text-xs font-medium text-accent transition-colors hover:bg-accent hover:text-accent-fg"
-                  >
-                    <span className="truncate">{n.name_zh}</span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-            <p className="mt-2 text-[11px] leading-4 text-subtle">{L.paper.nodesHint}</p>
-          </Card>
-        ) : null}
-      </aside>
-    </div>
-  );
+  const paper = getPaper((await params).id);
+  if (!paper) notFound();
+  const track = getTrack(paper.track)!;
+  const stage = track.stages.find((item) => item.papers.includes(paper.id))!;
+  const next = nextPapers(paper);
+  const links = paper.links.filter((link, index, all) => all.findIndex((other) => other.url === link.url) === index);
+  return <div className={`tone-${paper.track}`}>
+    <Link className="back-link" href={`/tracks/${track.id}#${stage.id}`}>← {track.name} / {stage.name}</Link>
+    <header className="paper-hero"><p className="eyebrow">{kindNames[paper.kind]} / {track.english}</p><h1>{paper.name}</h1><p className="full-title">{paper.title}</p><PaperBadges paper={paper} /><div className="button-row">{links.map((link, i) => <a key={link.url} className={`button ${i === 0 ? "primary" : ""}`} href={link.url} target="_blank" rel="noreferrer">{link.label} ↗</a>)}</div></header>
+    <div className="paper-detail-grid"><div>
+      <section className="detail-section"><p className="eyebrow">THE IDEA</p><h2>它在解决什么</h2><p className="lead">{paper.summary}</p></section>
+      <section className="detail-section"><p className="eyebrow">WHY READ IT</p><h2>为什么放在这条路线</h2><p>{paper.why}</p><div className="route-context"><span>当前阶段</span><Link href={`/tracks/${track.id}#${stage.id}`}>{stage.name} ↗</Link><p>{stage.question}</p></div></section>
+      <section className="detail-section caveat"><p className="eyebrow">READ WITH A QUESTION</p><h2>读的时候，留意什么</h2><p>{paper.watchFor}</p></section>
+      <ReadingEditor id={paper.id} />
+    </div><aside className="paper-aside">
+      <section className="evidence-card"><p className="eyebrow">SOURCE NOTES</p><h2>来源与收录记录</h2><dl><dt>资料性质</dt><dd>{kindNames[paper.kind]}</dd><dt>发表 / 版本</dt><dd>{paper.venue} · {paper.year}</dd><dt>核验日期</dt><dd>{paper.checkedAt}</dd></dl><p className="small-copy">{paper.reviewScope}</p>{paper.ccf && <p className="small-copy">CCF {paper.ccf} 采用 2026 目录评级。</p>}{["RSS", "CoRL"].includes(paper.venue) && <p className="small-copy">按机器人领域重点会议收录，未赋予 CCF 等级。</p>}<ul className="source-links">{paper.evidence.map((source) => <li key={source.url}><a href={source.url} target="_blank" rel="noreferrer">{source.label} ↗</a></li>)}{paper.distinction && <li><a href={paper.distinction.url} target="_blank" rel="noreferrer">{paper.distinction.label} 标记依据 ↗</a></li>}</ul><Link className="text-link" href="/sources">查看收录标准 →</Link></section>
+      {next.length > 0 && <section className="next-card"><p className="eyebrow">KEEP READING</p><h2>接下来可以读</h2>{next.map((item) => <Link key={item.id} href={`/papers/${item.id}`}><strong>{item.name} ↗</strong><span>{item.summary}</span></Link>)}</section>}
+    </aside></div>
+  </div>;
 }

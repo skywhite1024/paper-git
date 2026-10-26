@@ -1,0 +1,1903 @@
+{
+  "version": 1,
+  "updatedAt": "2026-10-26",
+  "frontierYear": 2026,
+  "tracks": [
+    {
+      "id": "world-models",
+      "name": "世界模型",
+      "english": "World Models",
+      "number": "01",
+      "question": "先理解世界，再预测行动的后果。",
+      "description": "从潜空间动力学到视频与表征预测，最后回到同一个问题：模型想象的未来，能否帮助机器人做出更好的行动？",
+      "stages": [
+        {
+          "id": "latent-control",
+          "name": "在想象中控制",
+          "question": "如何从像素学到可规划的状态？",
+          "guide": "从 World Models 的梦中环境出发，对比 PlaNet 的在线规划与 Dreamer 的策略学习，再由 DayDreamer 回到真机在线反馈。",
+          "papers": [
+            "world-models",
+            "planet",
+            "dreamer",
+            "dreamerv2",
+            "dreamerv3",
+            "tdmpc2",
+            "daydreamer"
+          ]
+        },
+        {
+          "id": "generative",
+          "name": "生成可交互世界",
+          "question": "预测画面，还是模拟因果？",
+          "guide": "先读 UniPi 的视频计划与逆动力学，再比较隐式动作、已知动作条件和视频基础模型。画面逼真与控制有效需分别验证。",
+          "papers": [
+            "unipi",
+            "genie",
+            "diamond",
+            "cosmos"
+          ]
+        },
+        {
+          "id": "feature-planning",
+          "name": "在表征中预测",
+          "question": "不生成像素，也能规划吗？",
+          "guide": "沿 I-JEPA → V-JEPA 理解表征预训练，再看 DINO-WM 与 V-JEPA 2 如何引入动作条件预测；用 LeWorldModel 作比较。",
+          "papers": [
+            "ijepa",
+            "vjepa",
+            "dino-wm",
+            "vjepa2",
+            "lewm"
+          ]
+        },
+        {
+          "id": "validation",
+          "name": "世界与动作闭环",
+          "question": "预测未来，如何同时帮助行动？",
+          "guide": "UWM → Cosmos Policy → DreamZero / LingBot-VA → Cosmos 3：比较联合建模与闭环控制，最后用 WorldArena 的评测视角检查效果。",
+          "papers": [
+            "uwm",
+            "cosmos-policy",
+            "dreamzero",
+            "lingbot-va",
+            "cosmos3",
+            "worldarena"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "vla",
+      "name": "视觉 · 语言 · 动作",
+      "english": "Vision–Language–Action",
+      "number": "02",
+      "question": "把「看懂与听懂」变成可执行的动作。",
+      "description": "以动作表示为起点，串起机器人数据、视觉语言预训练、连续动作生成和跨场景泛化。基础策略也保留在路线中，作为理解 VLA 的参照。",
+      "stages": [
+        {
+          "id": "actions",
+          "name": "动作如何表示",
+          "question": "一次预测一步，还是一段动作？",
+          "guide": "ACT、Diffusion Policy 与 FAST：依次比较动作块、连续分布生成与压缩后的离散 token。注意动作空间、控制频率与执行延迟。",
+          "papers": [
+            "act",
+            "diffusion-policy",
+            "fast"
+          ]
+        },
+        {
+          "id": "pretraining",
+          "name": "接上视觉与语言",
+          "question": "互联网知识如何落到机器人上？",
+          "guide": "RT-2 展示动作 token；Open X-Embodiment 讨论数据协作；Octo 和 OpenVLA 提供开放模型参照。",
+          "papers": [
+            "rt2",
+            "openx",
+            "octo",
+            "openvla"
+          ]
+        },
+        {
+          "id": "continuous",
+          "name": "生成连续动作",
+          "question": "语义理解如何连接精细控制？",
+          "guide": "沿 π0 的 flow matching 动作生成，看 π0.5 的数据混合与 GR00T N1 的分层模型。",
+          "papers": [
+            "pi0",
+            "pi05",
+            "groot-n1"
+          ]
+        },
+        {
+          "id": "generalization",
+          "name": "泛化与经验学习",
+          "question": "换一个环境，还能做对吗？",
+          "guide": "比较 π*0.6 的经验学习与 π0.7 的记忆、子任务和视觉子目标。分清零样本、引导、微调和任务组合。",
+          "papers": [
+            "pistar06",
+            "pi07"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "robot-agentic",
+      "name": "机器人智能体",
+      "english": "Robot Agentic",
+      "number": "03",
+      "question": "让任务规划、技能和环境反馈接成闭环。",
+      "description": "关注真实机器人系统中的语义落地、可执行程序、空间约束与技能学习。这里的 Agent 是研究对象；资料库本身不运行联网 Agent。",
+      "stages": [
+        {
+          "id": "grounding",
+          "name": "语言落地",
+          "question": "说得合理，是否真的做得到？",
+          "guide": "SayCan 用可供性约束语言选择，PaLM-E 将具身观测接入多模态模型。先划清规划与控制的边界。",
+          "papers": [
+            "saycan",
+            "palm-e"
+          ]
+        },
+        {
+          "id": "executable",
+          "name": "空间与约束",
+          "question": "怎样把语义目标写成可执行约束？",
+          "guide": "对比 VoxPoser 的三维价值图与 ReKep 的关键点关系约束，观察每步是否重新获取环境反馈。",
+          "papers": [
+            "voxposer",
+            "rekep"
+          ]
+        },
+        {
+          "id": "learning",
+          "name": "生成学习任务",
+          "question": "语言模型能帮助机器人学什么？",
+          "guide": "Eureka 生成奖励代码，RoboGen 组织仿真任务与学习流程；区分生成监督和直接控制。",
+          "papers": [
+            "eureka",
+            "robogen"
+          ]
+        },
+        {
+          "id": "closed-loop",
+          "name": "执行与技能积累",
+          "question": "失败经验怎样进入下一次尝试？",
+          "guide": "从 Hi Robot 的分层指令跟随，到 Gemini Robotics 的具身推理与 ASPIRE 的技能规划。检查高层计划能否通过反馈落到真实执行。",
+          "papers": [
+            "hirobot",
+            "gemini-robotics",
+            "aspire"
+          ]
+        }
+      ]
+    }
+  ],
+  "papers": [
+    {
+      "id": "planet",
+      "name": "PlaNet",
+      "title": "Learning Latent Dynamics for Planning from Pixels",
+      "year": 2019,
+      "kind": "paper",
+      "venue": "ICML",
+      "track": "world-models",
+      "summary": "学习潜空间动力学，在模型中搜索行动序列，再把选中的动作交给环境执行。",
+      "why": "世界模型控制的清晰起点，可用来理解状态估计、动力学和规划各自负责什么。",
+      "watchFor": "在线规划与训练一个策略不是同一件事；关注模型误差如何随预测步长累积。",
+      "ccf": "A",
+      "distinction": null,
+      "links": [
+        {
+          "label": "项目与资料",
+          "url": "https://danijar.com/project/planet/"
+        },
+        {
+          "label": "发表信息 / 原文",
+          "url": "https://danijar.com/project/planet/"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表与方法来源",
+          "url": "https://danijar.com/project/planet/"
+        }
+      ],
+      "checkedAt": "2026-10-26",
+      "reviewScope": "项目页、摘要及发表信息核验；导读不代替全文阅读。"
+    },
+    {
+      "id": "dreamer",
+      "name": "Dreamer",
+      "title": "Dream to Control: Learning Behaviors by Latent Imagination",
+      "year": 2020,
+      "kind": "paper",
+      "venue": "ICLR",
+      "track": "world-models",
+      "summary": "在潜空间想象轨迹上训练行为，把对未来的预测用于策略优化。",
+      "why": "与 PlaNet 对读，建立「模型中规划」和「模型中学习策略」的区别。",
+      "watchFor": "可微想象轨迹依赖模型质量；模拟任务上的成功不能直接当成真实机器人可靠性。",
+      "ccf": "A",
+      "distinction": {
+        "label": "Oral",
+        "url": "https://danijar.com/project/dreamer/"
+      },
+      "links": [
+        {
+          "label": "项目与资料",
+          "url": "https://danijar.com/project/dreamer/"
+        },
+        {
+          "label": "发表信息 / 原文",
+          "url": "https://danijar.com/project/dreamer/"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表与方法来源",
+          "url": "https://danijar.com/project/dreamer/"
+        }
+      ],
+      "checkedAt": "2026-10-26",
+      "reviewScope": "项目页、摘要及发表信息核验；导读不代替全文阅读。"
+    },
+    {
+      "id": "dreamerv2",
+      "name": "DreamerV2",
+      "title": "Mastering Atari with Discrete World Models",
+      "year": 2021,
+      "kind": "paper",
+      "venue": "ICLR",
+      "track": "world-models",
+      "summary": "用离散潜状态构建世界模型，在想象轨迹中学习行为。",
+      "why": "帮助追踪 Dreamer 路线中表征设计对复杂视觉控制的作用。",
+      "watchFor": "Atari 评价协议和真机操作差异较大，先读离散状态与训练目标。",
+      "ccf": "A",
+      "distinction": null,
+      "links": [
+        {
+          "label": "项目与资料",
+          "url": "https://danijar.com/project/dreamerv2/"
+        },
+        {
+          "label": "发表信息 / 原文",
+          "url": "https://danijar.com/project/dreamerv2/"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表与方法来源",
+          "url": "https://danijar.com/project/dreamerv2/"
+        }
+      ],
+      "checkedAt": "2026-10-26",
+      "reviewScope": "项目页、摘要及发表信息核验；导读不代替全文阅读。"
+    },
+    {
+      "id": "dreamerv3",
+      "name": "DreamerV3",
+      "title": "Mastering Diverse Control Tasks through World Models",
+      "year": 2025,
+      "kind": "paper",
+      "venue": "Nature",
+      "track": "world-models",
+      "summary": "通过归一化、损失平衡等稳定训练设计，让同一套配置覆盖多种控制任务。",
+      "why": "连接世界模型的算法设计与跨任务鲁棒性；作为期刊代表作补充会议主线。",
+      "watchFor": "初稿发表于 2023 年，本条按 Nature 2025 正式版本记录；多任务覆盖不等于现实世界通用。",
+      "ccf": null,
+      "distinction": null,
+      "links": [
+        {
+          "label": "项目与资料",
+          "url": "https://danijar.com/project/dreamerv3/"
+        },
+        {
+          "label": "发表信息 / 原文",
+          "url": "https://www.nature.com/articles/s41586-025-08744-2"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表与方法来源",
+          "url": "https://www.nature.com/articles/s41586-025-08744-2"
+        }
+      ],
+      "checkedAt": "2026-10-26",
+      "reviewScope": "项目页、摘要及发表信息核验；导读不代替全文阅读。"
+    },
+    {
+      "id": "tdmpc2",
+      "name": "TD-MPC2",
+      "title": "TD-MPC2: Scalable, Robust World Models for Continuous Control",
+      "year": 2024,
+      "kind": "paper",
+      "venue": "ICLR",
+      "track": "world-models",
+      "summary": "以任务相关潜状态做连续控制规划，不要求重建完整观测。",
+      "why": "与 Dreamer 对照阅读，关注不重建像素的模型如何服务动作决策。",
+      "watchFor": "比较状态输入与视觉输入的实验设定，避免把不同观测条件的分数直接放在一起。",
+      "ccf": "A",
+      "distinction": {
+        "label": "Spotlight",
+        "url": "https://www.tdmpc2.com/"
+      },
+      "links": [
+        {
+          "label": "项目与资料",
+          "url": "https://www.tdmpc2.com/"
+        },
+        {
+          "label": "发表信息 / 原文",
+          "url": "https://www.tdmpc2.com/"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表与方法来源",
+          "url": "https://www.tdmpc2.com/"
+        }
+      ],
+      "checkedAt": "2026-10-26",
+      "reviewScope": "项目页、摘要及发表信息核验；导读不代替全文阅读。"
+    },
+    {
+      "id": "genie",
+      "name": "Genie",
+      "title": "Genie: Generative Interactive Environments",
+      "year": 2024,
+      "kind": "paper",
+      "venue": "ICML",
+      "track": "world-models",
+      "summary": "从视频学习生成可交互环境，并用潜在动作控制生成过程。",
+      "why": "把「预测未来」扩展到「交互式生成世界」，是视频世界模型的重要参照。",
+      "watchFor": "隐式动作不一定对应真实机器人的力矩或位姿控制，交互演示不能代替物理一致性验证。",
+      "ccf": "A",
+      "distinction": null,
+      "links": [
+        {
+          "label": "项目与资料",
+          "url": "https://proceedings.mlr.press/v235/bruce24a.html"
+        },
+        {
+          "label": "发表信息 / 原文",
+          "url": "https://proceedings.mlr.press/v235/bruce24a.html"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表与方法来源",
+          "url": "https://proceedings.mlr.press/v235/bruce24a.html"
+        }
+      ],
+      "checkedAt": "2026-10-26",
+      "reviewScope": "项目页、摘要及发表信息核验；导读不代替全文阅读。"
+    },
+    {
+      "id": "diamond",
+      "name": "DIAMOND",
+      "title": "Diffusion for World Modeling: Visual Details Matter in Atari",
+      "year": 2024,
+      "kind": "paper",
+      "venue": "NeurIPS",
+      "track": "world-models",
+      "summary": "用扩散模型预测视觉环境，并在生成的环境中训练策略。",
+      "why": "提供像素生成路线，与潜空间和表征预测路线构成直接比较。",
+      "watchFor": "更精细的画面是否改善策略，需要结合控制指标和计算成本判断。",
+      "ccf": "A",
+      "distinction": {
+        "label": "Spotlight",
+        "url": "https://diamond-wm.github.io/"
+      },
+      "links": [
+        {
+          "label": "项目与资料",
+          "url": "https://diamond-wm.github.io/"
+        },
+        {
+          "label": "发表信息 / 原文",
+          "url": "https://diamond-wm.github.io/"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表与方法来源",
+          "url": "https://diamond-wm.github.io/"
+        }
+      ],
+      "checkedAt": "2026-10-26",
+      "reviewScope": "项目页、摘要及发表信息核验；导读不代替全文阅读。"
+    },
+    {
+      "id": "cosmos",
+      "name": "Cosmos",
+      "title": "Cosmos World Foundation Model Platform for Physical AI",
+      "year": 2025,
+      "kind": "report",
+      "venue": "技术报告",
+      "track": "world-models",
+      "summary": "面向物理 AI 的世界基础模型平台，将视频生成模型、数据处理与后训练联系起来。",
+      "why": "关键产业技术报告，帮助理解视频世界模型的系统和数据规模。",
+      "watchFor": "这是平台报告；生成视频质量、物理可控性和机器人收益应分别评估。",
+      "ccf": null,
+      "distinction": null,
+      "links": [
+        {
+          "label": "项目与资料",
+          "url": "https://www.nvidia.com/en-us/ai/cosmos/"
+        },
+        {
+          "label": "报告 / 原文",
+          "url": "https://arxiv.org/abs/2501.03575"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "作者报告与项目来源",
+          "url": "https://arxiv.org/abs/2501.03575"
+        }
+      ],
+      "checkedAt": "2026-10-26",
+      "reviewScope": "项目页、摘要及发表信息核验；导读不代替全文阅读。"
+    },
+    {
+      "id": "dino-wm",
+      "name": "DINO-WM",
+      "title": "DINO-WM: World Models on Pre-trained Visual Features Enable Zero-shot Planning",
+      "year": 2025,
+      "kind": "paper",
+      "venue": "ICML",
+      "track": "world-models",
+      "summary": "预测冻结视觉编码器的特征，在目标图像对应的特征空间里规划动作。",
+      "why": "清晰展示「不预测像素」也能做目标条件控制的技术路径。",
+      "watchFor": "Zero-shot 的任务、数据和环境边界必须分开读；不表示模型没有使用机器人轨迹训练。",
+      "ccf": "A",
+      "distinction": null,
+      "links": [
+        {
+          "label": "项目与资料",
+          "url": "https://dino-wm.github.io/"
+        },
+        {
+          "label": "发表信息 / 原文",
+          "url": "https://proceedings.mlr.press/v267/zhou25t.html"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表与方法来源",
+          "url": "https://proceedings.mlr.press/v267/zhou25t.html"
+        }
+      ],
+      "checkedAt": "2026-10-26",
+      "reviewScope": "项目页、摘要及发表信息核验；导读不代替全文阅读。"
+    },
+    {
+      "id": "vjepa2",
+      "name": "V-JEPA 2",
+      "title": "V-JEPA 2",
+      "year": 2025,
+      "kind": "report",
+      "venue": "技术报告",
+      "track": "world-models",
+      "summary": "先学习视频表征预测，再结合动作数据构建用于机器人规划的模型。",
+      "why": "连接 JEPA 视频学习与真实机器人行动条件预测，是表征路线的关键报告。",
+      "watchFor": "视频理解模型和动作条件版本有不同训练条件，不能混用两者的能力描述。",
+      "ccf": null,
+      "distinction": null,
+      "links": [
+        {
+          "label": "项目与资料",
+          "url": "https://ai.meta.com/research/vjepa/"
+        },
+        {
+          "label": "报告 / 原文",
+          "url": "https://ai.meta.com/research/vjepa/"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "作者报告与项目来源",
+          "url": "https://ai.meta.com/research/vjepa/"
+        }
+      ],
+      "checkedAt": "2026-10-26",
+      "reviewScope": "项目页、摘要及发表信息核验；导读不代替全文阅读。"
+    },
+    {
+      "id": "lewm",
+      "name": "LeWorldModel",
+      "title": "LeWorldModel: Stable End-to-End Joint-Embedding Predictive Architecture from Pixels",
+      "year": 2026,
+      "kind": "preprint",
+      "venue": "arXiv",
+      "track": "world-models",
+      "summary": "通过预测目标与表征正则化，训练端到端的联合嵌入世界模型。",
+      "why": "有项目页和公开实现，可与冻结编码器的 DINO-WM 对照研究表征学习方式。",
+      "watchFor": "尚按预印本收录；重点检查防止表征坍缩的设计、数据范围和真实规划评估。",
+      "ccf": null,
+      "distinction": null,
+      "links": [
+        {
+          "label": "项目与资料",
+          "url": "https://le-wm.github.io/"
+        },
+        {
+          "label": "报告 / 原文",
+          "url": "https://arxiv.org/abs/2603.19312"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "作者报告与项目来源",
+          "url": "https://arxiv.org/abs/2603.19312"
+        }
+      ],
+      "checkedAt": "2026-10-26",
+      "reviewScope": "项目页、摘要及发表信息核验；导读不代替全文阅读。"
+    },
+    {
+      "id": "cosmos-policy",
+      "name": "Cosmos Policy",
+      "title": "Cosmos Policy: Fine-Tuning Video Models for Visuomotor Control and Planning",
+      "year": 2026,
+      "kind": "paper",
+      "venue": "ICLR",
+      "track": "world-models",
+      "summary": "将预训练视频模型后训练为兼顾动作生成、未来状态与价值预测的模型。",
+      "why": "跨越世界模型与动作策略，适合检查视频生成预训练如何服务控制。",
+      "watchFor": "区分直接策略执行和额外规划带来的收益，同时考虑推理计算量。",
+      "ccf": "A",
+      "distinction": null,
+      "links": [
+        {
+          "label": "项目与资料",
+          "url": "https://research.nvidia.com/labs/dir/cosmos-policy/"
+        },
+        {
+          "label": "发表信息 / 原文",
+          "url": "https://research.nvidia.com/labs/dir/cosmos-policy/"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表与方法来源",
+          "url": "https://research.nvidia.com/labs/dir/cosmos-policy/"
+        }
+      ],
+      "checkedAt": "2026-10-26",
+      "reviewScope": "项目页、摘要及发表信息核验；导读不代替全文阅读。"
+    },
+    {
+      "id": "worldarena",
+      "name": "WorldArena",
+      "title": "WorldArena: A Unified Benchmark for Evaluating Perception and Functional Utility of Embodied World Models",
+      "year": 2026,
+      "kind": "preprint",
+      "venue": "arXiv",
+      "track": "world-models",
+      "summary": "从感知质量和具身功能两方面评估世界模型，检查预测对下游任务的作用。",
+      "why": "有评测项目与代码，补上世界模型路线中「好看是否有用」的评价环节。",
+      "watchFor": "挑战赛或 workshop 不等于主会论文接收；本条保留预印本身份，并区分 v1 与后续版本。",
+      "ccf": null,
+      "distinction": null,
+      "links": [
+        {
+          "label": "项目与资料",
+          "url": "https://world-arena.ai/v1/"
+        },
+        {
+          "label": "报告 / 原文",
+          "url": "https://arxiv.org/abs/2602.08971"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "作者报告与项目来源",
+          "url": "https://arxiv.org/abs/2602.08971"
+        }
+      ],
+      "checkedAt": "2026-10-26",
+      "reviewScope": "项目页、摘要及发表信息核验；导读不代替全文阅读。"
+    },
+    {
+      "id": "act",
+      "name": "ACT / ALOHA",
+      "title": "Learning Fine-Grained Bimanual Manipulation with Low-Cost Hardware",
+      "year": 2023,
+      "kind": "paper",
+      "venue": "RSS",
+      "track": "vla",
+      "summary": "以动作分块策略学习双臂操作，结合低成本硬件与示范数据采集。",
+      "why": "机器人领域基础读物；理解后续 VLA 的动作块和执行方式之前先读它。",
+      "watchFor": "ACT 本身不是视觉语言大模型；硬件、示范质量和策略要分开讨论。",
+      "ccf": null,
+      "distinction": null,
+      "links": [
+        {
+          "label": "项目与资料",
+          "url": "https://tonyzhaozh.github.io/aloha/"
+        },
+        {
+          "label": "发表信息 / 原文",
+          "url": "https://tonyzhaozh.github.io/aloha/"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表与方法来源",
+          "url": "https://tonyzhaozh.github.io/aloha/"
+        }
+      ],
+      "checkedAt": "2026-10-26",
+      "reviewScope": "项目页、摘要及发表信息核验；导读不代替全文阅读。"
+    },
+    {
+      "id": "diffusion-policy",
+      "name": "Diffusion Policy",
+      "title": "Diffusion Policy: Visuomotor Policy Learning via Action Diffusion",
+      "year": 2023,
+      "kind": "paper",
+      "venue": "RSS",
+      "track": "vla",
+      "summary": "把动作序列建模为条件扩散过程，以滚动执行的方式完成视觉运动控制。",
+      "why": "连续动作生成的重要基线，用来理解多模态动作分布与动作块。",
+      "watchFor": "RSS 2023 与 IJRR 扩展版需区分；动作生成质量也受闭环频率与推理开销影响。",
+      "ccf": null,
+      "distinction": null,
+      "links": [
+        {
+          "label": "项目与资料",
+          "url": "https://diffusion-policy.cs.columbia.edu/"
+        },
+        {
+          "label": "发表信息 / 原文",
+          "url": "https://roboticsproceedings.org/rss19/p026.html"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表与方法来源",
+          "url": "https://roboticsproceedings.org/rss19/p026.html"
+        }
+      ],
+      "checkedAt": "2026-10-26",
+      "reviewScope": "项目页、摘要及发表信息核验；导读不代替全文阅读。"
+    },
+    {
+      "id": "rt2",
+      "name": "RT-2",
+      "title": "RT-2: Vision-Language-Action Models Transfer Web Knowledge to Robotic Control",
+      "year": 2023,
+      "kind": "paper",
+      "venue": "CoRL",
+      "track": "vla",
+      "summary": "将机器人动作编码为 token，把视觉语言训练与机器人数据训练结合。",
+      "why": "建立 VLA 的基础概念：如何利用互联网语义知识产生可执行动作。",
+      "watchFor": "语义泛化和运动技能泛化并不相同；分析测试任务是否仍依赖已有动作能力。",
+      "ccf": null,
+      "distinction": null,
+      "links": [
+        {
+          "label": "项目与资料",
+          "url": "https://robotics-transformer2.github.io/"
+        },
+        {
+          "label": "发表信息 / 原文",
+          "url": "https://proceedings.mlr.press/v229/zitkovich23a.html"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表与方法来源",
+          "url": "https://proceedings.mlr.press/v229/zitkovich23a.html"
+        }
+      ],
+      "checkedAt": "2026-10-26",
+      "reviewScope": "项目页、摘要及发表信息核验；导读不代替全文阅读。"
+    },
+    {
+      "id": "openx",
+      "name": "Open X-Embodiment",
+      "title": "Open X-Embodiment: Robotic Learning Datasets and RT-X Models",
+      "year": 2024,
+      "kind": "paper",
+      "venue": "ICRA",
+      "track": "vla",
+      "summary": "汇集不同机器人平台的操作数据，研究跨具身数据训练与迁移。",
+      "why": "ICRA Best Paper；为理解通用策略背后的数据组合与机器人差异提供基础。",
+      "watchFor": "跨平台数据不能简单拼接：动作规范、任务覆盖和采集偏差都会影响迁移。",
+      "ccf": "B",
+      "distinction": {
+        "label": "Best Paper",
+        "url": "https://trail.t.u-tokyo.ac.jp/publication/matsushima-2024-openxembodiment/"
+      },
+      "links": [
+        {
+          "label": "项目与资料",
+          "url": "https://robotics-transformer-x.github.io/"
+        },
+        {
+          "label": "发表信息 / 原文",
+          "url": "https://trail.t.u-tokyo.ac.jp/publication/matsushima-2024-openxembodiment/"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表与方法来源",
+          "url": "https://trail.t.u-tokyo.ac.jp/publication/matsushima-2024-openxembodiment/"
+        }
+      ],
+      "checkedAt": "2026-10-26",
+      "reviewScope": "项目页、摘要及发表信息核验；导读不代替全文阅读。"
+    },
+    {
+      "id": "octo",
+      "name": "Octo",
+      "title": "Octo: An Open-Source Generalist Robot Policy",
+      "year": 2024,
+      "kind": "paper",
+      "venue": "RSS",
+      "track": "vla",
+      "summary": "构建可适配不同观测与动作空间的开放通用机器人策略。",
+      "why": "开放训练和适配路线的重要参照，帮助把模型结构与数据贡献分开。",
+      "watchFor": "通用机器人策略不都以大语言模型为核心，阅读时不要把 Octo 与所有 VLA 等同。",
+      "ccf": null,
+      "distinction": null,
+      "links": [
+        {
+          "label": "项目与资料",
+          "url": "https://octo-models.github.io/"
+        },
+        {
+          "label": "发表信息 / 原文",
+          "url": "https://www.roboticsproceedings.org/rss20/p090.html"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表与方法来源",
+          "url": "https://www.roboticsproceedings.org/rss20/p090.html"
+        }
+      ],
+      "checkedAt": "2026-10-26",
+      "reviewScope": "项目页、摘要及发表信息核验；导读不代替全文阅读。"
+    },
+    {
+      "id": "openvla",
+      "name": "OpenVLA",
+      "title": "OpenVLA: An Open-Source Vision-Language-Action Model",
+      "year": 2024,
+      "kind": "paper",
+      "venue": "CoRL",
+      "track": "vla",
+      "summary": "将预训练视觉语言模型与机器人动作数据结合，提供开放的 VLA 及适配方案。",
+      "why": "开放 VLA 的实用基线，可以对照 RT-2 理解模型、数据和微调选择。",
+      "watchFor": "按 CoRL 2024 会议年份记录；论文集于 2025 年出版。复现时核对动作归一化和相机输入。",
+      "ccf": null,
+      "distinction": null,
+      "links": [
+        {
+          "label": "项目与资料",
+          "url": "https://openvla.github.io/"
+        },
+        {
+          "label": "发表信息 / 原文",
+          "url": "https://proceedings.mlr.press/v270/kim25c.html"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表与方法来源",
+          "url": "https://proceedings.mlr.press/v270/kim25c.html"
+        }
+      ],
+      "checkedAt": "2026-10-26",
+      "reviewScope": "项目页、摘要及发表信息核验；导读不代替全文阅读。"
+    },
+    {
+      "id": "pi0",
+      "name": "π0",
+      "title": "π0: A Vision-Language-Action Flow Model for General Robot Control",
+      "year": 2025,
+      "kind": "paper",
+      "venue": "RSS",
+      "track": "vla",
+      "summary": "把视觉语言能力与 flow matching 动作生成结合，产生连续动作序列。",
+      "why": "π 系列的关键起点；作为 2024 首发技术报告收录，便于按技术演进顺序阅读。",
+      "watchFor": "报告版本与后续会议版本需区分；重点看动作专家和预训练模型之间的信息交互。 初稿发布于 2024 年，正式版按 RSS 2025 收录。",
+      "ccf": null,
+      "distinction": null,
+      "links": [
+        {
+          "label": "正式发表 / 原文",
+          "url": "https://roboticsproceedings.org/rss21/p010.html"
+        },
+        {
+          "label": "项目与资料",
+          "url": "https://www.pi.website/blog/pi0"
+        },
+        {
+          "label": "报告 / 原文",
+          "url": "https://www.pi.website/blog/pi0"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "RSS 2025 论文集",
+          "url": "https://roboticsproceedings.org/rss21/p010.html"
+        },
+        {
+          "label": "作者报告与项目来源",
+          "url": "https://www.pi.website/blog/pi0"
+        }
+      ],
+      "checkedAt": "2026-10-26",
+      "reviewScope": "项目页、摘要及发表信息核验；导读不代替全文阅读。"
+    },
+    {
+      "id": "pi05",
+      "name": "π0.5",
+      "title": "π0.5: a VLA with Open-World Generalization",
+      "year": 2025,
+      "kind": "report",
+      "venue": "技术报告",
+      "track": "vla",
+      "summary": "通过数据混合与模型训练设计，研究跨环境的机器人任务泛化。",
+      "why": "π0 到开放环境操作之间的关键报告，连接语言语义、子任务和动作学习。",
+      "watchFor": "新环境不等于所有物体与技能都未见过，需要拆解测试中究竟变化了什么。",
+      "ccf": null,
+      "distinction": null,
+      "links": [
+        {
+          "label": "项目与资料",
+          "url": "https://www.pi.website/blog/pi05"
+        },
+        {
+          "label": "报告 / 原文",
+          "url": "https://www.pi.website/blog/pi05"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "作者报告与项目来源",
+          "url": "https://www.pi.website/blog/pi05"
+        }
+      ],
+      "checkedAt": "2026-10-26",
+      "reviewScope": "项目页、摘要及发表信息核验；导读不代替全文阅读。"
+    },
+    {
+      "id": "groot-n1",
+      "name": "GR00T N1",
+      "title": "GR00T N1: An Open Foundation Model for Generalist Humanoid Robots",
+      "year": 2025,
+      "kind": "report",
+      "venue": "技术报告",
+      "track": "vla",
+      "summary": "面向人形机器人的基础模型，结合视觉语言理解与动作生成。",
+      "why": "补充人形机器人与分层模型路线，和 π 系列一起看具身平台、数据与控制差异。",
+      "watchFor": "本条针对 N1，代码仓库后续版本不等于原论文模型；不能混用不同版本的实验结果。",
+      "ccf": null,
+      "distinction": null,
+      "links": [
+        {
+          "label": "项目与资料",
+          "url": "https://research.nvidia.com/labs/lpr/publication/gr00tn1_2025/"
+        },
+        {
+          "label": "报告 / 原文",
+          "url": "https://arxiv.org/abs/2503.14734"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "作者报告与项目来源",
+          "url": "https://arxiv.org/abs/2503.14734"
+        }
+      ],
+      "checkedAt": "2026-10-26",
+      "reviewScope": "项目页、摘要及发表信息核验；导读不代替全文阅读。"
+    },
+    {
+      "id": "pistar06",
+      "name": "π*0.6 / RECAP",
+      "title": "π*0.6: a VLA that Learns from Experience",
+      "year": 2025,
+      "kind": "report",
+      "venue": "技术报告",
+      "track": "vla",
+      "summary": "将机器人执行经验用于改进策略，把模型学习延伸到交互结果。",
+      "why": "在模仿学习与基于经验的改进之间建立桥梁，是 π 系列的重要阶段。",
+      "watchFor": "区分示范数据、执行数据与人工反馈各自的贡献，留意真实交互成本。",
+      "ccf": null,
+      "distinction": null,
+      "links": [
+        {
+          "label": "项目与资料",
+          "url": "https://www.pi.website/blog/pistar06"
+        },
+        {
+          "label": "报告 / 原文",
+          "url": "https://www.pi.website/blog/pistar06"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "作者报告与项目来源",
+          "url": "https://www.pi.website/blog/pistar06"
+        }
+      ],
+      "checkedAt": "2026-10-26",
+      "reviewScope": "项目页、摘要及发表信息核验；导读不代替全文阅读。"
+    },
+    {
+      "id": "pi07",
+      "name": "π0.7",
+      "title": "π0.7: A Steerable Model with Emergent Capabilities",
+      "year": 2026,
+      "kind": "report",
+      "venue": "技术报告",
+      "track": "vla",
+      "summary": "研究利用更丰富的条件与引导，让机器人组合已有能力解决任务。",
+      "why": "2026 年关键技术报告，用于观察 VLA 的引导方式与任务组合能力。",
+      "watchFor": "提示引导、子目标和微调是不同适配方式；演示成功不能直接证明无边界的泛化。",
+      "ccf": null,
+      "distinction": null,
+      "links": [
+        {
+          "label": "项目与资料",
+          "url": "https://www.pi.website/blog/pi07"
+        },
+        {
+          "label": "报告 / 原文",
+          "url": "https://www.pi.website/blog/pi07"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "作者报告与项目来源",
+          "url": "https://www.pi.website/blog/pi07"
+        }
+      ],
+      "checkedAt": "2026-10-26",
+      "reviewScope": "项目页、摘要及发表信息核验；导读不代替全文阅读。"
+    },
+    {
+      "id": "saycan",
+      "name": "SayCan",
+      "title": "Do As I Can, Not As I Say: Grounding Language in Robotic Affordances",
+      "year": 2022,
+      "kind": "paper",
+      "venue": "CoRL",
+      "track": "robot-agentic",
+      "summary": "将语言模型的任务判断与机器人技能可供性结合，从技能库中选择下一步行动。",
+      "why": "具身智能体的清晰起点：语言上合理的动作还要在当前环境中可执行。",
+      "watchFor": "能力受已有技能库约束；按 CoRL 2022 记录，论文集出版年份为 2023。",
+      "ccf": null,
+      "distinction": null,
+      "links": [
+        {
+          "label": "项目与资料",
+          "url": "https://say-can.github.io/"
+        },
+        {
+          "label": "发表信息 / 原文",
+          "url": "https://proceedings.mlr.press/v205/ichter23a.html"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表与方法来源",
+          "url": "https://proceedings.mlr.press/v205/ichter23a.html"
+        }
+      ],
+      "checkedAt": "2026-10-26",
+      "reviewScope": "项目页、摘要及发表信息核验；导读不代替全文阅读。"
+    },
+    {
+      "id": "palm-e",
+      "name": "PaLM-E",
+      "title": "PaLM-E: An Embodied Multimodal Language Model",
+      "year": 2023,
+      "kind": "paper",
+      "venue": "ICML",
+      "track": "robot-agentic",
+      "summary": "将连续具身观测接入多模态语言模型，支持机器人相关推理与任务规划。",
+      "why": "连接多模态表示和具身决策，适合对照 VLA 理解「生成计划」与「输出动作」。",
+      "watchFor": "文本计划的可用性依赖下游执行系统，不能直接等同于端到端控制成功。",
+      "ccf": "A",
+      "distinction": null,
+      "links": [
+        {
+          "label": "项目与资料",
+          "url": "https://palm-e.github.io/"
+        },
+        {
+          "label": "发表信息 / 原文",
+          "url": "https://proceedings.mlr.press/v202/driess23a.html"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表与方法来源",
+          "url": "https://proceedings.mlr.press/v202/driess23a.html"
+        }
+      ],
+      "checkedAt": "2026-10-26",
+      "reviewScope": "项目页、摘要及发表信息核验；导读不代替全文阅读。"
+    },
+    {
+      "id": "voxposer",
+      "name": "VoxPoser",
+      "title": "VoxPoser: Composable 3D Value Maps for Robotic Manipulation with Language Models",
+      "year": 2023,
+      "kind": "paper",
+      "venue": "CoRL",
+      "track": "robot-agentic",
+      "summary": "用语言和视觉模型生成三维价值图，将任务语义转化为运动规划条件。",
+      "why": "CoRL Oral；空间落地的代表路线，与直接动作生成形成互补。",
+      "watchFor": "开放词汇理解仍依赖感知质量与规划器能力，关注系统失败来自哪个模块。",
+      "ccf": null,
+      "distinction": {
+        "label": "Oral",
+        "url": "https://voxposer.github.io/"
+      },
+      "links": [
+        {
+          "label": "项目与资料",
+          "url": "https://voxposer.github.io/"
+        },
+        {
+          "label": "发表信息 / 原文",
+          "url": "https://voxposer.github.io/"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表与方法来源",
+          "url": "https://voxposer.github.io/"
+        }
+      ],
+      "checkedAt": "2026-10-26",
+      "reviewScope": "项目页、摘要及发表信息核验；导读不代替全文阅读。"
+    },
+    {
+      "id": "rekep",
+      "name": "ReKep",
+      "title": "ReKep: Spatio-Temporal Reasoning of Relational Keypoint Constraints for Robotic Manipulation",
+      "year": 2024,
+      "kind": "paper",
+      "venue": "CoRL",
+      "track": "robot-agentic",
+      "summary": "将关键点之间的时空关系写成约束，用分层优化求解机器人动作。",
+      "why": "提供紧凑、可解释的任务表示，将语义推理连接到几何执行。",
+      "watchFor": "约束表达正确不代表感知正确；关注关键点跟踪和在线重规划的边界。",
+      "ccf": null,
+      "distinction": null,
+      "links": [
+        {
+          "label": "项目与资料",
+          "url": "https://rekep-robot.github.io/"
+        },
+        {
+          "label": "发表信息 / 原文",
+          "url": "https://openreview.net/pdf?id=9iG3SEbMnL"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表与方法来源",
+          "url": "https://openreview.net/pdf?id=9iG3SEbMnL"
+        }
+      ],
+      "checkedAt": "2026-10-26",
+      "reviewScope": "项目页、摘要及发表信息核验；导读不代替全文阅读。"
+    },
+    {
+      "id": "eureka",
+      "name": "Eureka",
+      "title": "Eureka: Human-Level Reward Design via Coding Large Language Models",
+      "year": 2024,
+      "kind": "paper",
+      "venue": "ICLR",
+      "track": "robot-agentic",
+      "summary": "用语言模型生成奖励代码，根据训练反馈迭代改进奖励设计。",
+      "why": "把 Agent 从执行者扩展为学习过程的设计者，形成反馈驱动的优化闭环。",
+      "watchFor": "主要证据来自仿真，奖励指标提升和真实机器人迁移不能直接画等号。",
+      "ccf": "A",
+      "distinction": null,
+      "links": [
+        {
+          "label": "项目与资料",
+          "url": "https://eureka-research.github.io/"
+        },
+        {
+          "label": "发表信息 / 原文",
+          "url": "https://proceedings.iclr.cc/paper_files/paper/2024/hash/70c26937fbf3d4600b69a129031b66ec-Abstract-Conference.html"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表与方法来源",
+          "url": "https://proceedings.iclr.cc/paper_files/paper/2024/hash/70c26937fbf3d4600b69a129031b66ec-Abstract-Conference.html"
+        }
+      ],
+      "checkedAt": "2026-10-26",
+      "reviewScope": "项目页、摘要及发表信息核验；导读不代替全文阅读。"
+    },
+    {
+      "id": "robogen",
+      "name": "RoboGen",
+      "title": "RoboGen: Towards Unleashing Infinite Data for Automated Robot Learning via Generative Simulation",
+      "year": 2024,
+      "kind": "paper",
+      "venue": "ICML",
+      "track": "robot-agentic",
+      "summary": "组织任务生成、场景生成与技能学习，探索生成式仿真的机器人学习流程。",
+      "why": "提供系统级阅读样本，理解自动化训练任务如何连接场景与监督。",
+      "watchFor": "自动生成任务并不保证任务有效或能迁移到真机，需同时检查筛选机制与评估。",
+      "ccf": "A",
+      "distinction": null,
+      "links": [
+        {
+          "label": "项目与资料",
+          "url": "https://robogen-ai.github.io/"
+        },
+        {
+          "label": "发表信息 / 原文",
+          "url": "https://robogen-ai.github.io/"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表与方法来源",
+          "url": "https://robogen-ai.github.io/"
+        }
+      ],
+      "checkedAt": "2026-10-26",
+      "reviewScope": "项目页、摘要及发表信息核验；导读不代替全文阅读。"
+    },
+    {
+      "id": "gemini-robotics",
+      "name": "Gemini Robotics",
+      "title": "Gemini Robotics: Bringing AI into the Physical World",
+      "year": 2025,
+      "kind": "report",
+      "venue": "技术报告",
+      "track": "robot-agentic",
+      "summary": "将机器人动作模型与具身推理模型分开发展，探索语义、空间理解与控制的协作。",
+      "why": "关键技术报告，可对照 PaLM-E 与 VLA 路线理解具身推理和动作模型的分工。",
+      "watchFor": "Robotics 与 Robotics-ER 能力边界不同；不要把展示视频当作完整的泛化评测。",
+      "ccf": null,
+      "distinction": null,
+      "links": [
+        {
+          "label": "项目与资料",
+          "url": "https://deepmind.google/blog/gemini-robotics-brings-ai-into-the-physical-world/"
+        },
+        {
+          "label": "报告 / 原文",
+          "url": "https://arxiv.org/abs/2503.20020"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "作者报告与项目来源",
+          "url": "https://arxiv.org/abs/2503.20020"
+        }
+      ],
+      "checkedAt": "2026-10-26",
+      "reviewScope": "项目页、摘要及发表信息核验；导读不代替全文阅读。"
+    },
+    {
+      "id": "aspire",
+      "name": "ASPIRE",
+      "title": "ASPIRE: Agentic /Skills Discovery for Robotics",
+      "year": 2026,
+      "kind": "preprint",
+      "venue": "arXiv",
+      "track": "robot-agentic",
+      "summary": "利用执行反馈迭代机器人技能程序，并积累可复用技能。",
+      "why": "有正式研究项目页，作为 2026 年技能发现与程序反馈闭环的观察点。",
+      "watchFor": "仍按预印本阅读；要检查技能评估、失败修复和迁移范围，而非只看示例成功。",
+      "ccf": null,
+      "distinction": null,
+      "links": [
+        {
+          "label": "项目与资料",
+          "url": "https://research.nvidia.com/labs/gear/aspire/"
+        },
+        {
+          "label": "报告 / 原文",
+          "url": "https://arxiv.org/abs/2607.00272"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "作者报告与项目来源",
+          "url": "https://arxiv.org/abs/2607.00272"
+        }
+      ],
+      "checkedAt": "2026-10-26",
+      "reviewScope": "项目页、摘要及发表信息核验；导读不代替全文阅读。"
+    },
+    {
+      "id": "world-models",
+      "name": "World Models",
+      "title": "Recurrent World Models Facilitate Policy Evolution",
+      "year": 2018,
+      "kind": "paper",
+      "venue": "NeurIPS",
+      "track": "world-models",
+      "summary": "用视觉压缩、循环动力学和简单控制器，把策略学习搬进模型想象的环境。",
+      "why": "作为 PlaNet 与 Dreamer 之前的起点，区分环境模型、控制器和优化策略的方法。",
+      "watchFor": "模型中的高回报可能来自利用模型漏洞；回到真实环境检验迁移。正式发表标题与项目名不同。",
+      "ccf": "A",
+      "distinction": null,
+      "links": [
+        {
+          "label": "原文 / 发表信息",
+          "url": "https://papers.nips.cc/paper_files/paper/2018/hash/2de5d16682c3c35007e4e92982f1a2ba-Abstract.html"
+        },
+        {
+          "label": "项目与代码",
+          "url": "https://worldmodels.github.io/"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表与方法来源",
+          "url": "https://papers.nips.cc/paper_files/paper/2018/hash/2de5d16682c3c35007e4e92982f1a2ba-Abstract.html"
+        }
+      ],
+      "checkedAt": "2026-10-26",
+      "reviewScope": "原始来源的摘要、方法概述及发表信息核验；结合用户提供文字稿组织导读，未做独立复现。"
+    },
+    {
+      "id": "daydreamer",
+      "name": "DayDreamer",
+      "title": "DayDreamer: World Models for Physical Robot Learning",
+      "year": 2022,
+      "kind": "paper",
+      "venue": "CoRL",
+      "track": "world-models",
+      "summary": "让机器人边交互边更新世界模型，再用想象轨迹改进策略，形成真机学习闭环。",
+      "why": "补齐从模拟任务到物理机器人的一环，对照采集、模型训练、策略训练与执行的不同频率。",
+      "watchFor": "真机在线学习与先在仿真中训练再迁移不同；检查任务设定、观测、奖励和人工干预条件。CoRL 2022，论文集于 2023 年出版。",
+      "ccf": null,
+      "distinction": null,
+      "links": [
+        {
+          "label": "原文 / 发表信息",
+          "url": "https://proceedings.mlr.press/v205/wu23c/wu23c.pdf"
+        },
+        {
+          "label": "项目与代码",
+          "url": "https://danijar.com/daydreamer/"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表与方法来源",
+          "url": "https://proceedings.mlr.press/v205/wu23c/wu23c.pdf"
+        }
+      ],
+      "checkedAt": "2026-10-26",
+      "reviewScope": "原始来源的摘要、方法概述及发表信息核验；结合用户提供文字稿组织导读，未做独立复现。"
+    },
+    {
+      "id": "ijepa",
+      "name": "I-JEPA",
+      "title": "Self-Supervised Learning From Images With a Joint-Embedding Predictive Architecture",
+      "year": 2023,
+      "kind": "paper",
+      "venue": "CVPR",
+      "track": "world-models",
+      "summary": "从图像中可见区域预测被遮挡区域的表征，学习语义视觉特征。",
+      "why": "先理解目标编码器、遮挡策略和表征预测，再进入视频与机器人动力学。",
+      "watchFor": "这是图像自监督表征学习，不应直接等同于带动作条件的机器人未来预测器。",
+      "ccf": "A",
+      "distinction": null,
+      "links": [
+        {
+          "label": "原文 / 发表信息",
+          "url": "https://openaccess.thecvf.com/content/CVPR2023/html/Assran_Self-Supervised_Learning_From_Images_With_a_Joint-Embedding_Predictive_Architecture_CVPR_2023_paper.html"
+        },
+        {
+          "label": "项目与代码",
+          "url": "https://github.com/facebookresearch/ijepa"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表与方法来源",
+          "url": "https://openaccess.thecvf.com/content/CVPR2023/html/Assran_Self-Supervised_Learning_From_Images_With_a_Joint-Embedding_Predictive_Architecture_CVPR_2023_paper.html"
+        }
+      ],
+      "checkedAt": "2026-10-26",
+      "reviewScope": "原始来源的摘要、方法概述及发表信息核验；结合用户提供文字稿组织导读，未做独立复现。"
+    },
+    {
+      "id": "vjepa",
+      "name": "V-JEPA",
+      "title": "Revisiting Feature Prediction for Learning Visual Representations from Video",
+      "year": 2024,
+      "kind": "paper",
+      "venue": "TMLR",
+      "track": "world-models",
+      "summary": "把遮挡表征预测扩展到视频，在不重建像素的条件下学习时空特征。",
+      "why": "连接 I-JEPA 与 V-JEPA 2；观察视频编码器如何成为后续理解和控制系统的组件。",
+      "watchFor": "预训练编码器本身不输出机器人动作。TMLR 2024 依据作者发表列表，不将其误标为 ECCV。",
+      "ccf": null,
+      "distinction": null,
+      "links": [
+        {
+          "label": "论文",
+          "url": "https://arxiv.org/abs/2404.08471"
+        },
+        {
+          "label": "原文 / 发表信息",
+          "url": "https://www.midoassran.ca/"
+        },
+        {
+          "label": "项目与代码",
+          "url": "https://github.com/facebookresearch/jepa"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "作者发表记录（TMLR 2024）",
+          "url": "https://www.midoassran.ca/"
+        }
+      ],
+      "checkedAt": "2026-10-26",
+      "reviewScope": "原始来源的摘要、方法概述及发表信息核验；结合用户提供文字稿组织导读，未做独立复现。"
+    },
+    {
+      "id": "unipi",
+      "name": "UniPi",
+      "title": "Learning Universal Policies via Text-Guided Video Generation",
+      "year": 2023,
+      "kind": "paper",
+      "venue": "NeurIPS",
+      "track": "world-models",
+      "summary": "先把文字目标变成未来视频计划，再从视频中提取可执行控制动作。",
+      "why": "用来理解视频规划与逆动力学之间的接口，是阅读联合视频动作模型的前置参照。",
+      "watchFor": "生成的画面仍需落到具体机器人动作；注意视频可行性、逆动力学误差与推理开销。",
+      "ccf": "A",
+      "distinction": null,
+      "links": [
+        {
+          "label": "原文 / 发表信息",
+          "url": "https://papers.nips.cc/paper_files/paper/2023/hash/1d5b9233ad716a43be5c0d3023cb82d0-Abstract-Conference.html"
+        },
+        {
+          "label": "项目与代码",
+          "url": "https://universal-policy.github.io/"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表与方法来源",
+          "url": "https://papers.nips.cc/paper_files/paper/2023/hash/1d5b9233ad716a43be5c0d3023cb82d0-Abstract-Conference.html"
+        }
+      ],
+      "checkedAt": "2026-10-26",
+      "reviewScope": "原始来源的摘要、方法概述及发表信息核验；结合用户提供文字稿组织导读，未做独立复现。"
+    },
+    {
+      "id": "uwm",
+      "name": "Unified World Models",
+      "title": "Unified World Models: Coupling Video and Action Diffusion for Pretraining on Large Robotic Datasets",
+      "year": 2025,
+      "kind": "paper",
+      "venue": "RSS",
+      "track": "world-models",
+      "summary": "通过视频和动作各自的扩散时间步，让同一模型支持策略、正向动力学和逆动力学等任务。",
+      "why": "把分离的世界建模与模仿学习放在同一框架中，适合与 UniPi、DreamZero 对照。",
+      "watchFor": "区分训练时的联合目标与推理时需要的模态。项目提及的 Best Paper 属于 ICML 2025 workshop，不作为 RSS 主会荣誉标记。",
+      "ccf": null,
+      "distinction": null,
+      "links": [
+        {
+          "label": "原文 / 发表信息",
+          "url": "https://www.roboticsproceedings.org/rss21/p015.html"
+        },
+        {
+          "label": "项目与代码",
+          "url": "https://weirdlabuw.github.io/uwm/"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表与方法来源",
+          "url": "https://www.roboticsproceedings.org/rss21/p015.html"
+        }
+      ],
+      "checkedAt": "2026-10-26",
+      "reviewScope": "原始来源的摘要、方法概述及发表信息核验；结合用户提供文字稿组织导读，未做独立复现。"
+    },
+    {
+      "id": "dreamzero",
+      "name": "DreamZero",
+      "title": "World Action Models are Zero-shot Policies",
+      "year": 2026,
+      "kind": "preprint",
+      "venue": "arXiv",
+      "track": "world-models",
+      "summary": "从视频生成底座出发，联合建模未来画面与机器人动作，用于跨任务策略迁移。",
+      "why": "作为 2026 年 WAM 代表预印本，有作者代码与评测入口，可追踪预测和动作的耦合。",
+      "watchFor": "零样本必须注明针对任务、场景还是本体；比较数据分布、闭环观测纠偏、延迟及可用权重。",
+      "ccf": null,
+      "distinction": null,
+      "links": [
+        {
+          "label": "原文 / 发表信息",
+          "url": "https://arxiv.org/abs/2602.15922"
+        },
+        {
+          "label": "项目与代码",
+          "url": "https://github.com/dreamzero0/dreamzero"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表与方法来源",
+          "url": "https://arxiv.org/abs/2602.15922"
+        }
+      ],
+      "checkedAt": "2026-10-26",
+      "reviewScope": "原始来源的摘要、方法概述及发表信息核验；结合用户提供文字稿组织导读，未做独立复现。"
+    },
+    {
+      "id": "lingbot-va",
+      "name": "LingBot-VA",
+      "title": "LingBot-VA: Causal World Modeling for Robot Control",
+      "year": 2026,
+      "kind": "paper",
+      "venue": "RSS",
+      "track": "world-models",
+      "summary": "以因果视频动作建模连接未来预测和机器人控制，关注历史信息与异步执行。",
+      "why": "和 DreamZero 比较双流结构、缓存记忆以及真实观测进入控制循环的方式。",
+      "watchFor": "RSS 2026 标注来自作者仓库；VA 与 VA2 的模型和结果应分开。块内联合生成不等于推理时使用真实未来信息。",
+      "ccf": null,
+      "distinction": null,
+      "links": [
+        {
+          "label": "原文 / 发表信息",
+          "url": "https://github.com/robbyant/lingbot-va"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "作者代码与 RSS 2026 发表标注",
+          "url": "https://github.com/robbyant/lingbot-va"
+        }
+      ],
+      "checkedAt": "2026-10-26",
+      "reviewScope": "原始来源的摘要、方法概述及发表信息核验；结合用户提供文字稿组织导读，未做独立复现。"
+    },
+    {
+      "id": "cosmos3",
+      "name": "Cosmos 3",
+      "title": "Cosmos3: Omnimodal World Models for Physical AI",
+      "year": 2026,
+      "kind": "report",
+      "venue": "技术报告",
+      "track": "world-models",
+      "summary": "在统一模型中处理语言、视觉、音频和动作，覆盖策略与正逆动力学等物理交互任务。",
+      "why": "补齐 Cosmos 从视频基础模型到动作作为显式模态的演进，和专用 WAM 对比。",
+      "watchFor": "按技术报告阅读；区分基础模型、任务后训练和完整部署成本，报告中的榜单成绩有评测时间与设置限制。",
+      "ccf": null,
+      "distinction": null,
+      "links": [
+        {
+          "label": "原文 / 发表信息",
+          "url": "https://research.nvidia.com/labs/cosmos-lab/cosmos3/technical-report.pdf"
+        },
+        {
+          "label": "项目与代码",
+          "url": "https://research.nvidia.com/labs/cosmos-lab/cosmos3/"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表与方法来源",
+          "url": "https://research.nvidia.com/labs/cosmos-lab/cosmos3/technical-report.pdf"
+        }
+      ],
+      "checkedAt": "2026-10-26",
+      "reviewScope": "原始来源的摘要、方法概述及发表信息核验；结合用户提供文字稿组织导读，未做独立复现。"
+    },
+    {
+      "id": "fast",
+      "name": "FAST",
+      "title": "FAST: Efficient Action Tokenization for Vision-Language-Action Models",
+      "year": 2025,
+      "kind": "paper",
+      "venue": "RSS",
+      "track": "vla",
+      "summary": "利用频域压缩把连续动作序列编码为离散 token，改善高频动作的自回归学习。",
+      "why": "在直接分箱与连续动作生成之间增加一个有代表性的动作表示方案。",
+      "watchFor": "训练效率、token 数量和部署延迟要分开比较；FAST 动作编码不等于名称相似的世界模型加速方法。",
+      "ccf": null,
+      "distinction": null,
+      "links": [
+        {
+          "label": "原文 / 发表信息",
+          "url": "https://www.roboticsproceedings.org/rss21/p012.pdf"
+        },
+        {
+          "label": "项目与代码",
+          "url": "https://huggingface.co/physical-intelligence/fast"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表与方法来源",
+          "url": "https://www.roboticsproceedings.org/rss21/p012.pdf"
+        }
+      ],
+      "checkedAt": "2026-10-26",
+      "reviewScope": "原始来源的摘要、方法概述及发表信息核验；结合用户提供文字稿组织导读，未做独立复现。"
+    },
+    {
+      "id": "hirobot",
+      "name": "Hi Robot",
+      "title": "Hi Robot: Open-Ended Instruction Following with Hierarchical Vision-Language-Action Models",
+      "year": 2025,
+      "kind": "paper",
+      "venue": "ICML",
+      "track": "robot-agentic",
+      "summary": "高层模型理解复杂指令与用户反馈，低层 VLA 执行具体动作，把语言交互接进机器人任务。",
+      "why": "作为 Robot Agentic 与 π 系列的交汇点，区分子任务规划、动作策略和执行中的反馈。",
+      "watchFor": "分层不自动保证长任务可靠性；检查反馈如何进入高层、子任务何时切换以及技能覆盖。",
+      "ccf": "A",
+      "distinction": null,
+      "links": [
+        {
+          "label": "原文 / 发表信息",
+          "url": "https://proceedings.mlr.press/v267/shi25d.html"
+        },
+        {
+          "label": "项目与代码",
+          "url": "https://www.pi.website/research/hirobot"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表与方法来源",
+          "url": "https://proceedings.mlr.press/v267/shi25d.html"
+        }
+      ],
+      "checkedAt": "2026-10-26",
+      "reviewScope": "原始来源的摘要、方法概述及发表信息核验；结合用户提供文字稿组织导读，未做独立复现。"
+    }
+  ],
+  "resources": [
+    {
+      "id": "droid",
+      "title": "DROID",
+      "type": "数据集",
+      "tracks": [
+        "world-models",
+        "vla"
+      ],
+      "url": "https://droid-dataset.github.io/",
+      "description": "多场景真实机器人操作数据。读 V-JEPA 2 与通用策略时，用它对照采集环境和数据覆盖。",
+      "status": "项目资料"
+    },
+    {
+      "id": "openx-data",
+      "title": "Open X-Embodiment 数据与模型",
+      "type": "数据集",
+      "tracks": [
+        "vla"
+      ],
+      "url": "https://robotics-transformer-x.github.io/",
+      "description": "跨机器人数据入口；先读数据规范和动作表示，再比较跨具身训练。",
+      "status": "项目资料"
+    },
+    {
+      "id": "diamond-code",
+      "title": "DIAMOND 代码",
+      "type": "代码",
+      "tracks": [
+        "world-models"
+      ],
+      "url": "https://github.com/eloialonso/diamond",
+      "description": "扩散世界模型的实现入口，适合把生成环境与策略训练的流程对应起来。",
+      "status": "作者代码"
+    },
+    {
+      "id": "lewm-code",
+      "title": "LeWorldModel 代码",
+      "type": "代码",
+      "tracks": [
+        "world-models"
+      ],
+      "url": "https://github.com/Mengarr/lewm",
+      "description": "与项目报告对照阅读训练目标、表征正则化和规划实现。",
+      "status": "作者代码"
+    },
+    {
+      "id": "worldarena-code",
+      "title": "WorldArena 评测",
+      "type": "基准",
+      "tracks": [
+        "world-models",
+        "vla"
+      ],
+      "url": "https://github.com/tsinghua-fib-lab/WorldArena",
+      "description": "检查世界模型视觉质量与具身功能的差别，使用时注明具体基准版本。",
+      "status": "评测代码"
+    },
+    {
+      "id": "groot-code",
+      "title": "Isaac GR00T 代码",
+      "type": "代码",
+      "tracks": [
+        "vla"
+      ],
+      "url": "https://github.com/NVIDIA/Isaac-GR00T",
+      "description": "仓库持续更新；阅读 N1 报告时先固定对应版本，避免把新代码当作原版实现。",
+      "status": "作者代码"
+    },
+    {
+      "id": "kelip",
+      "title": "可lip · 具身智能视频",
+      "type": "视频",
+      "tracks": [
+        "world-models",
+        "vla",
+        "robot-agentic"
+      ],
+      "url": "https://space.bilibili.com/104331347/upload/video",
+      "description": "用户提供 8 份本地文字稿，已通读主题稿并核对合集重叠与差异，用于组织路线。学术结论仍回查原始论文。",
+      "status": "文字稿已参考"
+    },
+    {
+      "id": "kelip-jepa",
+      "title": "世界模型第 2 期 · JEPA",
+      "type": "视频",
+      "tracks": [
+        "world-models"
+      ],
+      "url": "https://www.bilibili.com/video/BV1D5eK6dER8/",
+      "description": "已读用户提供的 JEPA 文字稿，据此补齐 I-JEPA、V-JEPA 到动作条件预测的前置脉络。",
+      "status": "文字稿已参考"
+    },
+    {
+      "id": "kelip-pi07",
+      "title": "VLA 入门（四）· π0.7",
+      "type": "视频",
+      "tracks": [
+        "vla"
+      ],
+      "url": "https://www.bilibili.com/video/BV1uQYD6jEfQ/",
+      "description": "已读 VLA 合集文字稿中的 π 系列部分，聚焦动作表示、数据混合、经验学习、记忆和视觉子目标。",
+      "status": "文字稿已参考"
+    },
+    {
+      "id": "embodiedterms",
+      "title": "具身智能术语表",
+      "type": "导读",
+      "tracks": [
+        "world-models",
+        "vla",
+        "robot-agentic"
+      ],
+      "url": "https://www.embodiedterms.com/about/",
+      "description": "可lip整理的术语入口，适合查词；网站说明包含 AI 辅助整理，不作为发表或获奖证据。",
+      "status": "辅助参考"
+    },
+    {
+      "id": "mujoco",
+      "title": "MuJoCo",
+      "type": "仿真",
+      "url": "https://mujoco.org/",
+      "description": "物理引擎。理解动力学、接触与仿真步进，它不负责替策略选择动作。",
+      "status": "官方资料",
+      "tracks": [
+        "world-models",
+        "vla"
+      ]
+    },
+    {
+      "id": "robosuite",
+      "title": "robosuite",
+      "type": "仿真",
+      "url": "https://robosuite.ai/",
+      "description": "机器人、控制器和环境接口，建立在 MuJoCo 之上。用于对齐观测、动作格式和任务执行。",
+      "status": "官方资料",
+      "tracks": [
+        "world-models",
+        "vla"
+      ]
+    },
+    {
+      "id": "libero",
+      "title": "LIBERO",
+      "type": "基准",
+      "url": "https://github.com/Lifelong-Robot-Learning/LIBERO",
+      "description": "多任务与终身机器人学习基准。比较结果时注明任务套件、数据划分、训练预算与成功率统计。",
+      "status": "官方资料",
+      "tracks": [
+        "world-models",
+        "vla"
+      ]
+    },
+    {
+      "id": "robotwin",
+      "title": "RoboTwin 2.0",
+      "type": "基准",
+      "url": "https://robotwin-platform.github.io/",
+      "description": "双臂操作的数据生成和评测框架；适合检查域随机化、任务覆盖和仿真到现实的差距。",
+      "status": "官方资料",
+      "tracks": [
+        "world-models",
+        "vla"
+      ]
+    },
+    {
+      "id": "umi",
+      "title": "UMI",
+      "type": "数据采集",
+      "url": "https://umi-gripper.github.io/",
+      "description": "用手持夹爪采集示范的接口与策略框架。和固定机器人遥操作比较坐标表示、时间对齐和延迟匹配。",
+      "status": "官方资料",
+      "tracks": [
+        "world-models",
+        "vla"
+      ]
+    },
+    {
+      "id": "ego4d",
+      "title": "Ego4D",
+      "type": "数据集",
+      "url": "https://ego4d-data.org/",
+      "description": "人类第一视角视频与感知基准。它有助于表征学习，但不天然提供可直接执行的机器人动作标签。",
+      "status": "官方资料",
+      "tracks": [
+        "world-models",
+        "vla"
+      ]
+    }
+  ],
+  "bridges": [
+    {
+      "from": "world-models",
+      "to": "vla",
+      "title": "预测 ⇄ 动作",
+      "description": "从 UniPi 的视频计划，到 UWM / DreamZero 的联合视频动作建模：WAM 连接世界预测与动作策略。",
+      "papers": [
+        "unipi",
+        "uwm",
+        "dreamzero"
+      ]
+    },
+    {
+      "from": "vla",
+      "to": "robot-agentic",
+      "title": "技能 → 任务",
+      "description": "Hi Robot 的子任务规划与 π0.7 的引导、记忆和视觉子目标：让动作能力组成可反馈的长任务。",
+      "papers": [
+        "hirobot",
+        "pi07"
+      ]
+    },
+    {
+      "from": "robot-agentic",
+      "to": "world-models",
+      "title": "反馈 → 学习",
+      "description": "对照 Eureka 与 Dreamer：两种反馈如何改变学习过程。这里是阅读比较，不表示直接引用。",
+      "papers": [
+        "eureka",
+        "dreamer"
+      ]
+    }
+  ],
+  "transcripts": [
+    {
+      "title": "世界模型第1期 · 梦的开始：从 World Models 到 DayDreamer，让策略在梦里练，机器狗真机 1 小时学会走路",
+      "filename": "世界模型第1期 · 梦的开始：从 World Models 到 DayDreamer，让策略在梦里练，机器狗真机 1 小时学会走路_哔哩哔哩_bilibili.txt",
+      "takeaway": "想象训练与真机反馈",
+      "papers": [
+        "world-models",
+        "planet",
+        "dreamer",
+        "daydreamer"
+      ],
+      "reviewedAt": "2026-10-26",
+      "source": "用户提供的本地文字稿"
+    },
+    {
+      "title": "世界模型第2期 · JEPA：不生成像素，在表征空间预测未来｜从 LeCun 立场文到 V-JEPA 2 真机零样本抓放",
+      "filename": "世界模型第2期 · JEPA：不生成像素，在表征空间预测未来｜从 LeCun 立场文到 V-JEPA 2 真机零样本抓放_哔哩哔哩_bilibili.txt",
+      "takeaway": "表征预训练与动作条件预测",
+      "papers": [
+        "ijepa",
+        "vjepa",
+        "dino-wm",
+        "vjepa2"
+      ],
+      "reviewedAt": "2026-10-26",
+      "source": "用户提供的本地文字稿"
+    },
+    {
+      "title": "Cosmos：视频模型如何学会行动 世界模型系列第三期",
+      "filename": "Cosmos：视频模型如何学会行动 世界模型系列第三期_哔哩哔哩_bilibili.txt",
+      "takeaway": "从视频计划到动作模态",
+      "papers": [
+        "unipi",
+        "cosmos",
+        "cosmos-policy",
+        "cosmos3"
+      ],
+      "reviewedAt": "2026-10-26",
+      "source": "用户提供的本地文字稿"
+    },
+    {
+      "title": "一个视频看懂World Action Model",
+      "filename": "一个视频看懂World Action Model_哔哩哔哩_bilibili.txt",
+      "takeaway": "视频动作联合建模与闭环纠偏",
+      "papers": [
+        "uwm",
+        "dreamzero",
+        "lingbot-va"
+      ],
+      "reviewedAt": "2026-10-26",
+      "source": "用户提供的本地文字稿"
+    },
+    {
+      "title": "一口气看懂VLA",
+      "filename": "一口气看懂VLA_哔哩哔哩_bilibili.txt",
+      "takeaway": "动作表示、π 系列与分层控制",
+      "papers": [
+        "fast",
+        "pi0",
+        "pi05",
+        "pistar06",
+        "pi07",
+        "hirobot"
+      ],
+      "reviewedAt": "2026-10-26",
+      "source": "用户提供的本地文字稿"
+    },
+    {
+      "title": "实战！一口气看懂具身智能仿真",
+      "filename": "实战！一口气看懂具身智能仿真_哔哩哔哩_bilibili.txt",
+      "takeaway": "策略、基准、控制器与物理引擎的接口",
+      "papers": [
+        "openvla",
+        "cosmos-policy"
+      ],
+      "reviewedAt": "2026-10-26",
+      "source": "用户提供的本地文字稿"
+    },
+    {
+      "title": "盘点一下具身领域常用的数据集",
+      "filename": "盘点一下具身领域常用的数据集_哔哩哔哩_bilibili.txt",
+      "takeaway": "真实机器人、人类视频与仿真数据的区别",
+      "papers": [
+        "openx",
+        "octo"
+      ],
+      "reviewedAt": "2026-10-26",
+      "source": "用户提供的本地文字稿"
+    },
+    {
+      "title": "一口气看懂世界模型！",
+      "filename": "一口气看懂世界模型！_哔哩哔哩_bilibili.txt",
+      "takeaway": "与四期主题稿比对，阅读未匹配片段，避免重复计作独立证据",
+      "papers": [
+        "world-models",
+        "vjepa2",
+        "cosmos3",
+        "dreamzero"
+      ],
+      "reviewedAt": "2026-10-26",
+      "source": "用户提供的本地文字稿"
+    }
+  ]
+}

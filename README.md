@@ -1,113 +1,96 @@
-# PaperGit · 论文追踪与可视化
+# PaperGit · 个人研究资料库
 
-以 GitHub 式体验追踪学术论文进展：领域树（领域 → 子领域 → 研究路线）自动聚合论文、时间线脉络、趋势与动态，覆盖 **AI / 计算机科学 / 机器人** 三大方向，可扩展至任意领域。
+围绕 **世界模型、VLA、Robot Agentic** 的本地阅读资料库。用问题驱动的阶段路线组织资料，提供论文导读、来源记录、阅读状态和个人笔记。
 
-- 调研与产品方案：[`docs/research-and-plan.md`](docs/research-and-plan.md)（v0.1，2026-08-23 的历史快照；当前实现以代码与下列文档为准）
-- API 契约：[`docs/api-contract.md`](docs/api-contract.md)
-- 设计系统与前端约定：[`docs/design-system.md`](docs/design-system.md)
-- 三维拓扑实现说明：[`docs/topology3d.md`](docs/topology3d.md)
+当前目录：43 篇论文与技术报告、16 个配套资料入口。资料最后核验于 2026-10-26。已参考用户提供的 8 份可lip文字稿，具体阅读范围见应用「资料与来源」及 [文字稿阅读记录](docs/transcript-review.md)。
 
-## 功能
+## 在线访问
 
-- **三维知识拓扑（主页 `/`）**：以 three.js 构建的立体知识结构——路线为走廊、阶段为地层、方法为节点；确定性布局（非力导向），沿走廊推进即读出路线主流程，跨走廊高拱管为闭环回流。射线拾取悬停/单击、相机飞行定位、走廊显隐筛选、`?route=&node=` 深链、方向键遍历 + Enter 选取；可切换「列表」视图，WebGL 不可用时自动降级，不黑屏。设计说明见 [`docs/topology3d.md`](docs/topology3d.md)。
-- **设计系统与主题**：全站颜色/圆角/阴影走 `app/globals.css` 的令牌层，浅深双主题（`data-theme`，首屏前应用不闪烁），原语集中在 `components/ui.tsx`。约定见 [`docs/design-system.md`](docs/design-system.md)。
-- **提示词系统**（`frontend/lib/lexicon.ts`）：全站文案与术语统一管理，学术中性表述、双语对照、无表情符号。
-- **技术路线网**（`/routes`）：闭环总览图、6 条技术路线的演进网络（分层 DAG）、技能契约与评测矩阵；两图均提供「图示 / 清单」双视图，窄屏纵向堆叠；路线即代码：`routes/routes.yaml`。
-- **全站检索**：顶栏即时检索支持 `Ctrl/Cmd + K`，可直达技术路线、研究方向与论文。
-- **领域树导航**：可折叠树 + 过滤 + 面包屑，任意节点看懂方向进展；论文聚合、时间线、趋势、关注 digest。
-- **论文聚合**：标题 / 作者 / 年份 / venue / 引用 / arXiv 链接，支持关键词筛选、年份过滤、排序、每页条数与分页；计数一律按论文去重并说明口径。
-- **时间线脉络**：按年份分组的论文流，里程碑工作以「里程碑」文字徽标高亮。
-- **趋势可视化**：ECharts 年度论文量趋势（按需引入），随主题重绘，并提供等价数据表。
-- **进展追踪**：Watch 节点 → 「我的关注」按 7/14/30 天窗口汇总 digest，支持乐观取消与撤销；节点「动态」页展示近期新增。
-- **无障碍**：跳转链接、地标与可访问名称、焦点可见指示、图形配文字图例；WCAG AA 对比度由门禁把守。
-- **数据管道**：arXiv 全量/增量采集 + OpenAlex 引用回填 + 规则分类（可升级嵌入分类）。
+**[打开 PaperGit](https://skywhite1024.github.io/paper-git/)**，无需本地启动。
 
-## 快速开始（本机开发，无需 Docker）
+代码仓库：[skywhite1024/paper-git](https://github.com/skywhite1024/paper-git)。推送到 `main` 后，GitHub Actions 自动测试、静态导出并部署 GitHub Pages。线上版本的搜索、筛选和笔记都在浏览器运行，不需要后端服务。
 
-```bash
-# 1. 后端（Python 3.10+）
-python -m venv .venv
-.venv/Scripts/python -m pip install -e "backend[dev]"   # Windows；Linux/Mac 用 .venv/bin/python
-cd backend && ../.venv/Scripts/python -m app.ingest.runner --per-category 300   # 拉取真实 arXiv 数据
-# 无网络时可用种子数据：../.venv/Scripts/python -m app.ingest.seed
-../.venv/Scripts/python -m uvicorn app.main:app --port 8000     # API → http://localhost:8000/docs
+线上与 localhost 的笔记存储独立。迁移时先在旧页面导出 JSON，再到线上「阅读记录」导入；笔记仍只保存在当前浏览器，不会随代码上传到 GitHub，也不自动跨设备同步。
 
-# 2. 前端（Node 18+）
-cd ../frontend && npm install
-npm run dev        # → http://localhost:3000
+本地验证与线上一致的静态产物：
+
+```powershell
+npm run build:pages
 ```
 
-## Docker Compose（Postgres + API + Web + 一次性 ingest）
+输出位于 `frontend/.next-pages/`，默认路径前缀为 `/paper-git`。部署工作流使用 Pages 返回的 `base_path`，包含子页面、静态资源和 404 页面校验。
 
-```bash
-docker compose up -d --build            # 起 db / api(:8000) / web(:3000)
-docker compose run --rm ingest          # 首次数据抓取（arXiv，约 10-20 分钟）
-# 增量更新：docker compose run --rm ingest python -m app.ingest.runner --incremental
+## 启动
+
+需要 Node.js **22.18+**（测试使用 Node 原生 TypeScript 支持；已在 Node 24.14.1 验证）。
+
+```powershell
+cd "G:/code/paper-git"
+npm --prefix "frontend" ci
+npm run dev
 ```
 
-## 维护领域树（taxonomy 即代码）
+命令启动本地 Next.js，等待就绪后打开默认浏览器 **http://localhost:3000**。终端保持运行，按 Ctrl+C 停止本次启动的服务。
 
-领域树完全由 [`taxonomy/taxonomy.yaml`](taxonomy/taxonomy.yaml) 定义（当前 67 节点）。
-**新增领域/子领域/研究路线 = 编辑 YAML + 重跑 `python -m app.taxonomy_loader`**，无需改代码。
-每个节点配置 `keywords`（标题/摘要命中用于自动分类）与 `arxiv_cats`（分类映射），欢迎提 PR 扩展。
-
-## Ingest 常用命令
-
-```bash
-python -m app.ingest.runner                          # 全量：30 个 arXiv 分类 × 每类 900 篇
-python -m app.ingest.runner --categories cs.RO,cs.AI # 指定分类
-python -m app.ingest.runner --incremental --days 3   # 增量（定时任务用）
-python -m app.ingest.runner --backfill-citations     # OpenAlex 回填引用数/venue
-python -m app.ingest.seed                            # 离线演示数据（61 篇里程碑 + 合成填充）
-python -m app.ingest.enrich_routes                   # 为 routes.yaml 方法节点检索 arXiv 链接
-python -m pytest                                     # 后端测试（backend/ 下）
+```powershell
+npm run dev -- --no-open
+npm run dev -- --help
 ```
 
-## 前端质量门禁
+不需要 Python、SQLite 服务、模型账户或 API Key。默认仅监听 127.0.0.1；3000 端口被占用时提示并退出，不结束其他进程、不自动换端口。阅读记录与浏览器来源绑定，因此请固定使用 localhost:3000。
 
-需前后端已分别运行在 `localhost:3000` / `localhost:8000`。工具用 Playwright 驱动本机 Chrome。
+首次安装依赖需要网络；安装后内容来自本地 JSON。应用没有自动抓取、Agent、模型调用或联网搜索功能。外部论文、代码与视频仅在点击链接时打开。开发命令禁用 Next.js 遥测。
 
-```bash
-cd frontend
-npm run qa:all                       # 一条命令跑完：类型 → 生产构建 → 双主题视觉回归
-                                     # → 交互冒烟 → 可达性审计
+## 怎样使用
+
+- **研究路线**：三个方向各四个阶段，点击方法进入导读。箭头表示建议阅读顺序，不代表引用或严格的历史继承关系。
+- **资料库**：按方向、类型、阅读状态、荣誉筛选；搜索名称、方法、会议或年份。
+- **论文详情**：查看核心问题、入选理由、阅读边界、原始来源与后续阅读。
+- **阅读记录**：标记待读、在读、已读；记笔记，导入或导出 JSON 备份。笔记输入框失焦时保存，也可点击保存。
+- **资料与来源**：数据集、代码、基准、导读及收录标准。
+
+笔记仅保存在当前浏览器的 localStorage。清理浏览器数据或更换浏览器前请导出。导入会校验格式，**保留所有同名已有记录**，只添加当前没有的记录；未收录的论文 ID 被忽略。没有云同步。不同端口和 localhost / 127.0.0.1 是不同的浏览器存储空间。
+
+## 收录原则
+
+1. 只收录对三个方向有直接阅读价值的资料，注明「为何收录」与「注意什么」。
+2. 历史正式论文以相关重要会议为主，补充机器人领域重点 RSS、CoRL 和少量关键期刊。CCF 标签采用 **2026 目录**，不追溯冒充发表当年等级；RSS、CoRL 不硬套 CCF。
+3. Oral、Spotlight、Best Paper 必须有可查证据；个人精选不是官方荣誉。详情页链接到对应依据。
+4. 普通预印本限 2026 年，项目页、代码和实验证据优先；有 github.io 并不自动入选。技术报告独立分类，可早于 2026 年。
+5. 当前导读基于项目、摘要和发表信息核验，不宣称逐篇完成全文精读或独立复现。
+6. 可lip文字稿用于整理技术脉络与阅读问题，学术事实回查原文。合集与主题稿去重比对，不将重复内容当成多份独立证据。
+
+所有目录内容在 [frontend/content/catalog.json](frontend/content/catalog.json) 人工维护。新增条目后加入一个对应阶段，并运行目录测试。更新 frontierYear 时，应重新审查旧预印本的发表状态，不能只改年份绕过收录门槛。
+
+## 验证
+
+```powershell
+npm test
+npm run typecheck
+npm run build:check
 ```
 
-单项：
+测试检查目录引用、年份与分类门槛、荣誉来源、笔记备份往返、导入冲突与异常数据。生产构建使用 frontend/.next-production；开发使用 frontend/.next-local，保留旧缓存不混用。
 
-```bash
-cd frontend
-npx tsc --noEmit                     # 类型
-npm run build:check                  # 生产构建（含 lint），构建到一次性目录，可与 dev 并存
-npx next build                       # 常规生产构建（会占用 .next）
-node visual-qa.mjs <前缀> both light   # 9 个页面 × 1440/390 截图，检出横向溢出与控制台报错
-node visual-qa.mjs <前缀> both dark    # 同上，深色主题
-node interaction-qa.mjs              # 14 项真实操作冒烟（主题持久化、即时检索、拓扑定位、
-                                     # 分页筛选、关注撤销、移动端抽屉、404 恢复）
-node a11y-qa.mjs                     # 结构可达性审计（唯一 h1、地标与可访问名称、
-                                     # 重复 id、svg/图片替代文本、焦点可见性）
+如需运行验证后的生产版本：
+
+```powershell
+$env:NEXT_DIST_DIR = ".next-production"
+npm --prefix "frontend" start
 ```
 
-截图输出到 `.qa/shots/`（已 gitignore）。
+## 结构
 
-> 三维画布是持续动画的 WebGL，`chrome --headless --screenshot` 抓不到帧（会得到一张全黑的
-> 假阴性图）。视觉验证必须走 Playwright。
-
-设计令牌、原语与文案约定见 [docs/design-system.md](docs/design-system.md)。
-
-## 目录结构
-
-```
-taxonomy/taxonomy.yaml   领域树定义（即代码）
-routes/routes.yaml       技术路线族定义（即代码：路线/阶段/方法节点/演进边/闭环/契约/矩阵）
-backend/                 FastAPI：API + ingest 管道 + 测试
-  app/api/               nodes/papers/search/watch 路由
-  app/ingest/            arXiv & OpenAlex 适配器、去重、规则分类、CLI
-frontend/                Next.js 15（App Router）+ Tailwind v4 + ECharts
-docs/                    调研报告、API 契约
-docker-compose.yml       db(Postgres) + api + web + ingest(tools profile)
+```text
+frontend/content/catalog.json    人工维护的论文、路线、资料
+frontend/app/                    首页、资料库、阅读记录与详情
+frontend/components/             路线、卡片、筛选和阅读交互
+frontend/lib/                    目录访问与笔记格式
+frontend/tests/                  目录与本地记录验证
+scripts/dev.mjs                  单命令启动与浏览器预览
+docs/                            配色、来源边界与验收记录
 ```
 
-## 数据来源与致谢
+本次按个人资料库目标替换了旧 FastAPI、全领域聚合、自动抓取、技能发现六路线和 3D 拓扑。采用直接可读的二维阶段图，减少遮挡与操作成本。原有 data/papergit.db 保留，未删除、未迁移进精选目录；旧数据库不再参与应用运行。
 
-[arXiv](https://arxiv.org)（Atom API，遵守 ~1 请求/3 秒限速）· [OpenAlex](https://openalex.org)（引用数与 venue 回填）。元数据仅用于研究与展示。
+视觉参考：[paper-figure 的 ASPIRE 架构图](https://github.com/skywhite1024/paper-figure/blob/main/output/aspire/aspire-figure-1.png)。借鉴浅色分组、蓝绿暖橙与清晰连线；界面独立实现，不复制论文插图或品牌图标。

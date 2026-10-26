@@ -9,10 +9,10 @@ export default function GlobalError({
 }) {
   return (
     <html lang="zh-CN">
-      <body style={{ margin: 0, background: "#f7f8fa", color: "#14181f", font: "14px/1.7 system-ui, sans-serif" }}>
+      <body style={{ margin: 0, background: "#faf9f5", color: "#302f2b", font: "14px/1.7 system-ui, sans-serif" }}>
         <div style={{ maxWidth: 520, margin: "18vh auto", padding: 24, textAlign: "center" }}>
           <h1 style={{ fontSize: 18, margin: "0 0 8px" }}>应用出现异常</h1>
-          <p style={{ color: "#5b6472", margin: "0 0 20px" }}>
+          <p style={{ color: "#5c5952", margin: "0 0 20px" }}>
             {error?.digest ? `错误编号 ${error.digest}` : "请重试加载页面。"}
           </p>
           <button
@@ -21,7 +21,7 @@ export default function GlobalError({
               padding: "8px 18px",
               borderRadius: 8,
               border: 0,
-              background: "#4f46e5",
+              background: "#9e4f35",
               color: "#fff",
               fontSize: 14,
               cursor: "pointer",

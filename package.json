@@ -1,0 +1,14 @@
+{
+  "name": "papergit",
+  "private": true,
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "test": "npm --prefix \"frontend\" test",
+    "build:check": "npm --prefix \"frontend\" run build:check",
+    "build:pages": "npm --prefix \"frontend\" run build:pages",
+    "typecheck": "npm --prefix \"frontend\" run typecheck"
+  },
+  "engines": {
+    "node": ">=22.18.0"
+  }
+}

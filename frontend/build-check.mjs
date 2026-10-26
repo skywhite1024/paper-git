@@ -1,29 +1,27 @@
-// Production build gate that coexists with `next dev`.
-// next dev owns .next; building there would break the running dev server,
-// so this verifies the build into a throwaway distDir instead.
+// Verify production output without disturbing the running development app.
 import { spawnSync } from "node:child_process";
-import { copyFileSync, mkdtempSync, rmSync } from "node:fs";
-import { tmpdir } from "node:os";
+import { readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const here = dirname(fileURLToPath(import.meta.url));
-const dist = ".next-verify";
 const tsconfig = join(here, "tsconfig.json");
-// `next build` rewrites tsconfig.json (expanding arrays and appending the
-// distDir's types path); a verification command must not dirty tracked config.
-const tsBackup = join(mkdtempSync(join(tmpdir(), "papergit-ts-")), "tsconfig.json");
-
-copyFileSync(tsconfig, tsBackup);
-rmSync(join(here, dist), { recursive: true, force: true });
-
-const run = spawnSync("next", ["build"], {
-  stdio: "inherit",
-  shell: process.platform === "win32",
-  env: { ...process.env, NEXT_DIST_DIR: dist },
-});
-
-copyFileSync(tsBackup, tsconfig);
-rmSync(dirname(tsBackup), { recursive: true, force: true });
-rmSync(join(here, dist), { recursive: true, force: true });
-process.exit(run.status ?? 1);
+const original = readFileSync(tsconfig);
+const pages = process.argv.includes("--pages");
+let status = 1;
+try {
+  const run = spawnSync(process.execPath, [join(here, "node_modules/next/dist/bin/next"), "build"], {
+    cwd: here, stdio: "inherit", windowsHide: true,
+    env: { ...process.env, NEXT_DIST_DIR: pages ? ".next-pages" : ".next-production", NEXT_TELEMETRY_DISABLED: "1", GITHUB_PAGES: pages ? "true" : "false" },
+  });
+  status = run.status ?? 1;
+} finally {
+  // Next can add its generated types directory; keep the checked-in config stable.
+  writeFileSync(tsconfig, original);
+}
+if (pages && status === 0) {
+  writeFileSync(join(here, ".next-pages/.nojekyll"), "");
+  const verify = spawnSync(process.execPath, [join(here, "verify-pages.mjs")], { cwd: here, stdio: "inherit", windowsHide: true });
+  status = verify.status ?? 1;
+}
+process.exit(status);
