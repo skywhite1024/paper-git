@@ -1,0 +1,519 @@
+{
+  "act": {
+    "url": "https://arxiv.org/pdf/2304.13705",
+    "page": 4,
+    "figure": 4,
+    "crop": [
+      48,
+      48,
+      564,
+      181
+    ],
+    "methodPages": [
+      4,
+      5
+    ],
+    "sha256": "2e2fe25860f5f9cee9e655a2714e9f2264a7a5078bcd267c16d3f39af461345a"
+  },
+  "aspire": {
+    "url": "https://research.nvidia.com/labs/gear/aspire/assets/aspire.pdf?v=20261016",
+    "page": 2,
+    "figure": 1,
+    "crop": [
+      60,
+      82,
+      534,
+      382
+    ],
+    "methodPages": [
+      3
+    ],
+    "sha256": "92e44067d236b985a2d64f82c3db593d106c27a669a05ce1f128bec0e9e548b1"
+  },
+  "daydreamer": {
+    "url": "https://proceedings.mlr.press/v205/wu23c/wu23c.pdf",
+    "page": 3,
+    "figure": 3,
+    "crop": [
+      106,
+      50,
+      507,
+      224
+    ],
+    "methodPages": [
+      3
+    ],
+    "sha256": "74df6e52295b6b7408dbc9d8eab44dd3c09b8d6e5a4f25e89ea3a87d7f3d5108"
+  },
+  "diamond": {
+    "url": "https://arxiv.org/pdf/2405.12399",
+    "page": 2,
+    "figure": 1,
+    "crop": [
+      107,
+      65,
+      311,
+      289
+    ],
+    "methodPages": [
+      2,
+      3
+    ],
+    "sha256": "842ff972404c74ca4bac9d2f37a6d309506c19eb3f2efa3e0daf75d6abc19707"
+  },
+  "dino-wm": {
+    "url": "https://arxiv.org/pdf/2411.04983",
+    "page": 4,
+    "figure": 2,
+    "crop": [
+      53,
+      63,
+      544,
+      217
+    ],
+    "methodPages": [
+      4
+    ],
+    "sha256": "7683c366109c091a47b7ae8a3d6520131edd3db1a5aa594d74c7636d2f9745d6"
+  },
+  "dreamerv2": {
+    "url": "https://arxiv.org/pdf/2010.02193.pdf",
+    "page": 3,
+    "figure": 2,
+    "crop": [
+      106,
+      63,
+      507,
+      284
+    ],
+    "methodPages": [
+      3
+    ],
+    "sha256": "037dce26de328dd86ce4ab71dfb54f44513fef49a02f2995a1c05848ccef158f"
+  },
+  "dreamerv3": {
+    "url": "https://arxiv.org/pdf/2301.04104",
+    "page": 3,
+    "figure": 3,
+    "crop": [
+      69,
+      54,
+      545,
+      262
+    ],
+    "methodPages": [
+      3
+    ],
+    "sha256": "d0385798e8bada8e81b915c1743be81d9ce8776f12ed937e09351995e099ce37"
+  },
+  "dreamzero": {
+    "url": "https://arxiv.org/pdf/2602.15922",
+    "page": 6,
+    "figure": 4,
+    "crop": [
+      61,
+      83,
+      535,
+      248
+    ],
+    "methodPages": [
+      6
+    ],
+    "sha256": "cb91d24a04717a6c77fd39594af7f3f85a05317b7078b0d9c8d8b4ddd932f483"
+  },
+  "eureka": {
+    "url": "https://arxiv.org/pdf/2310.12931",
+    "page": 2,
+    "figure": 2,
+    "crop": [
+      107,
+      76,
+      507,
+      277
+    ],
+    "methodPages": [
+      3
+    ],
+    "sha256": "aa3b6350a92e4e8b1d894d0879d0af72df2fe76b3fe5d9341151924cb5884f74"
+  },
+  "genie": {
+    "url": "https://raw.githubusercontent.com/mlresearch/v235/main/assets/bruce24a/bruce24a.pdf",
+    "page": 3,
+    "figure": 3,
+    "crop": [
+      54,
+      67,
+      544,
+      189
+    ],
+    "methodPages": [
+      3
+    ],
+    "sha256": "0cb07aa892f30ac7d717d7d623cfbf0f5ac9a29b88c066b996c01b0654738c70"
+  },
+  "cosmos3": {
+    "url": "https://research.nvidia.com/labs/cosmos-lab/cosmos3/technical-report.pdf",
+    "page": 11,
+    "figure": 5,
+    "crop": [
+      61,
+      82,
+      536,
+      294
+    ],
+    "methodPages": [
+      11
+    ],
+    "sha256": "d8f554d76b37d8c2ba504c628d7814176d7b0383c6c3bfa9f8389decda228d6e"
+  },
+  "diffusion-policy": {
+    "url": "https://arxiv.org/pdf/2303.04137v4",
+    "page": 3,
+    "figure": 3,
+    "crop": [
+      48,
+      47,
+      564,
+      199
+    ],
+    "methodPages": [
+      3
+    ],
+    "sha256": "75a57946e2cef790775ca5c667b00befc8ea7d64c3a02c5ced3e3d173354640c"
+  },
+  "groot-n1": {
+    "url": "https://arxiv.org/pdf/2503.14734",
+    "page": 4,
+    "figure": 3,
+    "crop": [
+      61,
+      80,
+      534,
+      338
+    ],
+    "methodPages": [
+      4
+    ],
+    "sha256": "76e38cf679637b816b16edf7170340883dd09175bf334aeeaed49392777731b9"
+  },
+  "hirobot": {
+    "url": "https://raw.githubusercontent.com/mlresearch/v267/main/assets/shi25d/shi25d.pdf",
+    "page": 4,
+    "figure": 2,
+    "crop": [
+      54,
+      65,
+      291,
+      243
+    ],
+    "methodPages": [
+      4
+    ],
+    "sha256": "9074cb838cfa9d697e771cadf6be72b994ad0e1344ad1c50e3003775244f3f8f"
+  },
+  "ijepa": {
+    "url": "https://openaccess.thecvf.com/content/CVPR2023/papers/Assran_Self-Supervised_Learning_From_Images_With_a_Joint-Embedding_Predictive_Architecture_CVPR_2023_paper.pdf",
+    "page": 3,
+    "figure": 3,
+    "crop": [
+      308,
+      63,
+      547,
+      307
+    ],
+    "methodPages": [
+      3
+    ],
+    "sha256": "2e2a21dfb20b087eb2a1d95ce8a7dab687c344f68cde91cfa02e03337e93b1a2"
+  },
+  "fast": {
+    "url": "https://www.roboticsproceedings.org/rss21/p012.pdf",
+    "page": 5,
+    "figure": 4,
+    "crop": [
+      48,
+      47,
+      564,
+      243
+    ],
+    "methodPages": [
+      4,
+      5
+    ],
+    "sha256": "944be535b60314b62a9ee55df69cc90e14b84ae391b07a83c156b1845bf20acf"
+  },
+  "cosmos": {
+    "url": "https://arxiv.org/pdf/2501.03575",
+    "page": 3,
+    "figure": 2,
+    "crop": [
+      61,
+      83,
+      536,
+      353
+    ],
+    "methodPages": [
+      3,
+      5
+    ],
+    "sha256": "c3c61f0a6f9a32700fc47d9898db573628d72bdea07562ca319ceba046e95c84"
+  },
+  "cosmos-policy": {
+    "url": "https://arxiv.org/pdf/2601.16163",
+    "page": 4,
+    "figure": 2,
+    "crop": [
+      107,
+      73,
+      506,
+      249
+    ],
+    "methodPages": [
+      4
+    ],
+    "sha256": "05696475c9b5481afbf88673a65f80a46cf3fb87a5755c1410e83d0f468cc6e0"
+  },
+  "lingbot-va": {
+    "url": "https://raw.githubusercontent.com/Robbyant/lingbot-va/main/LingBot_VA_paper.pdf",
+    "page": 4,
+    "figure": 2,
+    "crop": [
+      69,
+      70,
+      544,
+      255
+    ],
+    "methodPages": [
+      4
+    ],
+    "sha256": "e791faff04ff10eccb62eef7952eabbcb2c654abc4d73f4b4a8d1f683a6e48ba"
+  },
+  "openx": {
+    "url": "https://arxiv.org/pdf/2310.08864",
+    "page": 4,
+    "figure": 3,
+    "crop": [
+      53,
+      46,
+      559,
+      164
+    ],
+    "methodPages": [
+      4
+    ],
+    "sha256": "13f16aff5afdee583dc25b3c570e9bb0cf6baefb59b539928d919588cd8d9246"
+  },
+  "palm-e": {
+    "url": "https://palm-e.github.io/assets/palm-e.pdf",
+    "page": 1,
+    "figure": 1,
+    "crop": [
+      54,
+      192,
+      544,
+      362
+    ],
+    "methodPages": [
+      4
+    ],
+    "sha256": "535cc3c7fe1ae7428b9ac7d6a3738a0529975aadc372b2229ea0cb2ce724576a"
+  },
+  "pi05": {
+    "url": "https://www.pi.website/download/pi05.pdf",
+    "page": 4,
+    "figure": 3,
+    "crop": [
+      48,
+      48,
+      564,
+      271
+    ],
+    "methodPages": [
+      4,
+      5
+    ],
+    "sha256": "f5d0aa0b652f188e6649a83a54d704e14393299676754c01525e3964767db7c8"
+  },
+  "pi07": {
+    "url": "https://www.pi.website/download/pi07.pdf",
+    "page": 4,
+    "figure": 2,
+    "crop": [
+      48,
+      48,
+      564,
+      315
+    ],
+    "methodPages": [
+      4
+    ],
+    "sha256": "d718dbcfcf294f87a2179052dcd2e783ea1f542f484d05dfa2ce139bc00d7d5b"
+  },
+  "pistar06": {
+    "url": "https://www.pi.website/download/pistar06.pdf",
+    "page": 1,
+    "figure": 1,
+    "crop": [
+      48,
+      176,
+      564,
+      389
+    ],
+    "methodPages": [
+      4
+    ],
+    "sha256": "6b37590a1f17e415df93b456a65ad399788126c5a610e85122e69e471a509223"
+  },
+  "planet": {
+    "url": "https://arxiv.org/pdf/1811.04551.pdf",
+    "page": 4,
+    "figure": 2,
+    "crop": [
+      54,
+      59,
+      543,
+      201
+    ],
+    "methodPages": [
+      3,
+      4
+    ],
+    "sha256": "abac727526e6a45669d3ab9957126587e22aacf4dc9bcd60ffe5c853108e5bcc"
+  },
+  "robogen": {
+    "url": "https://arxiv.org/pdf/2311.01455",
+    "page": 4,
+    "figure": 2,
+    "crop": [
+      54,
+      66,
+      544,
+      266
+    ],
+    "methodPages": [
+      4
+    ],
+    "sha256": "4146b2443205d6e4f8137e14fb20a91165da9a70c12306a300bc71fcae53b022"
+  },
+  "tdmpc2": {
+    "url": "https://arxiv.org/pdf/2310.16828",
+    "page": 3,
+    "figure": 3,
+    "crop": [
+      337,
+      412,
+      506,
+      554
+    ],
+    "methodPages": [
+      3
+    ],
+    "sha256": "99832c555b66665ad1e26cd48e75ea9dda4f3750175b993e7ed5b8dfe399b9e0"
+  },
+  "vjepa": {
+    "url": "https://arxiv.org/pdf/2404.08471",
+    "page": 4,
+    "figure": 3,
+    "crop": [
+      55,
+      45,
+      557,
+      193
+    ],
+    "methodPages": [
+      4
+    ],
+    "sha256": "fb84f79be128e7425263e8674fbc3f2ec991575c4b5880556cfb8f5fa9fd91ba"
+  },
+  "unipi": {
+    "url": "https://papers.nips.cc/paper_files/paper/2023/file/1d5b9233ad716a43be5c0d3023cb82d0-Paper-Conference.pdf",
+    "page": 4,
+    "figure": 2,
+    "crop": [
+      284,
+      258,
+      506,
+      420
+    ],
+    "methodPages": [
+      4
+    ],
+    "sha256": "fa27757c48b81118ec6eea597328166af731051083a7e76785e78cf0fa16ed43"
+  },
+  "worldarena": {
+    "url": "https://arxiv.org/pdf/2602.08971",
+    "page": 6,
+    "figure": 3,
+    "crop": [
+      53,
+      66,
+      543,
+      311
+    ],
+    "methodPages": [
+      6
+    ],
+    "sha256": "e41ab0f9ce75adad027e4e77402e1bbd77a50ab12340a6517a300d2edc94a6e6"
+  },
+  "gemini-robotics": {
+    "url": "https://arxiv.org/pdf/2503.20020",
+    "page": 2,
+    "figure": 1,
+    "crop": [
+      61,
+      85,
+      535,
+      359
+    ],
+    "methodPages": [
+      2
+    ],
+    "sha256": "f2c1ab4e73a76013b9ebf5a4ff90bb3d291eee0730304d3ebf4531256a204b78"
+  },
+  "lewm": {
+    "url": "https://arxiv.org/pdf/2603.19312",
+    "page": 1,
+    "figure": 1,
+    "crop": [
+      107,
+      451,
+      507,
+      598
+    ],
+    "methodPages": [
+      1,
+      3
+    ],
+    "sha256": "553a01501ac74ec56721cfdb936d3825ac941734133a1fd761f614c01b6887e9"
+  },
+  "uwm": {
+    "url": "https://arxiv.org/pdf/2504.02792",
+    "page": 4,
+    "figure": 2,
+    "crop": [
+      48,
+      47,
+      564,
+      202
+    ],
+    "methodPages": [
+      4
+    ],
+    "sha256": "00412b2405481445df0dfc43dbc1037f7af63b9eb66fa25280844d9d5add2b88"
+  },
+  "octo": {
+    "url": "https://arxiv.org/pdf/2405.12213",
+    "page": 3,
+    "figure": 2,
+    "crop": [
+      48,
+      47,
+      564,
+      306
+    ],
+    "methodPages": [
+      3
+    ],
+    "sha256": "73bff297cfafe523319162124e6b7f96919c0930e0a380f307255c4c7464ac93"
+  }
+}

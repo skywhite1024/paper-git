@@ -1,10 +1,10 @@
 export type Point = { x: number; y: number };
 export type Camera = Point & { zoom: number };
 export type Bounds = Point & { width: number; height: number };
-export const MIN_ZOOM = .05;
+export const MIN_ZOOM = .02;
 export const MAX_ZOOM = 2.5;
-export const CARD_WIDTH = 320;
-export const CARD_HEIGHT = 230;
+export const CARD_WIDTH = 360;
+export const CARD_HEIGHT = 260;
 
 // Keep the world point underneath the cursor fixed during zooming.
 export function zoomAt(camera: Camera, zoom: number, anchor: Point): Camera {
@@ -18,25 +18,77 @@ export function fitBounds(bounds: Bounds, viewport: { width: number; height: num
   return { zoom, x: (viewport.width - bounds.width * zoom) / 2 - bounds.x * zoom, y: (viewport.height - bounds.height * zoom) / 2 - bounds.y * zoom };
 }
 
-type LayoutTrack = { id: string; stages: { id: string; name: string; papers: string[] }[] };
+type LayoutTrack = { id: string; stages: { id: string; name: string; question?: string; papers: string[] }[] };
+const ringRadii = [{ rx: 800, ry: 600 }, { rx: 1350, ry: 1010 }, { rx: 1900, ry: 1420 }];
+const ringCapacity = [2, 3, 4];
+
+export function orbitPoint(center: Point, rx: number, ry: number, angle: number): Point {
+  // Node and browser trig implementations can differ in the last decimal places.
+  return { x: Math.round((center.x + rx * Math.cos(angle)) * 1000) / 1000, y: Math.round((center.y + ry * Math.sin(angle)) * 1000) / 1000 };
+}
+
 export function createAtlasLayout(tracks: LayoutTrack[]) {
-  const origins = [{ x: 120, y: 120 }, { x: 2120, y: 160 }, { x: 2070, y: 1840 }];
-  const territories = tracks.map((track, index) => ({
-    id: track.id, ...origins[index], width: 1720,
-    height: Math.max(...track.stages.map((stage) => stage.papers.length)) * 270 + 400,
+  const origins = [{ x: 120, y: 160 }, { x: 4660, y: 120 }, { x: 4250, y: 2850 }];
+  const territories = tracks.map((track, index) => {
+    const count = Math.max(...track.stages.map((stage) => stage.papers.length));
+    const rings = count > 5 ? 3 : count > 2 ? 2 : 1;
+    const outer = ringRadii[rings - 1];
+    const width = outer.rx * 2 + 600, height = outer.ry * 2 + 540;
+    const origin = origins[index];
+    return { id: track.id, ...origin, width, height, rings, center: { x: origin.x + width / 2, y: origin.y + height / 2 } };
+  });
+  const stages = tracks.flatMap((track, index) => track.stages.map((stage, sector) => {
+    const angle = (-135 + sector * 90) * Math.PI / 180;
+    const center = territories[index].center;
+    return { id: stage.id, name: stage.name, question: stage.question, track: track.id, count: stage.papers.length, sector,
+      ...orbitPoint(center, 440, 325, angle), center,
+    };
   }));
-  const stages = tracks.flatMap((track, index) => track.stages.map((stage, column) => ({
-    id: stage.id, name: stage.name, track: track.id, count: stage.papers.length,
-    x: territories[index].x + 120 + column * 370, y: territories[index].y + 225,
-  })));
-  const points = tracks.flatMap((track, index) => track.stages.flatMap((stage, column) => stage.papers.map((id, row) => ({
-    id, track: track.id, stage: stage.id,
-    x: territories[index].x + 120 + column * 370, y: territories[index].y + 290 + row * 270,
-  }))));
+  const points = tracks.flatMap((track, index) => track.stages.flatMap((stage, sector) => {
+    let offset = 0;
+    return ringRadii.flatMap(({ rx, ry }, ring) => {
+      const ids = stage.papers.slice(offset, offset + ringCapacity[ring]);
+      const start = offset; offset += ids.length;
+      return ids.map((id, step) => {
+        // Alternate arc direction to continue outward without crossing another branch.
+        const position = ring % 2 ? ids.length - 1 - step : step;
+        const angle = (-180 + sector * 90 + (ids.length === 1 ? 45 : 15 + position * 60 / (ids.length - 1))) * Math.PI / 180;
+        const point = orbitPoint(territories[index].center, rx, ry, angle);
+        return { id, track: track.id, stage: stage.id, ring, sector, angle, order: start + step + 1,
+          x: point.x - CARD_WIDTH / 2, y: point.y - CARD_HEIGHT / 2 };
+      });
+    });
+  }));
+  const rings = territories.flatMap((area) => ringRadii.slice(0, area.rings).map((radii, index) => ({ ...radii, ...area.center, track: area.id, index })));
   const bounds = { x: 0, y: 0, width: Math.max(...territories.map((island) => island.x + island.width)) + 100, height: Math.max(...territories.map((island) => island.y + island.height)) + 100 };
-  return { territories, stages, points, bounds };
+  return { territories, stages, points, rings, bounds };
+}
+
+type RoutePoint = Point & { ring: number; angle: number; stage: string; track: string };
+export function routeGeometry(from: RoutePoint, to: RoutePoint, center: Point) {
+  const a = { x: from.x + CARD_WIDTH / 2, y: from.y + CARD_HEIGHT / 2 };
+  const b = { x: to.x + CARD_WIDTH / 2, y: to.y + CARD_HEIGHT / 2 };
+  if (from.track === to.track && from.stage === to.stage && from.ring === to.ring) {
+    const { rx, ry } = ringRadii[from.ring];
+    const boundary = (start: number, end: number, card: Point) => {
+      let low = 0, high = 1;
+      for (let i = 0; i < 24; i++) {
+        const mid = (low + high) / 2, p = orbitPoint(center, rx, ry, start + (end - start) * mid);
+        if (Math.abs(p.x - card.x) < CARD_WIDTH / 2 + 10 && Math.abs(p.y - card.y) < CARD_HEIGHT / 2 + 10) low = mid; else high = mid;
+      }
+      return orbitPoint(center, rx, ry, start + (end - start) * high);
+    };
+    const start = boundary(from.angle, to.angle, a), end = boundary(to.angle, from.angle, b);
+    return { d: `M${start.x} ${start.y} A${rx} ${ry} 0 0 ${to.angle > from.angle ? 1 : 0} ${end.x} ${end.y}`, label: orbitPoint(center, rx, ry, (from.angle + to.angle) / 2) };
+  }
+  const dx = b.x - a.x, dy = b.y - a.y;
+  const inset = Math.min((CARD_WIDTH / 2 + 12) / Math.max(Math.abs(dx), .001), (CARD_HEIGHT / 2 + 12) / Math.max(Math.abs(dy), .001));
+  const start = { x: a.x + dx * inset, y: a.y + dy * inset };
+  const end = { x: b.x - dx * inset, y: b.y - dy * inset };
+  const bend = from.track === to.track && from.stage === to.stage ? .08 : .14;
+  return { d: `M${start.x} ${start.y} C${start.x + dx * .3 - dy * bend} ${start.y + dy * .3 + dx * bend} ${end.x - dx * .3 - dy * bend} ${end.y - dy * .3 + dx * bend} ${end.x} ${end.y}`, label: { x: (a.x + b.x) / 2 - dy * bend * .75, y: (a.y + b.y) / 2 + dx * bend * .75 } };
 }
 
 export function islandPath({ x, y, width: w, height: h }: Bounds) {
-  return `M${x + w * .15} ${y + 25} C${x + w * .36} ${y - 30} ${x + w * .7} ${y + 40} ${x + w * .85} ${y + 12} Q${x + w + 35} ${y + h * .08} ${x + w - 12} ${y + h * .3} C${x + w + 40} ${y + h * .55} ${x + w - 20} ${y + h * .75} ${x + w - 12} ${y + h * .88} Q${x + w * .92} ${y + h + 40} ${x + w * .68} ${y + h - 8} C${x + w * .42} ${y + h + 35} ${x + w * .18} ${y + h - 10} ${x + w * .12} ${y + h - 25} Q${x - 38} ${y + h * .88} ${x + 8} ${y + h * .66} C${x - 40} ${y + h * .43} ${x + 14} ${y + h * .28} ${x + 3} ${y + h * .16} Q${x + 10} ${y + 45} ${x + w * .15} ${y + 25}Z`;
+  return `M${x + w * .5} ${y} C${x + w * .75} ${y - 25} ${x + w * .98} ${y + h * .18} ${x + w} ${y + h * .43} C${x + w * 1.04} ${y + h * .72} ${x + w * .75} ${y + h * 1.04} ${x + w * .48} ${y + h} C${x + w * .21} ${y + h * 1.06} ${x - w * .03} ${y + h * .75} ${x} ${y + h * .47} C${x - w * .02} ${y + h * .2} ${x + w * .25} ${y + 15} ${x + w * .5} ${y}Z`;
 }

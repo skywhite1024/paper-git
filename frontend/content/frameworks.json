@@ -169,5 +169,651 @@
     "mechanism": "关键点约束 + 分层优化",
     "outputs": "多阶段机器人动作",
     "change": "与 VoxPoser 的稠密价值图对照，ReKep 用关键点关系表达任务约束。"
+  },
+  "planet": {
+    "figure": {
+      "file": "planet.webp",
+      "url": "https://arxiv.org/pdf/1811.04551.pdf#page=4",
+      "source": "https://arxiv.org/pdf/1811.04551.pdf#page=4",
+      "credit": "PlaNet · 原文 Fig. 2 · p.4",
+      "title": "随机与确定状态结合的 RSSM",
+      "caption": "图中对比纯确定、纯随机与混合状态模型。PlaNet 用 RSSM 预测潜状态，并通过在线规划选择动作。"
+    },
+    "steps": [
+      "编码像素观测",
+      "潜空间展开候选动作",
+      "执行规划的第一步"
+    ],
+    "inputs": "图像、动作与奖励",
+    "mechanism": "RSSM + 潜空间模型预测控制",
+    "outputs": "在线规划的动作",
+    "change": "相对 World Models 的分离建模，PlaNet 将随机状态与确定记忆结合，并在潜空间直接搜索动作。"
+  },
+  "dreamerv2": {
+    "figure": {
+      "file": "dreamerv2.webp",
+      "url": "https://arxiv.org/pdf/2010.02193.pdf#page=3",
+      "source": "https://arxiv.org/pdf/2010.02193.pdf#page=3",
+      "credit": "DreamerV2 · 原文 Fig. 2 · p.3",
+      "title": "离散潜状态的世界模型",
+      "caption": "CNN 编码图像，RSSM 同时维护循环状态和多个类别变量；预测奖励、折扣并重建观测。"
+    },
+    "steps": [
+      "图像编码",
+      "离散 RSSM 预测",
+      "想象轨迹训练策略"
+    ],
+    "inputs": "图像、动作、奖励与终止信号",
+    "mechanism": "离散 RSSM + KL balancing + actor-critic",
+    "outputs": "从想象轨迹学出的策略",
+    "change": "延续 Dreamer 的想象策略学习，将随机潜变量改为离散类别，并调整梯度和 KL 训练方式。"
+  },
+  "dreamerv3": {
+    "figure": {
+      "file": "dreamerv3.webp",
+      "url": "https://arxiv.org/pdf/2301.04104#page=3",
+      "source": "https://arxiv.org/pdf/2301.04104#page=3",
+      "credit": "DreamerV3 · 原文 Fig. 3 · p.3",
+      "title": "世界模型与 actor-critic 的共同训练",
+      "caption": "左侧从经验学习离散潜状态动力学，右侧让 actor 和 critic 在模型预测的表征轨迹上学习。"
+    },
+    "steps": [
+      "从回放学习世界模型",
+      "在潜空间想象",
+      "更新 actor 与 critic"
+    ],
+    "inputs": "多领域的观测、动作与奖励",
+    "mechanism": "RSSM + 稳健损失与尺度归一化",
+    "outputs": "使用统一配置训练的策略",
+    "change": "保留 DreamerV2 的主要结构，通过信号变换、归一化与损失平衡改善跨任务训练稳定性；结构相似不代表训练配方相同。"
+  },
+  "tdmpc2": {
+    "figure": {
+      "file": "tdmpc2.webp",
+      "url": "https://arxiv.org/pdf/2310.16828#page=3",
+      "source": "https://arxiv.org/pdf/2310.16828#page=3",
+      "credit": "TD-MPC2 · 原文 Fig. 3 · p.3",
+      "title": "不重建观测的控制世界模型",
+      "caption": "编码器形成归一化潜状态，递归预测动作、奖励和终端价值；图中没有用于像素重建的解码器。"
+    },
+    "steps": [
+      "编码状态与任务",
+      "预测奖励及价值",
+      "滚动优化动作序列"
+    ],
+    "inputs": "观测、动作、奖励与任务标识",
+    "mechanism": "隐式潜空间动力学 + TD 学习 + MPC",
+    "outputs": "规划动作",
+    "change": "与 Dreamer 的想象 actor 学习作对照：TD-MPC2 用面向控制的隐式世界模型进行在线轨迹优化。"
+  },
+  "daydreamer": {
+    "figure": {
+      "file": "daydreamer.webp",
+      "url": "https://proceedings.mlr.press/v205/wu23c/wu23c.pdf#page=3",
+      "source": "https://proceedings.mlr.press/v205/wu23c/wu23c.pdf#page=3",
+      "credit": "DayDreamer · 原文 Fig. 3 · p.3",
+      "title": "在真实机器人上学习与想象",
+      "caption": "左侧融合多种传感器并训练 RSSM，右侧在潜空间进行策略学习；采集与学习并行，以适应真实硬件的延迟。"
+    },
+    "steps": [
+      "真机采集经验",
+      "学习多模态世界模型",
+      "想象中更新策略"
+    ],
+    "inputs": "机器人传感器、动作与任务奖励",
+    "mechanism": "Dreamer + 并行数据采集与学习",
+    "outputs": "真机在线学习的控制策略",
+    "change": "把 Dreamer 路线带到真实机器人，关键在实际反馈、传感器融合和学习执行调度；并不是增加一个视频生成器。"
+  },
+  "unipi": {
+    "figure": {
+      "file": "unipi.webp",
+      "url": "https://papers.nips.cc/paper_files/paper/2023/file/1d5b9233ad716a43be5c0d3023cb82d0-Paper-Conference.pdf#page=4",
+      "source": "https://papers.nips.cc/paper_files/paper/2023/file/1d5b9233ad716a43be5c0d3023cb82d0-Paper-Conference.pdf#page=4",
+      "credit": "UniPi · 原文 Fig. 2 · p.4",
+      "title": "视频计划接上逆动力学",
+      "caption": "语言和初始画面约束视频扩散模型生成未来轨迹，逆动力学模型把相邻画面转为机器人动作。"
+    },
+    "steps": [
+      "给定语言目标与初始帧",
+      "生成视频计划",
+      "逆动力学解码动作"
+    ],
+    "inputs": "文本指令与初始观测",
+    "mechanism": "条件视频扩散 + 逆动力学",
+    "outputs": "计划视频与执行动作",
+    "change": "建立从视频生成到行动的接口；与直接预测动作的策略相比，多了一层可观察的视觉计划。"
+  },
+  "genie": {
+    "figure": {
+      "file": "genie.webp",
+      "url": "https://raw.githubusercontent.com/mlresearch/v235/main/assets/bruce24a/bruce24a.pdf#page=3",
+      "source": "https://raw.githubusercontent.com/mlresearch/v235/main/assets/bruce24a/bruce24a.pdf#page=3",
+      "credit": "Genie · 原文 Fig. 3 · p.3",
+      "title": "从无动作标签视频学习交互环境",
+      "caption": "视频 tokenizer 提供离散视觉 token，潜动作模型从相邻帧学习动作代码，动力学模型据此预测后续视频。"
+    },
+    "steps": [
+      "压缩视频帧",
+      "推断离散潜动作",
+      "预测下一帧"
+    ],
+    "inputs": "无动作标签的视频；交互时输入潜动作",
+    "mechanism": "Video tokenizer + latent action model + dynamics model",
+    "outputs": "可由潜动作控制的视频环境",
+    "change": "与 UniPi 的语言视频计划不同，Genie 从视频中学习可操纵的潜动作接口；潜动作不能直接等同于机器人关节控制量。"
+  },
+  "diamond": {
+    "figure": {
+      "file": "diamond.webp",
+      "url": "https://arxiv.org/pdf/2405.12399#page=2",
+      "source": "https://arxiv.org/pdf/2405.12399#page=2",
+      "credit": "DIAMOND · 原文 Fig. 1 · p.2",
+      "title": "扩散世界中的想象展开",
+      "caption": "横轴为环境时间，纵轴为去噪时间；策略选动作，扩散模型以历史画面和动作条件逐步生成后续观测。"
+    },
+    "steps": [
+      "历史观测与动作条件化",
+      "去噪得到下一帧",
+      "在生成环境中训练策略"
+    ],
+    "inputs": "历史图像与已知动作",
+    "mechanism": "条件扩散世界模型 + 想象中的强化学习",
+    "outputs": "预测画面及学习到的游戏策略",
+    "change": "与 Genie 的无监督潜动作路线对照，DIAMOND 使用真实动作条件，重点研究视觉细节对模型内策略学习的影响。"
+  },
+  "cosmos": {
+    "figure": {
+      "file": "cosmos.webp",
+      "url": "https://arxiv.org/pdf/2501.03575#page=3",
+      "source": "https://arxiv.org/pdf/2501.03575#page=3",
+      "credit": "Cosmos · 原文 Fig. 2 · p.3",
+      "title": "通用世界模型的预训练与专门化",
+      "caption": "原始报告展示通用 WFM 通过各领域数据后训练，适配驾驶、机器人等物理系统；这是模型训练框架图。"
+    },
+    "steps": [
+      "整理与编码大规模视频",
+      "预训练世界基础模型",
+      "面向目标场景后训练"
+    ],
+    "inputs": "视频、文本及目标领域条件",
+    "mechanism": "连续扩散 / 离散自回归视频世界模型",
+    "outputs": "条件未来视频与领域专用世界模型",
+    "change": "从专门环境的世界模型扩展到可后训练的基础模型平台。这里对应 2025 年原始 Cosmos 报告，不能混用 Cosmos3 架构。"
+  },
+  "ijepa": {
+    "figure": {
+      "file": "ijepa.webp",
+      "url": "https://openaccess.thecvf.com/content/CVPR2023/papers/Assran_Self-Supervised_Learning_From_Images_With_a_Joint-Embedding_Predictive_Architecture_CVPR_2023_paper.pdf#page=3",
+      "source": "https://openaccess.thecvf.com/content/CVPR2023/papers/Assran_Self-Supervised_Learning_From_Images_With_a_Joint-Embedding_Predictive_Architecture_CVPR_2023_paper.pdf#page=3",
+      "credit": "I-JEPA · 原文 Fig. 3 · p.3",
+      "title": "图像块之间的表征预测",
+      "caption": "上下文编码器只处理可见区域，预测器利用位置 token 预测目标块的表征；目标编码器通过指数移动平均更新。"
+    },
+    "steps": [
+      "编码可见上下文",
+      "预测目标块特征",
+      "与目标编码器对齐"
+    ],
+    "inputs": "单张图像及上下文 / 目标掩码",
+    "mechanism": "ViT 编码器 + 特征预测器 + EMA 目标编码器",
+    "outputs": "语义图像表征",
+    "change": "学习目标从重建像素变为预测特征；I-JEPA 本身不是动作条件动力学模型，也不直接输出机器人动作。"
+  },
+  "vjepa": {
+    "figure": {
+      "file": "vjepa.webp",
+      "url": "https://arxiv.org/pdf/2404.08471#page=4",
+      "source": "https://arxiv.org/pdf/2404.08471#page=4",
+      "credit": "V-JEPA · 原文 Fig. 3 · p.4",
+      "title": "视频时空掩码的特征预测",
+      "caption": "视频被划分为时空 token；编码器处理未遮挡部分，预测器结合 mask token 回归目标编码器的特征。"
+    },
+    "steps": [
+      "遮挡视频时空块",
+      "编码可见 token",
+      "预测隐藏区域表征"
+    ],
+    "inputs": "无标签视频和时空掩码",
+    "mechanism": "视频 JEPA + 特征回归",
+    "outputs": "可迁移的视频表示",
+    "change": "把 I-JEPA 的特征预测思路扩展到视频时空关系；动作条件规划是后续工作的额外步骤。"
+  },
+  "dino-wm": {
+    "figure": {
+      "file": "dino-wm.webp",
+      "url": "https://arxiv.org/pdf/2411.04983#page=4",
+      "source": "https://arxiv.org/pdf/2411.04983#page=4",
+      "credit": "DINO-WM · 原文 Fig. 2 · p.4",
+      "title": "冻结视觉表征上的目标规划",
+      "caption": "DINOv2 编码当前和目标图像；动力学模型在 patch 特征空间预测未来，通过优化动作使预测表征靠近目标。"
+    },
+    "steps": [
+      "冻结 DINOv2 编码器",
+      "学习动作条件特征动态",
+      "优化到达目标的动作"
+    ],
+    "inputs": "观测历史、动作与目标图像",
+    "mechanism": "冻结 DINOv2 + 因果动态模型 + MPC",
+    "outputs": "目标条件动作序列",
+    "change": "与 V-JEPA 的通用表征预训练作区分：DINO-WM 固定视觉编码器，另学动作条件动态模型，并显式规划。"
+  },
+  "lewm": {
+    "figure": {
+      "file": "lewm.webp",
+      "url": "https://arxiv.org/pdf/2603.19312#page=1",
+      "source": "https://arxiv.org/pdf/2603.19312#page=1",
+      "credit": "LeWorldModel · 原文 Fig. 1 · p.1",
+      "title": "预测损失与高斯正则共同训练",
+      "caption": "编码器与动作条件预测器端到端训练；下一帧特征预测损失配合 SIGReg，约束潜表示并防止塌缩。"
+    },
+    "steps": [
+      "编码连续帧",
+      "预测下一帧表征",
+      "施加 SIGReg 正则"
+    ],
+    "inputs": "图像序列及动作",
+    "mechanism": "端到端 JEPA + 预测损失 + SIGReg",
+    "outputs": "用于目标规划的紧凑潜状态",
+    "change": "与 DINO-WM 的冻结预训练编码器对照，LeWM 从像素端到端学习表示和动力学，强调简单且稳定的防塌缩目标。"
+  },
+  "uwm": {
+    "figure": {
+      "file": "uwm.webp",
+      "url": "https://arxiv.org/pdf/2504.02792#page=4",
+      "source": "https://arxiv.org/pdf/2504.02792#page=4",
+      "credit": "Unified World Models · 原文 Fig. 2 · p.4",
+      "title": "统一视频与动作的扩散训练",
+      "caption": "动作与未来观测分别使用扩散时间步；训练一个联合模型后，通过改变两种模态的噪声状态切换策略、正向和逆动力学推断。"
+    },
+    "steps": [
+      "分别扰动视频与动作",
+      "联合去噪训练",
+      "按条件切换推断方式"
+    ],
+    "inputs": "当前观测、动作及未来观测",
+    "mechanism": "多模态扩散 Transformer + 独立噪声时间步",
+    "outputs": "策略动作、未来视频或逆动力学动作",
+    "change": "将视频与动作放入同一个可条件化的联合分布；相比 UniPi，推断模式不再依赖两个完全分离的模型。"
+  },
+  "cosmos-policy": {
+    "figure": {
+      "file": "cosmos-policy.webp",
+      "url": "https://arxiv.org/pdf/2601.16163#page=4",
+      "source": "https://arxiv.org/pdf/2601.16163#page=4",
+      "credit": "Cosmos Policy · 原文 Fig. 2 · p.4",
+      "title": "将状态、动作和价值注入潜帧",
+      "caption": "把机器人本体状态、动作块、未来图像与价值编码为潜帧，注入 Cosmos-Predict2 的视频扩散序列，再用机器人数据后训练。"
+    },
+    "steps": [
+      "编码多视角图像",
+      "注入状态 / 动作 / 价值潜帧",
+      "条件去噪与规划"
+    ],
+    "inputs": "多视角图像、本体状态与任务条件",
+    "mechanism": "Cosmos-Predict2 + latent frame injection",
+    "outputs": "动作块、未来状态与状态价值",
+    "change": "复用预训练视频模型并以潜帧统一新模态；这里的直接底座是 Cosmos-Predict2，不能把它说成原始 Cosmos 模型的简单改名。"
+  },
+  "dreamzero": {
+    "figure": {
+      "file": "dreamzero.webp",
+      "url": "https://arxiv.org/pdf/2602.15922#page=6",
+      "source": "https://arxiv.org/pdf/2602.15922#page=6",
+      "credit": "DreamZero · 原文 Fig. 4 · p.6",
+      "title": "联合视频动作与真实反馈闭环",
+      "caption": "训练时用共享目标联合预测视频与动作；执行动作块后，把真实观测更新到 KV cache，再预测下一段。"
+    },
+    "steps": [
+      "编码视觉、语言与状态",
+      "联合视频动作 flow matching",
+      "用真实观测更新缓存"
+    ],
+    "inputs": "视觉历史、语言指令与本体状态",
+    "mechanism": "自回归视频动作扩散 Transformer",
+    "outputs": "同步的未来视频和动作块",
+    "change": "在联合视频动作建模上强调时序对齐与实时闭环：执行后的真实反馈替换预测历史，减少滚动误差积累。"
+  },
+  "lingbot-va": {
+    "figure": {
+      "file": "lingbot-va.webp",
+      "url": "https://raw.githubusercontent.com/Robbyant/lingbot-va/main/LingBot_VA_paper.pdf#page=4",
+      "source": "https://raw.githubusercontent.com/Robbyant/lingbot-va/main/LingBot_VA_paper.pdf#page=4",
+      "credit": "LingBot-VA · 原文 Fig. 2 · p.4",
+      "title": "因果交织的视频与动作双流",
+      "caption": "双流 Mixture-of-Transformers 交织视觉和动作 token；先预测未来视觉状态，再基于视觉转移推断对应动作。"
+    },
+    "steps": [
+      "编码历史与任务",
+      "预测视觉转移",
+      "逆动力学生成动作"
+    ],
+    "inputs": "观测历史、语言与机器人动作数据",
+    "mechanism": "自回归双流 MoT + 视频动作因果建模",
+    "outputs": "未来视觉状态与机器人动作",
+    "change": "与 DreamZero 的联合去噪作方法对照，LingBot-VA 显式强调视觉动态预测到逆动力学的因果分解。原图来自 VA，非 VA2。"
+  },
+  "cosmos3": {
+    "figure": {
+      "file": "cosmos3.webp",
+      "url": "https://research.nvidia.com/labs/cosmos-lab/cosmos3/technical-report.pdf#page=11",
+      "source": "https://research.nvidia.com/labs/cosmos-lab/cosmos3/technical-report.pdf#page=11",
+      "credit": "Cosmos 3 · 原文 Fig. 5 · p.11",
+      "title": "推理与生成双塔 MoT",
+      "caption": "AR 分支处理离散文本等上下文，扩散分支处理连续模态；两塔有独立参数并通过共享注意力连接，使用不同注意力掩码。"
+    },
+    "steps": [
+      "统一多模态 token",
+      "路由推理与生成双塔",
+      "共享注意力输出各模态"
+    ],
+    "inputs": "语言、图像、视频、音频与动作",
+    "mechanism": "Mixture-of-Transformers：AR reasoner + diffusion generator",
+    "outputs": "多模态理解、生成与动作预测",
+    "change": "相对仅视频或视频动作模型，Cosmos3 将推理和多种连续模态生成放在统一架构中；图示对应技术报告的 MoT 方法。"
+  },
+  "worldarena": {
+    "figure": {
+      "file": "worldarena.webp",
+      "url": "https://arxiv.org/pdf/2602.08971#page=6",
+      "source": "https://arxiv.org/pdf/2602.08971#page=6",
+      "credit": "WorldArena · 原文 Fig. 3 · p.6",
+      "title": "世界模型的三种功能评测",
+      "caption": "图中分别评估世界模型作为数据引擎、策略评估器和动作规划器的作用，用下游任务成功率及评估相关性衡量实际用途。"
+    },
+    "steps": [
+      "生成数据训练策略",
+      "比较策略评估结果",
+      "测试基于世界模型的规划"
+    ],
+    "inputs": "候选世界模型、机器人数据与评测任务",
+    "mechanism": "数据引擎 / 策略评估 / 动作规划评测",
+    "outputs": "功能评估指标与下游任务表现",
+    "change": "从模型设计转向检验实际效用；WorldArena 是评测框架，不是 Cosmos3 或 DreamZero 的下一代模型。"
+  },
+  "act": {
+    "figure": {
+      "file": "act.webp",
+      "url": "https://arxiv.org/pdf/2304.13705#page=4",
+      "source": "https://arxiv.org/pdf/2304.13705#page=4",
+      "credit": "ACT / ALOHA · 原文 Fig. 4 · p.4",
+      "title": "动作块的条件 VAE 与 Transformer",
+      "caption": "训练时编码动作序列和关节状态形成风格变量；策略解码器结合多视角图像与状态预测动作块，测试时使用先验均值。"
+    },
+    "steps": [
+      "编码示范动作风格",
+      "融合多视角与关节状态",
+      "解码连续动作块"
+    ],
+    "inputs": "多视角图像、关节状态及示范动作",
+    "mechanism": "Conditional VAE + Transformer + temporal ensemble",
+    "outputs": "未来一段关节目标动作",
+    "change": "用动作块缩短有效决策长度，并通过时间集成平滑重叠预测；并不是语言驱动的基础模型。"
+  },
+  "diffusion-policy": {
+    "figure": {
+      "file": "diffusion-policy.webp",
+      "url": "https://arxiv.org/pdf/2303.04137v4#page=3",
+      "source": "https://arxiv.org/pdf/2303.04137v4#page=3",
+      "credit": "Diffusion Policy · 原文 Fig. 3 · p.3",
+      "title": "以观测为条件去噪动作序列",
+      "caption": "观测编码作为条件输入 CNN 或 Transformer 去噪网络，从高斯噪声逐步得到动作序列，以滚动时域方式执行。"
+    },
+    "steps": [
+      "编码观测历史",
+      "多步去噪动作序列",
+      "执行局部动作并重规划"
+    ],
+    "inputs": "视觉 / 状态观测历史",
+    "mechanism": "条件动作扩散 + 滚动时域控制",
+    "outputs": "多模态连续动作序列",
+    "change": "与 ACT 同样生成动作块，但用去噪过程表达多模态动作分布；CNN 与 Transformer 是原文比较的两种实现。"
+  },
+  "fast": {
+    "figure": {
+      "file": "fast.webp",
+      "url": "https://www.roboticsproceedings.org/rss21/p012.pdf#page=5",
+      "source": "https://www.roboticsproceedings.org/rss21/p012.pdf#page=5",
+      "credit": "FAST · 原文 Fig. 4 · p.5",
+      "title": "动作序列的频域压缩 token 化",
+      "caption": "先对归一化动作块进行离散余弦变换，量化并按频率顺序展开系数，再用 BPE 压缩为离散 token。"
+    },
+    "steps": [
+      "动作块转频域",
+      "量化并展开系数",
+      "BPE 压缩为 token"
+    ],
+    "inputs": "高频连续动作块",
+    "mechanism": "DCT + 量化 + Byte-Pair Encoding",
+    "outputs": "用于自回归 VLA 的压缩动作 token",
+    "change": "改变的是动作的编码方式，而非另造一个完整 VLA；把时间相关的连续轨迹压缩后再做 token 预测。"
+  },
+  "openx": {
+    "figure": {
+      "file": "openx.webp",
+      "url": "https://arxiv.org/pdf/2310.08864#page=4",
+      "source": "https://arxiv.org/pdf/2310.08864#page=4",
+      "credit": "Open X-Embodiment · 原文 Fig. 3 · p.4",
+      "title": "RT-1-X 与 RT-2-X 的跨机器人训练",
+      "caption": "图示展示两种 RT-X 模型如何把图像和文本指令映射到离散末端执行器动作；开放数据集合是跨具身训练的基础。"
+    },
+    "steps": [
+      "统一跨机器人数据",
+      "条件化图像与指令",
+      "预测离散控制动作"
+    ],
+    "inputs": "多机器人示范、图像与语言指令",
+    "mechanism": "Open X-Embodiment 数据 + RT-1-X / RT-2-X",
+    "outputs": "跨具身机器人策略",
+    "change": "将 RT 系列扩展到多个机器人数据来源；其贡献同时包含数据协作与模型实验，不能只当一个网络结构。"
+  },
+  "octo": {
+    "figure": {
+      "file": "octo.webp",
+      "url": "https://arxiv.org/pdf/2405.12213#page=3",
+      "source": "https://arxiv.org/pdf/2405.12213#page=3",
+      "credit": "Octo · 原文 Fig. 2 · p.3",
+      "title": "可扩展输入输出的通用机器人策略",
+      "caption": "任务与观测分别 token 化，Transformer 的读出 token 接动作头；块状注意力允许微调时增加传感器或动作空间。"
+    },
+    "steps": [
+      "编码任务与观测",
+      "块状注意力聚合",
+      "扩散动作头输出动作块"
+    ],
+    "inputs": "语言或目标图像、观测历史",
+    "mechanism": "模块化 Transformer + 扩散动作头",
+    "outputs": "可迁移的动作块策略",
+    "change": "使用 Open X 数据预训练，强调不同机器人传感器与动作空间的适配；不是把大语言模型直接拿来逐 token 输出动作。"
+  },
+  "pi05": {
+    "figure": {
+      "file": "pi05.webp",
+      "url": "https://www.pi.website/download/pi05.pdf#page=4",
+      "source": "https://www.pi.website/download/pi05.pdf#page=4",
+      "credit": "π0.5 · 原文 Fig. 3 · p.4",
+      "title": "离散预训练与连续动作后训练",
+      "caption": "第一阶段混合机器人、语义子任务和互联网数据，以 FAST token 训练；后训练加入 flow matching 动作专家，同时支持高层和低层推断。"
+    },
+    "steps": [
+      "混合数据预训练",
+      "加入连续动作专家",
+      "分层推断并执行"
+    ],
+    "inputs": "图像、状态、任务及异构训练数据",
+    "mechanism": "VLM + FAST 预训练 + flow matching 动作专家",
+    "outputs": "语义子任务与连续动作块",
+    "change": "在 π0 路线上拓展异构数据与环境泛化，并区分便于训练的离散动作编码和便于实时执行的连续生成。"
+  },
+  "groot-n1": {
+    "figure": {
+      "file": "groot-n1.webp",
+      "url": "https://arxiv.org/pdf/2503.14734#page=4",
+      "source": "https://arxiv.org/pdf/2503.14734#page=4",
+      "credit": "GR00T N1 · 原文 Fig. 3 · p.4",
+      "title": "视觉语言系统接上动作扩散系统",
+      "caption": "Eagle-2 产生视觉语言特征，机器人状态和带噪动作通过具身专用编码器输入 DiT，动作解码器输出运动控制。"
+    },
+    "steps": [
+      "Eagle-2 编码语义",
+      "具身状态与动作编码",
+      "DiT 生成运动动作"
+    ],
+    "inputs": "图像、语言指令、本体状态与带噪动作",
+    "mechanism": "Eagle-2 VLM + 具身适配 DiT / flow matching",
+    "outputs": "不同机器人形态的动作块",
+    "change": "与 π 系列作并列比较：同样连接语义与连续控制，但采用双系统设计及具身专用输入输出模块。"
+  },
+  "pistar06": {
+    "figure": {
+      "file": "pistar06.webp",
+      "url": "https://www.pi.website/download/pistar06.pdf#page=1",
+      "source": "https://www.pi.website/download/pistar06.pdf#page=1",
+      "credit": "π*0.6 / RECAP · 原文 Fig. 1 · p.1",
+      "title": "RECAP 的经验与纠正反馈循环",
+      "caption": "部署 VLA 收集自主轨迹和人工纠正，以结果反馈更新价值函数，再用优势条件训练策略，使真实经验进入下一轮学习。"
+    },
+    "steps": [
+      "自主执行与人工纠正",
+      "更新价值及优势估计",
+      "优势条件化改进策略"
+    ],
+    "inputs": "示范、在线轨迹、人工纠正与奖励反馈",
+    "mechanism": "RECAP + 价值函数 + advantage conditioning",
+    "outputs": "从真实经验持续改进的 VLA",
+    "change": "从单纯模仿示范转向利用自主成功和失败经验；图中价值模型和策略之间的反馈是关键新增环节。"
+  },
+  "pi07": {
+    "figure": {
+      "file": "pi07.webp",
+      "url": "https://www.pi.website/download/pi07.pdf#page=4",
+      "source": "https://www.pi.website/download/pi07.pdf#page=4",
+      "credit": "π0.7 · 原文 Fig. 2 · p.4",
+      "title": "可引导 VLA 与高层策略、子目标模型",
+      "caption": "VLA 结合视觉历史、语言、策略质量元数据及子目标图像；运行时高层语义策略与轻量世界模型提供额外条件。"
+    },
+    "steps": [
+      "形成多模态任务条件",
+      "融合历史与子目标",
+      "动作专家生成控制"
+    ],
+    "inputs": "观测历史、语言、元数据与视觉子目标",
+    "mechanism": "VLM + MEM 历史编码 + 动作专家；高层策略 / 世界模型辅助",
+    "outputs": "可由多模态条件引导的连续动作",
+    "change": "相对经验学习路线，π0.7 强调用丰富提示整合不同质量和策略的数据，以及任务技能组合；需要区分人工引导与自主执行。"
+  },
+  "palm-e": {
+    "figure": {
+      "file": "palm-e.webp",
+      "url": "https://palm-e.github.io/assets/palm-e.pdf#page=1",
+      "source": "https://palm-e.github.io/assets/palm-e.pdf#page=1",
+      "credit": "PaLM-E · 原文 Fig. 1 · p.1",
+      "title": "将具身观测插入语言模型",
+      "caption": "图像、状态或三维表示被映射为连续嵌入，与文本 token 交织后送入 PaLM；输出文本可用于问答或低层技能调用。"
+    },
+    "steps": [
+      "编码感知输入",
+      "与语言 token 交织",
+      "生成回答或技能计划"
+    ],
+    "inputs": "文本、图像、连续状态或三维表示",
+    "mechanism": "多模态编码器 + PaLM",
+    "outputs": "文本推理及高层机器人计划",
+    "change": "与 SayCan 对候选技能打分的方式对照，PaLM-E 直接把观测接入语言模型上下文；仍需低层策略执行机器人动作。"
+  },
+  "eureka": {
+    "figure": {
+      "file": "eureka.webp",
+      "url": "https://arxiv.org/pdf/2310.12931#page=2",
+      "source": "https://arxiv.org/pdf/2310.12931#page=2",
+      "credit": "Eureka · 原文 Fig. 2 · p.2",
+      "title": "奖励代码的生成、评估与反思",
+      "caption": "LLM 读取环境代码与任务描述生成奖励函数；GPU 强化学习评估候选奖励，反馈用于下一轮奖励修订。"
+    },
+    "steps": [
+      "生成奖励代码",
+      "训练策略评估奖励",
+      "根据反馈修订奖励"
+    ],
+    "inputs": "环境源代码、任务描述与评估反馈",
+    "mechanism": "代码 LLM + 奖励进化搜索 + reward reflection",
+    "outputs": "奖励函数及其训练出的控制策略",
+    "change": "作用于学习监督而非直接输出电机命令；可以与 RoboGen 的任务和场景生成放在同一阅读分支。"
+  },
+  "robogen": {
+    "figure": {
+      "file": "robogen.webp",
+      "url": "https://arxiv.org/pdf/2311.01455#page=4",
+      "source": "https://arxiv.org/pdf/2311.01455#page=4",
+      "credit": "RoboGen · 原文 Fig. 2 · p.4",
+      "title": "从任务到场景、监督和技能学习",
+      "caption": "RoboGen 依次提出任务、检索并组织场景资产、生成训练监督，再通过相应学习算法得到技能。"
+    },
+    "steps": [
+      "提出任务并构造场景",
+      "生成学习监督",
+      "在仿真中学习技能"
+    ],
+    "inputs": "机器人描述、物体资产与生成模型",
+    "mechanism": "任务提案 + 场景生成 + 监督生成 + 技能学习",
+    "outputs": "生成的仿真任务与学得技能",
+    "change": "与 Eureka 的奖励生成对照，RoboGen 将生成过程扩展到任务与环境本身；生成流程不等于完成了真实机器人部署。"
+  },
+  "hirobot": {
+    "figure": {
+      "file": "hirobot.webp",
+      "url": "https://raw.githubusercontent.com/mlresearch/v267/main/assets/shi25d/shi25d.pdf#page=4",
+      "source": "https://raw.githubusercontent.com/mlresearch/v267/main/assets/shi25d/shi25d.pdf#page=4",
+      "credit": "Hi Robot · 原文 Fig. 2 · p.4",
+      "title": "随用户反馈调整的分层 VLA",
+      "caption": "高层 VLM 根据开放指令和图像生成低层语言命令，低层 VLA 结合命令、视觉和关节状态输出动作；用户插话触发高层更新。"
+    },
+    "steps": [
+      "理解指令与实时纠正",
+      "生成当前子任务",
+      "低层 VLA 执行动作"
+    ],
+    "inputs": "用户指令 / 插话、摄像头图像与关节状态",
+    "mechanism": "高层 VLM + 低层 VLA",
+    "outputs": "动作及可选语言回应",
+    "change": "把复杂指令和快速控制分给不同层级，并把用户纠正纳入运行时反馈；高层计划需要随观测更新。"
+  },
+  "gemini-robotics": {
+    "figure": {
+      "file": "gemini-robotics.webp",
+      "url": "https://arxiv.org/pdf/2503.20020#page=2",
+      "source": "https://arxiv.org/pdf/2503.20020#page=2",
+      "credit": "Gemini Robotics · 原文 Fig. 1 · p.2",
+      "title": "具身推理与机器人动作的模型族",
+      "caption": "官方报告以模型族总览说明：Gemini 基础能力经机器人专门训练形成 Robotics / Robotics-ER，并进一步适配新形态和复杂任务。"
+    },
+    "steps": [
+      "复用多模态基础能力",
+      "进行机器人专门训练",
+      "适配形态与目标任务"
+    ],
+    "inputs": "多模态观测、指令与机器人训练数据",
+    "mechanism": "Gemini Robotics / Robotics-ER 模型族",
+    "outputs": "具身推理或机器人动作能力",
+    "change": "这里展示原文公开的系统级总览，不把它当成已披露全部网络细节的架构图；推理模型与直接动作模型需分开理解。"
+  },
+  "aspire": {
+    "figure": {
+      "file": "aspire.webp",
+      "url": "https://research.nvidia.com/labs/gear/aspire/assets/aspire.pdf?v=20261016#page=2",
+      "source": "https://research.nvidia.com/labs/gear/aspire/assets/aspire.pdf?v=20261016#page=2",
+      "credit": "ASPIRE · 原文 Fig. 1 · p.2",
+      "title": "执行诊断与可复用技能积累",
+      "caption": "协调器管理任务与技能库，执行代理通过细粒度轨迹定位失败并修复机器人程序；验证后的修复写入技能库，供后续任务检索。"
+    },
+    "steps": [
+      "编写并运行机器人程序",
+      "检查轨迹和修复失败",
+      "验证后积累可复用技能"
+    ],
+    "inputs": "任务、机器人 API、执行轨迹与已有技能",
+    "mechanism": "代码代理 + 执行引擎 + 技能库 + 进化搜索",
+    "outputs": "经验证的程序与可迁移技能",
+    "change": "把闭环反馈进一步变成可积累的程序知识；与端到端 VLA 相比，关键接口是机器人程序、工具与执行证据。"
   }
 }

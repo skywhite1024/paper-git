@@ -3,7 +3,7 @@
 import { memo, useCallback, useEffect, useRef, useState, type CSSProperties, type KeyboardEvent, type PointerEvent } from "react";
 import { assetPath, atlasLayout, frameworks, islands, relations } from "@/lib/atlas";
 import { getPaper } from "@/lib/catalog";
-import { CARD_HEIGHT, CARD_WIDTH, fitBounds, islandPath, MAX_ZOOM, MIN_ZOOM, zoomAt, type Camera, type Point } from "@/lib/atlas-geometry";
+import { CARD_HEIGHT, CARD_WIDTH, fitBounds, islandPath, MAX_ZOOM, MIN_ZOOM, routeGeometry, zoomAt, type Camera, type Point } from "@/lib/atlas-geometry";
 import { useReading } from "./ReadingProvider";
 
 export type AtlasFocus = { kind: "paper" | "island" | "all"; id: string; sequence: number };
@@ -19,6 +19,7 @@ const Terrain = memo(function Terrain() {
     {atlasLayout.territories.map((area, index) => <g key={area.id}>
       {[1.05, 1.035, 1.02, .98, .955, .925].map((scale) => <path key={scale} d={islandPath(area)} fill="none" stroke={islands[index].color} strokeWidth="1.2" opacity=".12" transform={`translate(${area.x + area.width / 2} ${area.y + area.height / 2}) scale(${scale}) translate(${-area.x - area.width / 2} ${-area.y - area.height / 2})`} />)}
       <path d={islandPath(area)} fill={`url(#wash-${area.id})`} stroke={islands[index].color} strokeWidth="2" strokeOpacity=".25" />
+      {atlasLayout.rings.filter((ring) => ring.track === area.id).map((ring) => <g key={ring.index} className="canvas-orbit"><ellipse cx={ring.x} cy={ring.y} rx={ring.rx} ry={ring.ry} fill="none" stroke={islands[index].color} strokeWidth="64" opacity=".045" /><ellipse cx={ring.x} cy={ring.y} rx={ring.rx} ry={ring.ry} fill="none" stroke={islands[index].color} strokeWidth="1.5" strokeDasharray="3 12" opacity=".3" /><text x={ring.x} y={ring.y - ring.ry - 18} textAnchor="middle" fill={islands[index].color} fontSize="14" letterSpacing="3">{['问题起点', '方法展开', '延伸与验证'][ring.index]}</text></g>)}
     </g>)}
   </svg>;
 });
@@ -31,6 +32,8 @@ export default function AtlasCanvas({ selectedId, filteredIds, focus, readerOpen
   const [viewport, setViewport] = useState(size.current);
   const [dragging, setDragging] = useState(false);
   const [showRelations, setShowRelations] = useState(true);
+  const [activeTrack, setActiveTrack] = useState("world-models");
+  const [activeStage, setActiveStage] = useState("latent-control");
   const pointers = useRef(new Map<number, Point>());
   const gesture = useRef<{ camera: Camera; center: Point; distance: number } | null>(null);
   const dragged = useRef(false);
@@ -46,8 +49,18 @@ export default function AtlasCanvas({ selectedId, filteredIds, focus, readerOpen
   }
   function locateIsland(id: string) {
     const area = atlasLayout.territories.find((item) => item.id === id)!;
-    const zoom = Math.max(.65, Math.min(.9, (availableWidth() - 60) / area.width));
-    commit({ zoom, x: 30 - area.x * zoom, y: 65 - area.y * zoom });
+    setActiveTrack(id); setActiveStage("");
+    commit(fitBounds(area, { width: availableWidth(), height: size.current.height }, 64));
+  }
+  function stageBounds(track: string, id: string) {
+    const nodes = atlasLayout.points.filter((point) => point.track === track && point.stage === id);
+    const x = Math.min(...nodes.map((p) => p.x)) - 30, y = Math.min(...nodes.map((p) => p.y)) - 30;
+    return { x, y, width: Math.max(...nodes.map((p) => p.x + CARD_WIDTH)) - x + 30, height: Math.max(...nodes.map((p) => p.y + CARD_HEIGHT)) - y + 30 };
+  }
+  function locateStage(track: string, id: string) {
+    setActiveTrack(track); setActiveStage(id);
+    commit(fitBounds(stageBounds(track, id), { width: availableWidth(), height: size.current.height - 80 }, 42));
+    commit({ ...cameraRef.current, y: cameraRef.current.y + 65 });
   }
   function showAll() { commit(fitBounds(atlasLayout.bounds, { width: availableWidth(), height: size.current.height }, 32)); }
   function changeZoom(factor: number) { commit(zoomAt(cameraRef.current, cameraRef.current.zoom * factor, { x: availableWidth() / 2, y: size.current.height / 2 })); }
@@ -58,8 +71,9 @@ export default function AtlasCanvas({ selectedId, filteredIds, focus, readerOpen
       const next = { width: element.clientWidth, height: element.clientHeight };
       if (!next.width || !next.height) return;
       if (!size.current.width) {
-        const zoom = next.width < 600 ? .7 : .78;
-        commit({ zoom, x: 30 - (next.width < 600 ? 210 : 120) * zoom, y: 65 - 120 * zoom });
+        const start = atlasLayout.points.find((point) => point.id === "dreamerv2")!;
+        const zoom = next.width < 600 ? .5 : .62;
+        commit({ zoom, x: next.width / 2 - (start.x + CARD_WIDTH / 2) * zoom, y: next.height / 2 + 25 - (start.y + CARD_HEIGHT / 2) * zoom });
       } else {
         commit({ ...cameraRef.current, x: cameraRef.current.x + (next.width - size.current.width) / 2, y: cameraRef.current.y + (next.height - size.current.height) / 2 });
       }
@@ -84,7 +98,7 @@ export default function AtlasCanvas({ selectedId, filteredIds, focus, readerOpen
 
   useEffect(() => {
     if (!focus) return;
-    if (focus.kind === "paper") locatePaper(focus.id); else if (focus.kind === "island") locateIsland(focus.id); else showAll();
+    if (focus.kind === "paper") { const point = atlasLayout.points.find((item) => item.id === focus.id)!; setActiveTrack(point.track); setActiveStage(point.stage); locatePaper(focus.id); } else if (focus.kind === "island") locateIsland(focus.id); else showAll();
     // Navigation is intentional; resizing or closing the reader must not reset the camera.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [focus]);
@@ -137,17 +151,19 @@ export default function AtlasCanvas({ selectedId, filteredIds, focus, readerOpen
     style={{ backgroundPosition: `${camera.x}px ${camera.y}px`, backgroundSize: `${Math.max(8, 28 * camera.zoom)}px ${Math.max(8, 28 * camera.zoom)}px` }}>
     <div className="canvas-world" style={{ width: atlasLayout.bounds.width, height: atlasLayout.bounds.height, transform: `translate(${camera.x}px, ${camera.y}px) scale(${camera.zoom})` }}>
       <Terrain />
-      {showRelations && <svg className="canvas-relations" width={atlasLayout.bounds.width} height={atlasLayout.bounds.height} aria-hidden="true">{relations.map((edge) => {
+      {showRelations && <svg className="canvas-relations" width={atlasLayout.bounds.width} height={atlasLayout.bounds.height} aria-hidden="true"><defs><marker id="route-arrow" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M1 1 L11 6 L1 11Z" fill="#6c8b79" /></marker></defs>{relations.map((edge) => {
         const from = atlasLayout.points.find((point) => point.id === edge.from)!;
         const to = atlasLayout.points.find((point) => point.id === edge.to)!;
         const active = edge.from === selectedId || edge.to === selectedId;
         if (!filteredIds.has(from.id) || !filteredIds.has(to.id)) return null;
-        const ax = from.x + CARD_WIDTH / 2, ay = from.y + CARD_HEIGHT;
-        const bx = to.x + CARD_WIDTH / 2, by = to.y;
-        return <path key={`${edge.from}-${edge.to}`} className={`${edge.kind} ${active ? "active" : ""}`} d={`M${ax} ${ay} C${ax} ${ay + 100} ${bx} ${by - 100} ${bx} ${by}`}><title>{`${edge.label}：${edge.explanation}`}</title></path>;
+        const sequential = from.track === to.track && from.stage === to.stage && to.order === from.order + 1;
+        if (!sequential && !(active && readerOpen)) return null;
+        const area = atlasLayout.territories.find((item) => item.id === from.track)!;
+        const route = routeGeometry(from, to, area.center);
+        return <g key={`${edge.from}-${edge.to}`} className={`canvas-route ${edge.kind} ${active ? "active" : ""}`}><path d={route.d} markerEnd="url(#route-arrow)"><title>{`${edge.label}：${edge.explanation}`}</title></path>{(camera.zoom > .28 || active) && <g className="canvas-route-label" transform={`translate(${route.label.x} ${route.label.y})`}><rect x={-edge.label.length * 9 - 16} y="-19" width={edge.label.length * 18 + 32} height="38" rx="19" /><text textAnchor="middle" dominantBaseline="central">{edge.label}</text></g>}</g>;
       })}</svg>}
-      {atlasLayout.territories.map((area, index) => <div key={area.id} className="canvas-island-heading" style={{ left: area.x + 120, top: area.y + 85, color: islands[index].color }}><span>0{index + 1} / {islands[index].english}</span><h2>{islands[index].name}</h2><p>{islands[index].question} <b>{atlasLayout.points.filter((point) => point.track === area.id).length} 篇工作</b></p></div>)}
-      {atlasLayout.stages.map((stage) => <div className="canvas-stage-heading" key={`${stage.track}-${stage.id}`} style={{ left: stage.x, top: stage.y }}><span>{stage.name}</span><small>{stage.count}</small></div>)}
+      {atlasLayout.territories.map((area, index) => <div key={area.id} className="canvas-island-heading" style={{ left: area.center.x, top: area.center.y, color: islands[index].color }}><span>0{index + 1} / {islands[index].english}</span><h2>{islands[index].name}</h2><p>{islands[index].question}</p><b>{atlasLayout.points.filter((point) => point.track === area.id).length} 篇工作 · 沿编号向外探索</b></div>)}
+      {atlasLayout.stages.map((stage) => <button className="canvas-stage-heading" tabIndex={-1} key={`${stage.track}-${stage.id}`} style={{ left: stage.x, top: stage.y }} onClick={() => locateStage(stage.track, stage.id)}><small>BRANCH 0{stage.sector + 1}</small><strong>{stage.name}</strong><span>{stage.question}</span><em>展开 {stage.count} 篇工作 ↗</em></button>)}
       {atlasLayout.points.map((point) => {
         const paper = getPaper(point.id)!, figure = frameworks[point.id]?.figure;
         const color = islands.find((island) => island.id === paper.track)!.color;
@@ -155,12 +171,15 @@ export default function AtlasCanvas({ selectedId, filteredIds, focus, readerOpen
         return <button key={point.id} className={`canvas-paper ${point.id === selectedId ? "selected" : ""} ${dimmed ? "dimmed" : ""}`} style={{ left: point.x, top: point.y, width: CARD_WIDTH, height: CARD_HEIGHT, "--island": color } as CSSProperties}
           tabIndex={dimmed ? -1 : 0} aria-label={`查看 ${paper.name}，${paper.year}`} aria-pressed={point.id === selectedId} onClick={() => onSelect(point.id)}
           onFocus={(event) => { if (event.currentTarget.matches(":focus-visible")) { locatePaper(point.id); host.current?.scrollTo(0, 0); } }}>
+          <b className="canvas-step-number">{String(point.order).padStart(2, "0")}</b>
           {figure ? <div className="canvas-paper-image"><img src={assetPath(`/figures/${figure.file}`)} alt={`${paper.name} 框架图`} draggable="false" /><span>作者原图 ↗</span></div> : <div className="canvas-paper-summary"><span>研究要点 <small>框架原图待补充</small></span><p>{paper.summary}</p><i>打开论文导读 ↗</i></div>}
-          <div className="canvas-paper-caption"><strong>{paper.name}</strong><small>{paper.year}{entries[paper.id]?.status === "done" ? " · 已读" : ""}</small></div>
+          <div className="canvas-paper-caption"><span><strong>{paper.name}</strong><em>{frameworks[point.id]?.mechanism}</em></span><small>{paper.year}{entries[paper.id]?.status === "done" ? " · 已读" : ""}</small></div>
         </button>;
       })}
     </div>
     <nav className="canvas-island-nav" data-canvas-control aria-label="群岛快捷定位">{islands.map((island) => <button key={island.id} style={{ "--island": island.color } as CSSProperties} onClick={() => onNavigateIsland(island.id)}><i />{island.id === "world-models" ? "世界模型" : island.id === "vla" ? "VLA" : "Agent"}<span>{atlasLayout.points.filter((point) => point.track === island.id).length}</span></button>)}</nav>
+    <nav className="canvas-branch-nav" data-canvas-control aria-label="研究分支路线">{atlasLayout.stages.filter((stage) => stage.track === activeTrack).map((stage) => <button key={stage.id} aria-pressed={activeStage === stage.id} onClick={() => locateStage(stage.track, stage.id)}><span>0{stage.sector + 1}</span>{stage.name}</button>)}</nav>
+    <div className="canvas-route-legend" data-canvas-control><span><i />方法延伸</span><span><i className="reading" />阅读路径</span><span><i className="compare" />方法对照</span><small>圈层是阅读深度，不是统一年表</small></div>
     <div className="canvas-top-actions" data-canvas-control><button aria-pressed={showRelations} onClick={() => setShowRelations(!showRelations)}>{showRelations ? "隐藏联系" : "显示联系"}</button><button onClick={onToggleExpand}>{expanded ? "退出全屏" : "全屏画布"}</button></div>
     {!filteredIds.size && <div className="canvas-empty" role="status">没有匹配的论文，试试清空搜索或筛选。</div>}
     <div className="canvas-minimap" data-canvas-control><button onClick={showAll} aria-label="通过小地图返回全部群岛"><svg viewBox={`0 0 ${atlasLayout.bounds.width} ${atlasLayout.bounds.height}`} aria-hidden="true">{atlasLayout.territories.map((area, i) => <path key={area.id} d={islandPath(area)} fill={islands[i].color} opacity=".16" />)}{atlasLayout.points.map((point) => <rect key={point.id} x={point.x} y={point.y} width={CARD_WIDTH} height={CARD_HEIGHT} rx="12" fill={point.id === selectedId ? "#387995" : "#7b9587"} opacity={filteredIds.has(point.id) ? .85 : .2} />)}<rect x={-camera.x / camera.zoom} y={-camera.y / camera.zoom} width={viewport.width / camera.zoom} height={viewport.height / camera.zoom} fill="#fffefa22" stroke="#456e7c" strokeWidth="18" /></svg><span>全览 · {atlasLayout.points.length} 篇工作</span></button></div>

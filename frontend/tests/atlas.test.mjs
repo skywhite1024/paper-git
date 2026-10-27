@@ -1,10 +1,37 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
-import { CARD_HEIGHT, CARD_WIDTH, createAtlasLayout, fitBounds, MAX_ZOOM, MIN_ZOOM, zoomAt } from "../lib/atlas-geometry.ts";
+import { readFileSync, statSync } from "node:fs";
+import { CARD_HEIGHT, CARD_WIDTH, createAtlasLayout, fitBounds, MAX_ZOOM, MIN_ZOOM, routeGeometry, zoomAt } from "../lib/atlas-geometry.ts";
 
 const catalog = JSON.parse(readFileSync(new URL("../content/catalog.json", import.meta.url), "utf8"));
 const layout = createAtlasLayout(catalog.tracks);
+const frameworks = JSON.parse(readFileSync(new URL("../content/frameworks.json", import.meta.url), "utf8"));
+const routes = JSON.parse(readFileSync(new URL("../content/atlas-routes.json", import.meta.url), "utf8"));
+
+test("every paper has an original framework asset, source and structured reading notes", () => {
+  assert.deepEqual(Object.keys(frameworks).sort(), catalog.papers.map((paper) => paper.id).sort());
+  for (const [id, entry] of Object.entries(frameworks)) {
+    assert.ok(statSync(new URL(`../public/figures/${entry.figure.file}`, import.meta.url)).size > 1000, id);
+    assert.match(entry.figure.source, /^https:\/\//);
+    for (const field of ["inputs", "mechanism", "outputs", "change"]) assert.ok(entry[field].trim(), `${id}: ${field}`);
+    assert.equal(entry.steps.length, 3);
+  }
+});
+
+test("development routes resolve to catalog papers and usable curves", () => {
+  const covered = new Set(), pairs = new Set();
+  for (const route of routes) {
+    const from = layout.points.find((p) => p.id === route.from), to = layout.points.find((p) => p.id === route.to);
+    assert.ok(from && to && from !== to);
+    assert.ok(["reading", "evolution", "compare"].includes(route.kind));
+    assert.ok(!pairs.has(`${route.from}:${route.to}`)); pairs.add(`${route.from}:${route.to}`);
+    covered.add(from.id); covered.add(to.id);
+    const curve = routeGeometry(from, to, layout.territories.find((a) => a.id === from.track).center);
+    assert.doesNotMatch(curve.d, /NaN|Infinity/);
+    assert.ok(Number.isFinite(curve.label.x) && Number.isFinite(curve.label.y));
+  }
+  assert.equal(covered.size, catalog.papers.length);
+});
 
 test("every catalog paper occupies one non-overlapping card in its own island", () => {
   assert.deepEqual(layout.points.map((point) => point.id).sort(), catalog.papers.map((paper) => paper.id).sort());
