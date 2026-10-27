@@ -9,7 +9,7 @@ main.container:has(.research-atlas) { width:calc(100% - 32px); max-width:none; p
 .canvas-index-toggle { white-space:nowrap; background:#eff2e9; border:1px solid #dce3d5; border-radius:6px; font-size:11px; padding:6px 10px; }
 .research-atlas .atlas-workbench { position:relative; display:block; height:calc(100dvh - 250px); min-height:440px; isolation:isolate; }
 .research-atlas .atlas-workbench.expanded { position:fixed; inset:0; width:100%; height:100dvh; min-height:0; z-index:50; background:var(--bg); }
-.atlas-canvas { position:relative; width:100%; height:100%; overflow:clip; border:1px solid #dcded2; border-radius:12px; background-color:#f8f8f1; background-image:radial-gradient(#b9c3ae60 .8px,transparent .8px); touch-action:none; cursor:grab; user-select:none; }
+.atlas-canvas { position:relative; width:100%; height:100%; overflow:clip; contain:layout paint; border:1px solid #dcded2; border-radius:12px; background-color:#f8f8f1; background-image:radial-gradient(#b9c3ae60 .8px,transparent .8px); background-size:18px 18px; touch-action:none; cursor:grab; user-select:none; }
 .atlas-canvas:focus-visible { outline:2px solid #709582; outline-offset:2px; }
 .atlas-canvas.is-dragging,.atlas-canvas.is-dragging * { cursor:grabbing !important; }
 .canvas-world { position:absolute; left:0; top:0; transform-origin:0 0; will-change:transform; pointer-events:none; }
@@ -36,6 +36,7 @@ main.container:has(.research-atlas) { width:calc(100% - 32px); max-width:none; p
 .canvas-paper:hover { border-color:var(--island); box-shadow:0 6px 24px #405d4029; }
 .canvas-paper.selected { border:2px solid #5b94a6; box-shadow:0 0 0 4px #7aabb329,0 6px 24px #405d4024; }
 .canvas-paper.dimmed { opacity:.18; }
+.is-dragging .canvas-paper { transition:none; }
 .canvas-step-number { position:absolute; z-index:1; top:7px; left:8px; border:1px solid #dbe4d2; background:#fbfdf3ef; color:#789068; border-radius:50%; width:25px; height:25px; display:grid; place-items:center; font:12px Georgia,serif; }
 .canvas-paper-image { position:relative; height:204px; width:100%; padding:16px 10px 8px; background:white; flex-shrink:0; }
 .canvas-paper-image img { width:100%; height:100%; object-fit:contain; display:block; pointer-events:none; }

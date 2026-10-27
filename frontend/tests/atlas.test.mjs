@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, statSync } from "node:fs";
-import { CARD_HEIGHT, CARD_WIDTH, createAtlasLayout, fitBounds, MAX_ZOOM, MIN_ZOOM, routeGeometry, zoomAt } from "../lib/atlas-geometry.ts";
+import { CARD_HEIGHT, CARD_WIDTH, createAtlasLayout, fitBounds, intersects, MAX_ZOOM, MIN_ZOOM, routeGeometry, viewportBounds, zoomAt } from "../lib/atlas-geometry.ts";
 
 const catalog = JSON.parse(readFileSync(new URL("../content/catalog.json", import.meta.url), "utf8"));
 const layout = createAtlasLayout(catalog.tracks);
@@ -31,6 +31,46 @@ test("development routes resolve to catalog papers and usable curves", () => {
     assert.ok(Number.isFinite(curve.label.x) && Number.isFinite(curve.label.y));
   }
   assert.equal(covered.size, catalog.papers.length);
+  for (const track of catalog.tracks) for (const stage of track.stages) {
+    for (let i = 1; i < stage.papers.length; i++) assert.ok(pairs.has(`${stage.papers[i - 1]}:${stage.papers[i]}`), `missing route to ${stage.papers[i]}`);
+  }
+});
+
+test("branches grow beyond three rings without dropping or overlapping papers", () => {
+  const expanded = structuredClone(catalog.tracks);
+  expanded[0].stages[0].papers = Array.from({ length: 20 }, (_, i) => `future-${i}`);
+  const result = createAtlasLayout(expanded);
+  assert.equal(result.points.filter((p) => p.stage === expanded[0].stages[0].id).length, 20);
+  for (let i = 0; i < result.points.length; i++) for (const b of result.points.slice(i + 1)) {
+    const a = result.points[i];
+    assert.equal(intersects({ ...a, width: CARD_WIDTH, height: CARD_HEIGHT }, { ...b, width: CARD_WIDTH, height: CARD_HEIGHT }), false, `${a.id} / ${b.id}`);
+  }
+});
+
+test("viewport culling includes partially visible cards and an overscan margin at every zoom", () => {
+  const size = { width: 1280, height: 720 };
+  for (const zoom of [MIN_ZOOM, .62, MAX_ZOOM]) {
+    const camera = { x: -1234, y: 567, zoom };
+    const visible = viewportBounds(camera, size, 0), padded = viewportBounds(camera, size);
+    const onEdge = { x: visible.x - CARD_WIDTH + 1, y: visible.y, width: CARD_WIDTH, height: CARD_HEIGHT };
+    assert.ok(intersects(visible, onEdge));
+    assert.ok(intersects(padded, { ...onEdge, x: visible.x - CARD_WIDTH - 200 / zoom }));
+    assert.equal(intersects(padded, { ...onEdge, x: visible.x - CARD_WIDTH - 300 / zoom }), false);
+    for (const p of layout.points) {
+      const screenVisible = p.x * zoom + camera.x < size.width && (p.x + CARD_WIDTH) * zoom + camera.x > 0 && p.y * zoom + camera.y < size.height && (p.y + CARD_HEIGHT) * zoom + camera.y > 0;
+      if (screenVisible) assert.ok(intersects(padded, { ...p, width: CARD_WIDTH, height: CARD_HEIGHT }), p.id);
+    }
+  }
+});
+
+test("every paper has a small canvas preview, while its original stays available", () => {
+  let bytes = 0;
+  for (const id of Object.keys(frameworks)) {
+    const size = statSync(new URL(`../public/figures/previews/${id}.webp`, import.meta.url)).size;
+    assert.ok(size > 1000 && size < 120_000, id);
+    bytes += size;
+  }
+  assert.ok(bytes < Object.keys(frameworks).length * 40_000, `preview total: ${bytes}`);
 });
 
 test("every catalog paper occupies one non-overlapping card in its own island", () => {

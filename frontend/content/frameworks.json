@@ -815,5 +815,632 @@
     "mechanism": "代码代理 + 执行引擎 + 技能库 + 进化搜索",
     "outputs": "经验证的程序与可迁移技能",
     "change": "把闭环反馈进一步变成可积累的程序知识；与端到端 VLA 相比，关键接口是机器人程序、工具与执行证据。"
+  },
+  "pets": {
+    "figure": {
+      "file": "pets.webp",
+      "url": "https://arxiv.org/pdf/1805.12114#page=2",
+      "source": "https://arxiv.org/pdf/1805.12114#page=2",
+      "credit": "PETS · 原文 Fig. 1 · p.2",
+      "title": "概率动力学与轨迹采样",
+      "caption": "用概率动力学模型集成表达不确定性，通过粒子轨迹采样评估候选动作，再用 MPC 滚动执行。"
+    },
+    "steps": [
+      "拟合概率集成",
+      "采样未来轨迹",
+      "滚动选择动作"
+    ],
+    "inputs": "状态、候选动作、环境转移数据",
+    "mechanism": "概率模型集成 + 轨迹采样 + MPC",
+    "outputs": "当前时刻的控制动作",
+    "change": "先建立不确定性感知的规划基线，再与 MBPO 用模型数据训练策略的方式比较。"
+  },
+  "mbpo": {
+    "figure": {
+      "file": "mbpo.webp",
+      "url": "https://arxiv.org/pdf/1906.08253#page=6",
+      "source": "https://arxiv.org/pdf/1906.08253#page=6",
+      "credit": "MBPO · 原文 Algorithm 2 · p.6",
+      "title": "模型辅助策略优化算法",
+      "caption": "从真实回放中的状态出发做短模型 rollout，把合成转移用于离线策略更新，限制长程模型误差。"
+    },
+    "steps": [
+      "拟合环境模型",
+      "从回放做短预测",
+      "更新控制策略"
+    ],
+    "inputs": "真实回放、概率动力学集成、当前策略",
+    "mechanism": "短分支 rollout + SAC 策略更新",
+    "outputs": "由模型数据辅助训练的策略",
+    "change": "与 PETS 的在线动作搜索对照：模型主要用来制造训练样本，推理时由策略直接行动。"
+  },
+  "simple": {
+    "figure": {
+      "file": "simple.webp",
+      "url": "https://arxiv.org/pdf/1903.00374#page=4",
+      "source": "https://arxiv.org/pdf/1903.00374#page=4",
+      "credit": "SimPLe · 原文 Fig. 2 · p.4",
+      "title": "离散随机视频预测器",
+      "caption": "学习带离散随机潜变量的帧与奖励预测器，在学得的 Atari 模拟器中训练策略。"
+    },
+    "steps": [
+      "编码帧与动作",
+      "采样离散潜变量",
+      "预测画面与奖励"
+    ],
+    "inputs": "连续四帧、动作、训练时的下一帧",
+    "mechanism": "卷积编码解码 + 离散潜变量预测",
+    "outputs": "下一帧、奖励，以及模拟器中学得的策略",
+    "change": "用可学习像素模拟器支撑策略优化；后续 IRIS 改用图像 token 与 Transformer 建模。"
+  },
+  "tdmpc": {
+    "figure": {
+      "file": "tdmpc.webp",
+      "url": "https://arxiv.org/pdf/2203.04955#page=4",
+      "source": "https://arxiv.org/pdf/2203.04955#page=4",
+      "credit": "TD-MPC · 原文 Fig. 2 · p.4",
+      "title": "任务相关潜动力学与价值学习",
+      "caption": "联合学习任务相关潜动力学、奖励和终端价值，用短时域模型预测加长程价值估计选择动作。"
+    },
+    "steps": [
+      "编码任务状态",
+      "预测奖励与潜状态",
+      "搜索高价值动作"
+    ],
+    "inputs": "图像或状态观测、动作、奖励",
+    "mechanism": "潜动力学 + TD 价值学习 + MPPI",
+    "outputs": "在线规划动作",
+    "change": "把终端价值引入短视野规划，随后 TD-MPC2 研究多任务与规模扩展。"
+  },
+  "iris": {
+    "figure": {
+      "file": "iris.webp",
+      "url": "https://arxiv.org/pdf/2209.00588#page=2",
+      "source": "https://arxiv.org/pdf/2209.00588#page=2",
+      "credit": "IRIS · 原文 Fig. 1 · p.2",
+      "title": "离散 token 自回归世界模型",
+      "caption": "把图像压缩成离散 token，自回归预测未来 token、奖励与终止，再在想象轨迹里学习行为。"
+    },
+    "steps": [
+      "将图像编码为 token",
+      "自回归预测环境",
+      "在想象中学习策略"
+    ],
+    "inputs": "图像 token、动作和历史上下文",
+    "mechanism": "VQ 编码器 + 自回归 Transformer + Actor-Critic",
+    "outputs": "未来图像 token、奖励、终止及策略",
+    "change": "相较卷积随机预测器，IRIS 以序列建模统一处理图像 token 和动作条件。"
+  },
+  "unisim": {
+    "figure": {
+      "file": "unisim.webp",
+      "url": "https://arxiv.org/html/2310.06114v2/method.png",
+      "source": "https://arxiv.org/html/2310.06114v2#S2.F2",
+      "credit": "UniSim · 原文 Fig. 2 · HTML §2",
+      "title": "统一动作条件视频模拟器",
+      "caption": "混合不同来源的视频和动作条件训练视频模拟器，以语言或低层动作控制后续视觉变化。"
+    },
+    "steps": [
+      "混合多源交互数据",
+      "按动作生成未来",
+      "在模拟器中训练策略"
+    ],
+    "inputs": "历史视频、语言或低层动作条件",
+    "mechanism": "多源数据混合 + 条件视频扩散",
+    "outputs": "动作条件未来视频",
+    "change": "把多种控制接口放入同一个视觉模拟器；与只按文本生成计划的视频方法作对照。"
+  },
+  "robodreamer": {
+    "figure": {
+      "file": "robodreamer.webp",
+      "url": "https://arxiv.org/pdf/2404.12377#page=3",
+      "source": "https://arxiv.org/pdf/2404.12377#page=3",
+      "credit": "RoboDreamer · 原文 Fig. 3 · p.3",
+      "title": "语言分解与组合视频扩散",
+      "caption": "把语言任务拆为动作与关系成分，组合各条件的扩散分数，生成机器人完成任务的视频计划。"
+    },
+    "steps": [
+      "拆分动作与关系",
+      "组合条件扩散",
+      "将视频转成动作"
+    ],
+    "inputs": "当前图像、语言指令及可选目标图像",
+    "mechanism": "语言成分分解 + 组合扩散分数",
+    "outputs": "视频计划及逆动力学解码的动作",
+    "change": "在 UniPi 的视频计划视角上进一步比较语言组合性，而非只扩大神经网络。"
+  },
+  "r3m": {
+    "figure": {
+      "file": "r3m.webp",
+      "url": "https://arxiv.org/pdf/2203.12601#page=4",
+      "source": "https://arxiv.org/pdf/2203.12601#page=4",
+      "credit": "R3M · 原文 Fig. 2 · p.4",
+      "title": "人类视频表征预训练",
+      "caption": "利用人类视频的时间关系、语言描述与稀疏正则预训练视觉表征，再用于机器人模仿学习。"
+    },
+    "steps": [
+      "采样人类视频",
+      "对齐时间与语义",
+      "训练下游机器人策略"
+    ],
+    "inputs": "人类交互视频、语言描述",
+    "mechanism": "时间对比 + 视频语言对齐 + L1 正则",
+    "outputs": "可供机器人策略使用的视觉表征",
+    "change": "提供与机器人任务相关的通用视觉特征，可与 VIP 的奖励导向表征比较。"
+  },
+  "vip": {
+    "figure": {
+      "file": "vip.webp",
+      "url": "https://arxiv.org/pdf/2210.00030#page=2",
+      "source": "https://arxiv.org/pdf/2210.00030#page=2",
+      "credit": "VIP · 原文 Fig. 1 · p.2",
+      "title": "价值隐式表征与视觉奖励",
+      "caption": "从被动人类视频构造隐式价值预训练目标，让当前图像与目标图像的表征距离可用于视觉奖励。"
+    },
+    "steps": [
+      "采样视频目标",
+      "学习隐式价值表征",
+      "按目标距离构造奖励"
+    ],
+    "inputs": "无动作标签的人类视频、目标图像",
+    "mechanism": "离线目标条件 RL 对偶导出的隐式价值目标",
+    "outputs": "视觉表征和目标条件奖励",
+    "change": "相较 R3M 的表征复用，VIP 明确围绕下游视觉奖励的平滑性组织预训练。"
+  },
+  "vc1": {
+    "figure": {
+      "file": "vc1.webp",
+      "url": "https://arxiv.org/pdf/2303.18240#page=4",
+      "source": "https://arxiv.org/pdf/2303.18240#page=4",
+      "credit": "VC-1 / CortexBench · 原文 Fig. 2 · p.4",
+      "title": "CortexBench 表征评测流程",
+      "caption": "用 CortexBench 比较预训练视觉编码器在多类具身任务上的迁移，并研究 VC-1 的数据规模与任务适配。"
+    },
+    "steps": [
+      "预训练视觉编码器",
+      "接入不同控制任务",
+      "比较冻结与适配表现"
+    ],
+    "inputs": "预训练图像数据、任务演示或 RL 交互",
+    "mechanism": "MAE 视觉预训练 + 跨任务表征评测",
+    "outputs": "VC-1 视觉编码器和跨任务评测结果",
+    "change": "这是视觉表征和基准研究，不是动力学预测器；为后续特征空间世界模型提供编码器对照。"
+  },
+  "transporter": {
+    "figure": {
+      "file": "transporter.webp",
+      "url": "https://arxiv.org/pdf/2010.14406#page=4",
+      "source": "https://arxiv.org/pdf/2010.14406#page=4",
+      "credit": "Transporter Networks · 原文 Fig. 3 · p.4",
+      "title": "抓取条件特征搬运",
+      "caption": "以抓取点周围的深度特征为查询，在整张场景特征图上做互相关，找到与抓取位置对应的放置位姿。"
+    },
+    "steps": [
+      "预测抓取位置",
+      "裁出局部深度特征",
+      "互相关寻找放置位置"
+    ],
+    "inputs": "正交俯视 RGB-D 场景、抓取位置",
+    "mechanism": "全卷积特征 + 抓取条件互相关",
+    "outputs": "抓取与放置位姿",
+    "change": "通过空间结构而非对象类别建模重排；CLIPort 在此基础上加入语言语义通路。"
+  },
+  "peract": {
+    "figure": {
+      "file": "peract.webp",
+      "url": "https://peract.github.io/paper/peract_corl2022.pdf#page=4",
+      "source": "https://peract.github.io/paper/peract_corl2022.pdf#page=4",
+      "credit": "PerAct · 原文 Fig. 2 · p.4",
+      "title": "语言条件体素动作预测",
+      "caption": "把 RGB-D 观测变成体素，与语言一起输入 PerceiverIO，预测下一关键帧的离散末端位姿。"
+    },
+    "steps": [
+      "融合观测成体素",
+      "语言条件注意力",
+      "预测关键帧位姿"
+    ],
+    "inputs": "RGB-D、语言目标、机器人状态",
+    "mechanism": "体素编码 + PerceiverIO + 位姿分类",
+    "outputs": "关键帧平移、旋转、夹爪与碰撞标志",
+    "change": "把操作建模为空间离散动作选择，为 RVT 用二维多视图处理三维任务提供对照。"
+  },
+  "rvt": {
+    "figure": {
+      "file": "rvt.webp",
+      "url": "https://d1qx31qr3h6wln.cloudfront.net/publications/RVT_Arxiv_2023.pdf#page=3",
+      "source": "https://d1qx31qr3h6wln.cloudfront.net/publications/RVT_Arxiv_2023.pdf#page=3",
+      "credit": "RVT · 原文 Fig. 2 · p.3",
+      "title": "虚拟多视图到三维动作",
+      "caption": "把点云从固定虚拟视角重新渲染，多视图 Transformer 预测热力图，再反投影得到三维动作。"
+    },
+    "steps": [
+      "重建点云并重渲染",
+      "融合多视图与语言",
+      "提升热力图到三维"
+    ],
+    "inputs": "RGB-D、语言指令、机器人状态",
+    "mechanism": "虚拟视角渲染 + 多视图 Transformer",
+    "outputs": "三维末端目标位姿",
+    "change": "与 PerAct 目标相似但改用多视图表示；RVT-2 进一步细化定位和计算效率。"
+  },
+  "rvt2": {
+    "figure": {
+      "file": "rvt2.webp",
+      "url": "https://arxiv.org/pdf/2406.08545#page=4",
+      "source": "https://arxiv.org/pdf/2406.08545#page=4",
+      "credit": "RVT-2 · 原文 Fig. 2 · p.4",
+      "title": "由粗到细的多视图动作预测",
+      "caption": "在 RVT 上增加由粗到细的局部重渲染，配合凸上采样和位置条件旋转预测提升精细操作。"
+    },
+    "steps": [
+      "全局预测粗位置",
+      "放大局部重渲染",
+      "细化位置与旋转"
+    ],
+    "inputs": "RGB-D、语言指令、粗定位结果",
+    "mechanism": "局部重渲染 + 双阶段 RVT + 凸上采样",
+    "outputs": "细化的末端位姿与夹爪动作",
+    "change": "直接扩展 RVT，将几何分辨率分配给相关区域，并优化网络的显存与计算开销。"
+  },
+  "dp3": {
+    "figure": {
+      "file": "dp3.webp",
+      "url": "https://arxiv.org/pdf/2403.03954#page=4",
+      "source": "https://arxiv.org/pdf/2403.03954#page=4",
+      "credit": "DP3 · 原文 Fig. 2 · p.4",
+      "title": "点云表征条件扩散策略",
+      "caption": "用轻量 MLP 编码稀疏点云，将紧凑三维表征和机器人状态作为扩散动作策略的条件。"
+    },
+    "steps": [
+      "裁剪采样点云",
+      "提取紧凑三维特征",
+      "去噪生成动作序列"
+    ],
+    "inputs": "单视角点云、机器人状态",
+    "mechanism": "轻量点云 MLP + 条件动作扩散",
+    "outputs": "连续动作序列",
+    "change": "沿用 Diffusion Policy 的动作生成思路，把感知条件改为简洁的三维表示。"
+  },
+  "rt1": {
+    "figure": {
+      "file": "rt1.webp",
+      "url": "https://robotics-transformer1.github.io/assets/rt1.pdf#page=6",
+      "source": "https://robotics-transformer1.github.io/assets/rt1.pdf#page=6",
+      "credit": "RT-1 · 原文 Fig. 3 · p.6",
+      "title": "语言条件视觉 token 与动作 Transformer",
+      "caption": "通过语言条件视觉编码、TokenLearner 压缩和 Transformer，把图像历史与任务指令映射为离散机器人动作。"
+    },
+    "steps": [
+      "语言调制视觉编码",
+      "压缩视觉 token",
+      "预测机器人动作"
+    ],
+    "inputs": "图像历史、语言任务",
+    "mechanism": "FiLM EfficientNet + TokenLearner + Transformer",
+    "outputs": "离散末端、底盘与模式动作 token",
+    "change": "RT-1 先建立规模化视觉语言动作策略；RT-2 再研究把视觉语言预训练知识迁入动作。"
+  },
+  "vima": {
+    "figure": {
+      "file": "vima.webp",
+      "url": "https://arxiv.org/pdf/2210.03094#page=4",
+      "source": "https://arxiv.org/pdf/2210.03094#page=4",
+      "credit": "VIMA · 原文 Fig. 3 · p.4",
+      "title": "多模态提示与对象中心策略",
+      "caption": "用交织的文字与对象图像描述任务，以对象中心 token 表示提示和观测，经交叉注意力预测操作。"
+    },
+    "steps": [
+      "编码图文提示",
+      "表示对象与交互历史",
+      "跨注意力预测操作"
+    ],
+    "inputs": "文字与图像提示、对象观测、交互历史",
+    "mechanism": "T5 提示编码 + 对象 token + 因果策略解码",
+    "outputs": "机器人操作 waypoint",
+    "change": "把任务接口从单一文字扩展到图文交织提示，与 RT 系列形成任务表达方式的对照。"
+  },
+  "spatialvla": {
+    "figure": {
+      "file": "spatialvla.webp",
+      "url": "https://arxiv.org/pdf/2501.15830#page=3",
+      "source": "https://arxiv.org/pdf/2501.15830#page=3",
+      "credit": "SpatialVLA · 原文 Fig. 2 · p.3",
+      "title": "三维位置编码与自适应动作网格",
+      "caption": "向视觉 token 注入自我中心三维位置，以适应数据分布的动作网格编码机器人动作，并支持新机器人适配。"
+    },
+    "steps": [
+      "估计自我中心位置",
+      "构造动作空间网格",
+      "适配新机器人分布"
+    ],
+    "inputs": "RGB、相机内参、语言指令",
+    "mechanism": "Ego3D 位置编码 + 自适应动作网格",
+    "outputs": "离散空间动作 token 及解码动作",
+    "change": "围绕感知与动作的空间结构改进 VLA，而非仅把连续控制值均匀量化。"
+  },
+  "rdt1b": {
+    "figure": {
+      "file": "rdt1b.webp",
+      "url": "https://arxiv.org/pdf/2410.07864#page=4",
+      "source": "https://arxiv.org/pdf/2410.07864#page=4",
+      "credit": "RDT-1B · 原文 Fig. 3 · p.4",
+      "title": "统一动作空间与机器人扩散 Transformer",
+      "caption": "用统一动作空间组织多机器人数据，以语言与多视角图像条件训练扩散 Transformer，再适配双臂操作。"
+    },
+    "steps": [
+      "对齐多机器人动作空间",
+      "条件扩散预训练",
+      "双臂数据微调"
+    ],
+    "inputs": "多视角图像、语言、本体状态、带噪动作",
+    "mechanism": "SigLIP / T5 + 统一动作空间 + DiT",
+    "outputs": "双臂连续动作块",
+    "change": "以扩散建模多峰动作分布，结合跨数据源预训练和目标双臂机器人微调。"
+  },
+  "openvla-oft": {
+    "figure": {
+      "file": "openvla-oft.webp",
+      "url": "https://arxiv.org/pdf/2502.19645#page=3",
+      "source": "https://arxiv.org/pdf/2502.19645#page=3",
+      "credit": "OpenVLA-OFT · 原文 Fig. 2 · p.3",
+      "title": "VLA 解码与动作目标对比",
+      "caption": "保留 OpenVLA 预训练基础，通过并行解码、动作分块和连续 L1 回归调整微调方式，改善速度与任务成功率。"
+    },
+    "steps": [
+      "装入动作查询 token",
+      "并行预测动作块",
+      "用连续回归微调"
+    ],
+    "inputs": "图像、指令、离线专家演示",
+    "mechanism": "并行解码 + 动作块 + 连续 L1 回归",
+    "outputs": "一次前向预测的连续动作块",
+    "change": "直接改进 OpenVLA 的动作生成接口，用受控实验比较离散、自回归与连续并行方案。"
+  },
+  "bridge-v2": {
+    "figure": {
+      "file": "bridge-v2.webp",
+      "url": "https://arxiv.org/pdf/2308.12952#page=1",
+      "source": "https://arxiv.org/pdf/2308.12952#page=1",
+      "credit": "BridgeData V2 · 原文 Fig. 1 · p.1",
+      "title": "跨场景操作数据集概览",
+      "caption": "提供覆盖不同环境、物体和技能的机器人操作轨迹，结合语言标注、示范与自主采集用于多任务学习。"
+    },
+    "steps": [
+      "采集多场景操作",
+      "组织语言与轨迹",
+      "训练并评估策略"
+    ],
+    "inputs": "低成本机器人采集的视觉与动作轨迹、语言描述",
+    "mechanism": "多环境示范 + 自主采集 + 语言标注",
+    "outputs": "开放操作数据和策略学习基准",
+    "change": "扩展 Bridge 数据的规模与多样性，为多任务及跨数据集策略训练提供公开数据。"
+  },
+  "droid": {
+    "figure": {
+      "file": "droid.webp",
+      "url": "https://arxiv.org/pdf/2403.12945#page=4",
+      "source": "https://arxiv.org/pdf/2403.12945#page=4",
+      "credit": "DROID · 原文 Fig. 2 · p.4",
+      "title": "真实场景数据采集平台",
+      "caption": "用可移动的标准化 Franka 平台、多相机与 VR 遥操作，在不同真实场景分布式采集机器人操作数据。"
+    },
+    "steps": [
+      "部署统一采集平台",
+      "分布式遥操作记录",
+      "清洗标注并评估策略"
+    ],
+    "inputs": "Franka、三路同步相机、VR 遥操作",
+    "mechanism": "标准化移动平台 + 统一采集协议",
+    "outputs": "带视觉和动作记录的真实操作轨迹",
+    "change": "将数据多样性扩展到真实生活场景，同时用标准化硬件和协议控制采集差异。"
+  },
+  "umi": {
+    "figure": {
+      "file": "umi.webp",
+      "url": "https://arxiv.org/pdf/2402.10329#page=2",
+      "source": "https://arxiv.org/pdf/2402.10329#page=2",
+      "credit": "UMI · 原文 Fig. 2 · p.2",
+      "title": "手持教学与机器人执行接口",
+      "caption": "用手持夹爪、鱼眼相机与惯性追踪采集演示，统一观测和相对动作接口，再把策略部署到机器人上。"
+    },
+    "steps": [
+      "用手持夹爪示范",
+      "恢复相对动作轨迹",
+      "对齐时序部署策略"
+    ],
+    "inputs": "手持夹爪视频、IMU、夹爪开合及机器人观测",
+    "mechanism": "视觉惯性追踪 + 相对动作 + 延迟对齐",
+    "outputs": "可迁移的操作示范与机器人策略",
+    "change": "与 DROID 搬运机器人采数据的方式对照：UMI 将教学接口轻量化并控制观测与本体差异。"
+  },
+  "cliport": {
+    "figure": {
+      "file": "cliport.webp",
+      "url": "https://arxiv.org/pdf/2109.12098.pdf#page=4",
+      "source": "https://arxiv.org/pdf/2109.12098.pdf#page=4",
+      "credit": "CLIPort · 原文 Fig. 2 · p.4",
+      "title": "语义与空间双通路",
+      "caption": "把冻结 CLIP 的语言视觉语义与 Transporter 的空间特征融合，预测语言条件的抓取和放置。"
+    },
+    "steps": [
+      "编码视觉语言语义",
+      "融合空间稠密特征",
+      "预测抓放可供性"
+    ],
+    "inputs": "RGB-D 俯视观测、自然语言指令",
+    "mechanism": "冻结 CLIP + Transporter 双流融合",
+    "outputs": "语言条件抓取与放置位姿",
+    "change": "直接扩展 Transporter 的空间搬运结构，加入 CLIP 语义以处理语言指定对象。"
+  },
+  "lm-nav": {
+    "figure": {
+      "file": "lm-nav.webp",
+      "url": "https://arxiv.org/pdf/2207.04429#page=4",
+      "source": "https://arxiv.org/pdf/2207.04429#page=4",
+      "credit": "LM-Nav · 原文 Fig. 3 · p.4",
+      "title": "地标落地与拓扑导航",
+      "caption": "语言模型提取地标，视觉语言模型将地标对应到图像节点，视觉导航模型提供可达性与低层执行。"
+    },
+    "steps": [
+      "从指令提取地标",
+      "在观测图中匹配",
+      "规划并执行导航"
+    ],
+    "inputs": "语言路线指令、环境图像图",
+    "mechanism": "LLM 地标提取 + VLM 匹配 + VNM 导航",
+    "outputs": "图上的 waypoint 序列与导航动作",
+    "change": "在 SayCan 的可行性思路之外，比较用视觉导航可达性约束语言路线的方法。"
+  },
+  "code-as-policies": {
+    "figure": {
+      "file": "code-as-policies.webp",
+      "url": "https://arxiv.org/pdf/2209.07753#page=1",
+      "source": "https://arxiv.org/pdf/2209.07753#page=1",
+      "credit": "Code as Policies · 原文 Fig. 1 · p.1",
+      "title": "语言模型程序与机器人 API",
+      "caption": "让语言模型生成可调用感知与控制 API 的 Python 程序，并递归补全辅助函数以表达空间推理和反馈控制。"
+    },
+    "steps": [
+      "解释指令生成程序",
+      "递归补全辅助函数",
+      "调用感知与控制 API"
+    ],
+    "inputs": "用户指令、程序示例、感知和控制 API",
+    "mechanism": "层级代码生成 + 函数组合",
+    "outputs": "可执行机器人控制程序",
+    "change": "用程序变量、逻辑和第三方库表达动作组合，区别于只输出自然语言技能列表。"
+  },
+  "progprompt": {
+    "figure": {
+      "file": "progprompt.webp",
+      "url": "https://arxiv.org/pdf/2209.11302#page=2",
+      "source": "https://arxiv.org/pdf/2209.11302#page=2",
+      "credit": "ProgPrompt · 原文 Fig. 2 · p.2",
+      "title": "程序式提示与状态恢复",
+      "caption": "以类似程序的提示列出可用动作、场景对象和示例，让模型生成含状态断言与恢复步骤的任务计划。"
+    },
+    "steps": [
+      "列出对象和可用动作",
+      "生成含断言的计划",
+      "检查状态并恢复执行"
+    ],
+    "inputs": "可用动作接口、对象列表、任务指令、示例",
+    "mechanism": "程序式 prompt + 状态断言 + 恢复计划",
+    "outputs": "落地任务计划及执行时检查",
+    "change": "通过明确对象和动作词汇减少计划与环境脱节，并把执行状态反馈写入程序式流程。"
+  },
+  "sayplan": {
+    "figure": {
+      "file": "sayplan.webp",
+      "url": "https://proceedings.mlr.press/v229/rana23a/rana23a.pdf#page=2",
+      "source": "https://proceedings.mlr.press/v229/rana23a/rana23a.pdf#page=2",
+      "credit": "SayPlan · 原文 Fig. 1 · p.2",
+      "title": "场景图语义搜索与迭代规划",
+      "caption": "在三维场景图上逐步展开或折叠相关区域，结合传统路径规划与模拟反馈，迭代生成可执行任务计划。"
+    },
+    "steps": [
+      "检索相关场景子图",
+      "生成并补全动作计划",
+      "用反馈迭代修正"
+    ],
+    "inputs": "任务指令、分层三维场景图、动作 API",
+    "mechanism": "场景图搜索 + 路径规划 + 模拟反馈",
+    "outputs": "经检查的高层任务与导航计划",
+    "change": "把语言规划扩展到多房间大环境，突出结构化状态表示和上下文压缩。"
+  },
+  "inner-monologue": {
+    "figure": {
+      "file": "inner-monologue.webp",
+      "url": "https://arxiv.org/pdf/2207.05608#page=2",
+      "source": "https://arxiv.org/pdf/2207.05608#page=2",
+      "credit": "Inner Monologue · 原文 Fig. 1 · p.2",
+      "title": "具身语言反馈规划闭环",
+      "caption": "将成功检测、场景描述和人类反馈写回语言上下文，让模型根据执行结果持续调整计划。"
+    },
+    "steps": [
+      "选择并执行技能",
+      "把环境反馈写回文本",
+      "修正后续计划"
+    ],
+    "inputs": "用户任务、场景描述、技能成功信号、人类反馈",
+    "mechanism": "文本化环境反馈 + LLM 重规划 + 预训练技能",
+    "outputs": "下一步技能调用或澄清交互",
+    "change": "在技能选择基础上加入持续反馈，不再默认每一步都已成功执行。"
+  },
+  "llm-planner": {
+    "figure": {
+      "file": "llm-planner.webp",
+      "url": "https://arxiv.org/pdf/2212.04088.pdf#page=4",
+      "source": "https://arxiv.org/pdf/2212.04088.pdf#page=4",
+      "credit": "LLM-Planner · 原文 Fig. 2 · p.4",
+      "title": "示例检索与层级落地规划",
+      "caption": "检索相近任务示例并加入当前可见对象，用 LLM 生成高层子目标，交给低层规划器执行并根据观测重规划。"
+    },
+    "steps": [
+      "检索相关任务示例",
+      "基于观测规划子目标",
+      "执行并动态重规划"
+    ],
+    "inputs": "语言指令、检索示例、可见对象、环境状态",
+    "mechanism": "kNN 示例检索 + LLM 高层计划 + 低层规划器",
+    "outputs": "对象绑定的子目标与环境动作",
+    "change": "把环境中的对象显式放入提示，结合层级执行缓解语言计划与场景脱节。"
+  },
+  "rt-h": {
+    "figure": {
+      "file": "rt-h.webp",
+      "url": "https://arxiv.org/pdf/2403.01823.pdf#page=4",
+      "source": "https://arxiv.org/pdf/2403.01823.pdf#page=4",
+      "credit": "RT-H · 原文 Fig. 2 · p.4",
+      "title": "语言动作层级与纠正学习",
+      "caption": "先预测“向左移动”等语言动作，再结合任务和观测生成低层动作 token，并用语言干预修正高层动作模型。"
+    },
+    "steps": [
+      "预测语言动作",
+      "条件生成控制 token",
+      "用语言纠正高层策略"
+    ],
+    "inputs": "图像、任务、语言动作与人类干预",
+    "mechanism": "两次 VLM 查询 + 语言动作中间层",
+    "outputs": "低层机器人动作及更新后的高层动作策略",
+    "change": "从 RT-2 的直接动作输出延伸到语言动作层级，让中间决策可被人纠正。"
+  },
+  "libero": {
+    "figure": {
+      "file": "libero.webp",
+      "url": "https://arxiv.org/pdf/2306.03310#page=4",
+      "source": "https://arxiv.org/pdf/2306.03310#page=4",
+      "credit": "LIBERO · 原文 Fig. 2 · p.4",
+      "title": "程序化任务生成流程",
+      "caption": "程序化生成带语言描述、对象布局和逻辑目标的操作任务，用多组任务套件研究知识迁移与持续学习。"
+    },
+    "steps": [
+      "生成任务与语言指令",
+      "指定布局和逻辑目标",
+      "评估迁移与遗忘"
+    ],
+    "inputs": "人类活动模板、对象与场景、初始条件、目标公式",
+    "mechanism": "行为模板 + BDDL 任务描述 + 仿真评测",
+    "outputs": "操作任务套件、演示和终身学习基准",
+    "change": "为模型比较提供受控任务变化，是评测基础设施而非新的动作网络。"
+  },
+  "alfred": {
+    "figure": {
+      "file": "alfred.webp",
+      "url": "https://openaccess.thecvf.com/content_CVPR_2020/papers/Shridhar_ALFRED_A_Benchmark_for_Interpreting_Grounded_Instructions_for_Everyday_Tasks_CVPR_2020_paper.pdf#page=3",
+      "source": "https://openaccess.thecvf.com/content_CVPR_2020/papers/Shridhar_ALFRED_A_Benchmark_for_Interpreting_Grounded_Instructions_for_Everyday_Tasks_CVPR_2020_paper.pdf#page=3",
+      "credit": "ALFRED · 原文 Fig. 2 · p.3",
+      "title": "七类任务与指令标注",
+      "caption": "在 AI2-THOR 中配对专家操作轨迹、自然语言目标和逐步指令，评估导航与交互结合的长程任务。"
+    },
+    "steps": [
+      "规划专家交互轨迹",
+      "收集目标与步骤描述",
+      "评估未见场景执行"
+    ],
+    "inputs": "AI2-THOR 场景、专家规划轨迹、众包语言",
+    "mechanism": "专家演示 + 目标与逐步指令配对",
+    "outputs": "具身指令跟随数据与评测任务",
+    "change": "把指令跟随从找到目的地扩展到改变物体状态的长程交互任务。"
   }
 }

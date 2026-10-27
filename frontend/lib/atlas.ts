@@ -1,7 +1,7 @@
 import frameworkData from "@/content/frameworks.json";
 import routeData from "@/content/atlas-routes.json";
 import { papers, tracks, type Paper } from "./catalog";
-import { createAtlasLayout } from "./atlas-geometry";
+import { createAtlasLayout, routeGeometry } from "./atlas-geometry";
 
 export type Framework = (typeof frameworkData)[keyof typeof frameworkData];
 export const frameworks: Record<string, Framework> = frameworkData;
@@ -12,12 +12,19 @@ export const islands = [
   { id: "robot-agentic", name: "任务规划与交互", english: "ROBOT AGENTIC", question: "把动作接成任务，让执行形成闭环", color: "#8c79a6" },
 ] as const;
 export const atlasLayout = createAtlasLayout(tracks);
+export const atlasPoints = new Map(atlasLayout.points.map((point) => [point.id, point]));
 export type AtlasRelation = { from: string; to: string; kind: "reading" | "compare" | "evolution"; label: string; explanation: string; source: string };
 export const relations: AtlasRelation[] = routeData.map((edge) => ({
   ...edge, kind: edge.kind as AtlasRelation["kind"],
-  explanation: frameworks[edge.to].change,
-  source: frameworks[edge.to].figure.source,
+  explanation: edge.explanation ?? frameworks[edge.to].change,
+  source: edge.source ?? frameworks[edge.to].figure.source,
 }));
+// Layout is content-dependent, not camera-dependent: calculate every curve once.
+export const atlasRoutes = relations.map((edge) => {
+  const from = atlasPoints.get(edge.from)!, to = atlasPoints.get(edge.to)!;
+  const area = atlasLayout.territories.find((item) => item.id === from.track)!;
+  return { ...edge, geometry: routeGeometry(from, to, area.center), sequential: from.track === to.track && from.stage === to.stage && to.order === from.order + 1 };
+});
 export const orderedPapers = tracks.flatMap((track) => track.stages.flatMap((stage) => stage.papers.map((id) => papers.find((paper) => paper.id === id)!)));
 export function matchPaper(paper: Paper, query: string) {
   const haystack = `${paper.name} ${paper.title} ${paper.summary} ${paper.why} ${paper.year} ${paper.venue}`.toLocaleLowerCase();

@@ -1,0 +1,115 @@
+{
+  "before": {
+    "report": {
+      "papers": 43,
+      "updates": 9,
+      "medianMs": 25.100000000093132,
+      "p95Ms": 34.90000000083819,
+      "totalMs": 195.70000000065193
+    },
+    "samples": [
+      {
+        "phase": "update",
+        "duration": 23.899999999906868
+      },
+      {
+        "phase": "update",
+        "duration": 25.100000000093132
+      },
+      {
+        "phase": "update",
+        "duration": 32.5
+      },
+      {
+        "phase": "update",
+        "duration": 31.40000000037253
+      },
+      {
+        "phase": "update",
+        "duration": 28.100000000093132
+      },
+      {
+        "phase": "update",
+        "duration": 34.90000000083819
+      },
+      {
+        "phase": "update",
+        "duration": 12.599999999627471
+      },
+      {
+        "phase": "update",
+        "duration": 3.599999999627471
+      },
+      {
+        "phase": "update",
+        "duration": 3.6000000000931323
+      }
+    ]
+  },
+  "after43": {
+    "report": {
+      "papers": 43,
+      "updates": 9,
+      "medianMs": 3,
+      "p95Ms": 7.2999999998137355,
+      "totalMs": 31.799999999813735
+    },
+    "samples": [
+      {
+        "phase": "update",
+        "duration": 2.400000000372529
+      },
+      {
+        "phase": "update",
+        "duration": 3.1000000000931323
+      },
+      {
+        "phase": "update",
+        "duration": 4.899999999906868
+      },
+      {
+        "phase": "update",
+        "duration": 3
+      },
+      {
+        "phase": "update",
+        "duration": 2.6999999997206032
+      },
+      {
+        "phase": "update",
+        "duration": 7.2999999998137355
+      },
+      {
+        "phase": "update",
+        "duration": 2.7999999998137355
+      },
+      {
+        "phase": "update",
+        "duration": 2.6000000000931323
+      },
+      {
+        "phase": "update",
+        "duration": 3
+      }
+    ]
+  },
+  "after76": {
+    "papers": 76,
+    "viewport": "1280x720",
+    "gesture": "340,420 → 570,440",
+    "durations": [
+      2,
+      2.099999999627471,
+      2.2000000001862645,
+      2.2000000001862645,
+      2.2999999998137355,
+      2.3999999994412065,
+      2.700000001117587,
+      6.2000000001862645,
+      6.400000000372529
+    ],
+    "median": 2.2999999998137355,
+    "max": 6.400000000372529,
+    "sum": 28.500000000931323
+  }
+}

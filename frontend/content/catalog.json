@@ -14,14 +14,18 @@
         {
           "id": "latent-control",
           "name": "在想象中控制",
-          "question": "如何从像素学到可规划的状态？",
-          "guide": "从 World Models 的梦中环境出发，对比 PlaNet 的在线规划与 Dreamer 的策略学习，再由 DayDreamer 回到真机在线反馈。",
+          "question": "模型用于规划，还是训练策略？",
+          "guide": "从 World Models 的模块划分出发，比较 PETS 的不确定性规划、MBPO 的短预测训练和 SimPLe 的像素模拟；再读 PlaNet / Dreamer 与 TD-MPC 系列，最后回到真机反馈。",
           "papers": [
             "world-models",
+            "pets",
+            "mbpo",
+            "simple",
             "planet",
             "dreamer",
             "dreamerv2",
             "dreamerv3",
+            "tdmpc",
             "tdmpc2",
             "daydreamer"
           ]
@@ -29,21 +33,27 @@
         {
           "id": "generative",
           "name": "生成可交互世界",
-          "question": "预测画面，还是模拟因果？",
-          "guide": "先读 UniPi 的视频计划与逆动力学，再比较隐式动作、已知动作条件和视频基础模型。画面逼真与控制有效需分别验证。",
+          "question": "视频能否按动作演化，并支撑控制？",
+          "guide": "从 IRIS 与 DIAMOND 的离散、连续生成对照出发，读 UniPi / RoboDreamer 的视频计划，再比较 UniSim、Genie 与 Cosmos 的条件、动作来源及交互能力。",
           "papers": [
-            "unipi",
-            "genie",
+            "iris",
             "diamond",
+            "unipi",
+            "robodreamer",
+            "unisim",
+            "genie",
             "cosmos"
           ]
         },
         {
           "id": "feature-planning",
-          "name": "在表征中预测",
-          "question": "不生成像素，也能规划吗？",
-          "guide": "沿 I-JEPA → V-JEPA 理解表征预训练，再看 DINO-WM 与 V-JEPA 2 如何引入动作条件预测；用 LeWorldModel 作比较。",
+          "name": "从表征到预测",
+          "question": "什么视觉表征适合奖励、规划与控制？",
+          "guide": "先看 R3M、VIP 与 VC-1：编码器、视觉奖励和评测各解决什么；再从 I-JEPA / V-JEPA 的表征预测，走向 DINO-WM、V-JEPA 2 与 LeWorldModel 的动作条件建模。",
           "papers": [
+            "r3m",
+            "vip",
+            "vc1",
             "ijepa",
             "vjepa",
             "dino-wm",
@@ -78,43 +88,56 @@
         {
           "id": "actions",
           "name": "动作如何表示",
-          "question": "一次预测一步，还是一段动作？",
-          "guide": "ACT、Diffusion Policy 与 FAST：依次比较动作块、连续分布生成与压缩后的离散 token。注意动作空间、控制频率与执行延迟。",
+          "question": "预测空间位姿，还是连续动作序列？",
+          "guide": "先沿 Transporter → PerAct → RVT / RVT-2 比较空间动作表示；再以 ACT、Diffusion Policy、DP3 和 FAST 对照动作块、生成分布、三维条件与 token 化。",
           "papers": [
+            "transporter",
+            "peract",
+            "rvt",
+            "rvt2",
             "act",
             "diffusion-policy",
+            "dp3",
             "fast"
           ]
         },
         {
           "id": "pretraining",
-          "name": "接上视觉与语言",
-          "question": "互联网知识如何落到机器人上？",
-          "guide": "RT-2 展示动作 token；Open X-Embodiment 讨论数据协作；Octo 和 OpenVLA 提供开放模型参照。",
+          "name": "连接视觉与语言",
+          "question": "视觉、语言和机器人数据如何汇合？",
+          "guide": "从 RT-1 到 RT-2，比较机器人模仿学习和视觉语言迁移；VIMA 补充图文提示，再沿 Open X-Embodiment、Octo、OpenVLA 到 SpatialVLA 看数据、模型与空间表征。",
           "papers": [
+            "rt1",
             "rt2",
+            "vima",
             "openx",
             "octo",
-            "openvla"
+            "openvla",
+            "spatialvla"
           ]
         },
         {
           "id": "continuous",
-          "name": "生成连续动作",
-          "question": "语义理解如何连接精细控制？",
-          "guide": "沿 π0 的 flow matching 动作生成，看 π0.5 的数据混合与 GR00T N1 的分层模型。",
+          "name": "连续动作与效率",
+          "question": "流匹配、扩散与回归各付出什么代价？",
+          "guide": "先读 π0 / π0.5 与 GR00T N1 的分层连续动作，再比较 RDT-1B 的双臂扩散和 OpenVLA-OFT 的并行回归，关注条件、动作块与推理成本。",
           "papers": [
             "pi0",
             "pi05",
-            "groot-n1"
+            "groot-n1",
+            "rdt1b",
+            "openvla-oft"
           ]
         },
         {
           "id": "generalization",
-          "name": "泛化与经验学习",
-          "question": "换一个环境，还能做对吗？",
-          "guide": "比较 π*0.6 的经验学习与 π0.7 的记忆、子任务和视觉子目标。分清零样本、引导、微调和任务组合。",
+          "name": "数据与经验学习",
+          "question": "训练分布如何支撑环境与经验泛化？",
+          "guide": "用 BridgeData V2、DROID、UMI 比较采集方式和覆盖范围；再进入 π*0.6 与 π0.7 的经验学习、记忆和目标条件。数据集与策略分别标注，不将规模等同于泛化。",
           "papers": [
+            "bridge-v2",
+            "droid",
+            "umi",
             "pistar06",
             "pi07"
           ]
@@ -132,29 +155,36 @@
         {
           "id": "grounding",
           "name": "语言落地",
-          "question": "说得合理，是否真的做得到？",
-          "guide": "SayCan 用可供性约束语言选择，PaLM-E 将具身观测接入多模态模型。先划清规划与控制的边界。",
+          "question": "如何把语义对象和可执行技能对应起来？",
+          "guide": "CLIPort 展示语义与空间双通路，SayCan 用可供性筛选技能，LM-Nav 通过地标与拓扑图导航，PaLM-E 则把具身观测纳入多模态模型。",
           "papers": [
+            "cliport",
             "saycan",
+            "lm-nav",
             "palm-e"
           ]
         },
         {
           "id": "executable",
-          "name": "空间与约束",
-          "question": "怎样把语义目标写成可执行约束？",
-          "guide": "对比 VoxPoser 的三维价值图与 ReKep 的关键点关系约束，观察每步是否重新获取环境反馈。",
+          "name": "程序与空间约束",
+          "question": "高层语言如何变成可检查的执行接口？",
+          "guide": "比较 Code as Policies 的控制程序、ProgPrompt 的对象和断言、SayPlan 的场景图，再读 VoxPoser 的空间价值图与 ReKep 的关键点约束。",
           "papers": [
+            "code-as-policies",
+            "progprompt",
+            "sayplan",
             "voxposer",
             "rekep"
           ]
         },
         {
           "id": "learning",
-          "name": "生成学习任务",
-          "question": "语言模型能帮助机器人学什么？",
-          "guide": "Eureka 生成奖励代码，RoboGen 组织仿真任务与学习流程；区分生成监督和直接控制。",
+          "name": "任务与学习环境",
+          "question": "如何定义任务、监督学习并检验迁移？",
+          "guide": "先通过 ALFRED 与 LIBERO 认识指令、目标和评测划分，再读 Eureka 的奖励代码与 RoboGen 的任务生成。基准、监督和控制策略是不同层级。",
           "papers": [
+            "alfred",
+            "libero",
             "eureka",
             "robogen"
           ]
@@ -162,9 +192,12 @@
         {
           "id": "closed-loop",
           "name": "执行与技能积累",
-          "question": "失败经验怎样进入下一次尝试？",
-          "guide": "从 Hi Robot 的分层指令跟随，到 Gemini Robotics 的具身推理与 ASPIRE 的技能规划。检查高层计划能否通过反馈落到真实执行。",
+          "question": "执行反馈如何进入下一次动作与学习？",
+          "guide": "从 Inner Monologue 的语言反馈、LLM-Planner 的层级重规划到 RT-H 的语言动作纠错；再看 Hi Robot、Gemini Robotics 与 ASPIRE 的任务执行和技能积累。",
           "papers": [
+            "inner-monologue",
+            "llm-planner",
+            "rt-h",
             "hirobot",
             "gemini-robotics",
             "aspire"
@@ -1572,6 +1605,1318 @@
       ],
       "checkedAt": "2026-10-27",
       "reviewScope": "已核对原文 Fig. 2（PDF 第 4 页）及第 4 页相关方法段落，并提炼图示的输入、机制和输出；未完成全文实验复核或代码复现。"
+    },
+    {
+      "id": "pets",
+      "name": "PETS",
+      "title": "Deep Reinforcement Learning in a Handful of Trials using Probabilistic Dynamics Models",
+      "year": 2018,
+      "kind": "paper",
+      "venue": "NeurIPS",
+      "track": "world-models",
+      "summary": "用概率动力学模型集成表达不确定性，通过粒子轨迹采样评估候选动作，再用 MPC 滚动执行。",
+      "why": "理解模型控制的基础：预测均值之外，为什么还要考虑环境噪声与模型认知不足。",
+      "watchFor": "主要从状态输入建模；不要把状态空间控制成绩直接等同于从像素学习的能力。",
+      "ccf": "A",
+      "distinction": null,
+      "links": [
+        {
+          "label": "会议记录 / 出版来源",
+          "url": "https://papers.nips.cc/paper_files/paper/2018/hash/3de568f8597b94bda53149c7d7f5958c-Abstract.html"
+        },
+        {
+          "label": "论文原文",
+          "url": "https://arxiv.org/pdf/1805.12114"
+        },
+        {
+          "label": "作者项目页",
+          "url": "https://arxiv.org/abs/1805.12114"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表信息核对",
+          "url": "https://papers.nips.cc/paper_files/paper/2018/hash/3de568f8597b94bda53149c7d7f5958c-Abstract.html"
+        },
+        {
+          "label": "原文 Fig. 1 · p.2",
+          "url": "https://arxiv.org/pdf/1805.12114#page=2"
+        }
+      ],
+      "checkedAt": "2026-10-27",
+      "reviewScope": "已核对原文 Fig. 1（PDF 第 2 页）及第 2, 3, 4 页相关方法段落，整理图示、输入、机制与输出；未完成全文实验复核或代码复现。"
+    },
+    {
+      "id": "mbpo",
+      "name": "MBPO",
+      "title": "When to Trust Your Model: Model-Based Policy Optimization",
+      "year": 2019,
+      "kind": "paper",
+      "venue": "NeurIPS",
+      "track": "world-models",
+      "summary": "从真实回放中的状态出发做短模型 rollout，把合成转移用于离线策略更新，限制长程模型误差。",
+      "why": "把“模型预测越长越好”变成可讨论的问题，是比较规划与模型辅助策略学习的关键节点。",
+      "watchFor": "短 rollout 的收益依赖模型泛化与数据分布；原文采用状态输入，不能直接代表视觉世界模型。",
+      "ccf": "A",
+      "distinction": null,
+      "links": [
+        {
+          "label": "会议记录 / 出版来源",
+          "url": "https://papers.nips.cc/paper_files/paper/2019/hash/5faf461eff3099671ad63c6f3f094f7f-Abstract.html"
+        },
+        {
+          "label": "论文原文",
+          "url": "https://arxiv.org/pdf/1906.08253"
+        },
+        {
+          "label": "作者项目页",
+          "url": "https://jannerm.github.io/mbpo-www/"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表信息核对",
+          "url": "https://papers.nips.cc/paper_files/paper/2019/hash/5faf461eff3099671ad63c6f3f094f7f-Abstract.html"
+        },
+        {
+          "label": "原文 Algorithm 2 · p.6",
+          "url": "https://arxiv.org/pdf/1906.08253#page=6"
+        }
+      ],
+      "checkedAt": "2026-10-27",
+      "reviewScope": "已核对原文 Algorithm 2（PDF 第 6 页）及第 5, 6 页相关方法段落，整理图示、输入、机制与输出；未完成全文实验复核或代码复现。"
+    },
+    {
+      "id": "simple",
+      "name": "SimPLe",
+      "title": "Model Based Reinforcement Learning for Atari",
+      "year": 2020,
+      "kind": "paper",
+      "venue": "ICLR",
+      "track": "world-models",
+      "summary": "学习带离散随机潜变量的帧与奖励预测器，在学得的 Atari 模拟器中训练策略。",
+      "why": "连接像素视频预测与模型强化学习，能和 World Models、IRIS、DIAMOND 逐项比较。",
+      "watchFor": "预测画面清晰不保证长期动态正确；关注模拟长度、重置策略及真实交互预算。",
+      "ccf": "A",
+      "distinction": null,
+      "links": [
+        {
+          "label": "会议记录 / 出版来源",
+          "url": "https://arxiv.org/abs/1903.00374"
+        },
+        {
+          "label": "论文原文",
+          "url": "https://arxiv.org/pdf/1903.00374"
+        },
+        {
+          "label": "作者项目页",
+          "url": "https://arxiv.org/abs/1903.00374"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表信息核对",
+          "url": "https://arxiv.org/abs/1903.00374"
+        },
+        {
+          "label": "原文 Fig. 2 · p.4",
+          "url": "https://arxiv.org/pdf/1903.00374#page=4"
+        }
+      ],
+      "checkedAt": "2026-10-27",
+      "reviewScope": "已核对原文 Fig. 2（PDF 第 4 页）及第 3, 4 页相关方法段落，整理图示、输入、机制与输出；未完成全文实验复核或代码复现。"
+    },
+    {
+      "id": "tdmpc",
+      "name": "TD-MPC",
+      "title": "Temporal Difference Learning for Model Predictive Control",
+      "year": 2022,
+      "kind": "paper",
+      "venue": "ICML",
+      "track": "world-models",
+      "summary": "联合学习任务相关潜动力学、奖励和终端价值，用短时域模型预测加长程价值估计选择动作。",
+      "why": "补齐 TD-MPC2 的前序方法，也提供不依赖像素重建目标的模型控制对照。",
+      "watchFor": "终端价值与模型都可能有偏差；区分辅助策略网络与最终 MPC 搜索输出。",
+      "ccf": "A",
+      "distinction": null,
+      "links": [
+        {
+          "label": "会议记录 / 出版来源",
+          "url": "https://proceedings.mlr.press/v162/hansen22a.html"
+        },
+        {
+          "label": "论文原文",
+          "url": "https://arxiv.org/pdf/2203.04955"
+        },
+        {
+          "label": "作者项目页",
+          "url": "https://www.nicklashansen.com/td-mpc/"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表信息核对",
+          "url": "https://proceedings.mlr.press/v162/hansen22a.html"
+        },
+        {
+          "label": "原文 Fig. 2 · p.4",
+          "url": "https://arxiv.org/pdf/2203.04955#page=4"
+        }
+      ],
+      "checkedAt": "2026-10-27",
+      "reviewScope": "已核对原文 Fig. 2（PDF 第 4 页）及第 3, 4 页相关方法段落，整理图示、输入、机制与输出；未完成全文实验复核或代码复现。"
+    },
+    {
+      "id": "iris",
+      "name": "IRIS",
+      "title": "Transformers are Sample-Efficient World Models",
+      "year": 2023,
+      "kind": "paper",
+      "venue": "ICLR",
+      "track": "world-models",
+      "summary": "把图像压缩成离散 token，自回归预测未来 token、奖励与终止，再在想象轨迹里学习行为。",
+      "why": "世界模型中的 token 化路线，可与连续像素扩散预测 DIAMOND 比较表征代价。",
+      "watchFor": "图像压缩会丢失细节；Atari 的样本效率并非真实机器人泛化的直接证据。",
+      "ccf": "A",
+      "distinction": null,
+      "links": [
+        {
+          "label": "会议记录 / 出版来源",
+          "url": "https://arxiv.org/abs/2209.00588"
+        },
+        {
+          "label": "论文原文",
+          "url": "https://arxiv.org/pdf/2209.00588"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表信息核对",
+          "url": "https://arxiv.org/abs/2209.00588"
+        },
+        {
+          "label": "原文 Fig. 1 · p.2",
+          "url": "https://arxiv.org/pdf/2209.00588#page=2"
+        }
+      ],
+      "checkedAt": "2026-10-27",
+      "reviewScope": "已核对原文 Fig. 1（PDF 第 2 页）及第 2, 3 页相关方法段落，整理图示、输入、机制与输出；未完成全文实验复核或代码复现。"
+    },
+    {
+      "id": "unisim",
+      "name": "UniSim",
+      "title": "Learning Interactive Real-World Simulators",
+      "year": 2024,
+      "kind": "paper",
+      "venue": "ICLR",
+      "track": "world-models",
+      "summary": "混合不同来源的视频和动作条件训练视频模拟器，以语言或低层动作控制后续视觉变化。",
+      "why": "将被动视频生成推进到可交互模拟，连接视频世界模型和下游策略学习。",
+      "watchFor": "学习模拟器可能产生不符合物理的轨迹；生成逼真度和策略迁移需要分别验证。",
+      "ccf": "A",
+      "distinction": null,
+      "links": [
+        {
+          "label": "会议记录 / 出版来源",
+          "url": "https://universal-simulator.github.io/unisim/"
+        },
+        {
+          "label": "论文原文",
+          "url": "https://arxiv.org/pdf/2310.06114v2"
+        },
+        {
+          "label": "作者项目页",
+          "url": "https://universal-simulator.github.io/unisim/"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表信息核对",
+          "url": "https://universal-simulator.github.io/unisim/"
+        },
+        {
+          "label": "原文 Fig. 2 · HTML §2",
+          "url": "https://arxiv.org/html/2310.06114v2#S2.F2"
+        }
+      ],
+      "checkedAt": "2026-10-27",
+      "reviewScope": "已核对原文 HTML 版 Fig. 2 与 §2.1、§2.2、§4.1、§4.2 相关方法段落；采用原文图像资源。未完成全文实验复核或代码复现。"
+    },
+    {
+      "id": "robodreamer",
+      "name": "RoboDreamer",
+      "title": "RoboDreamer: Learning Compositional World Models for Robot Imagination",
+      "year": 2024,
+      "kind": "paper",
+      "venue": "ICML",
+      "track": "world-models",
+      "summary": "把语言任务拆为动作与关系成分，组合各条件的扩散分数，生成机器人完成任务的视频计划。",
+      "why": "关注世界模型对未见过的语义组合能否泛化，补充单一文本条件生成器的对照。",
+      "watchFor": "组合泛化仍依赖已见成分与数据覆盖；视频计划必须经逆动力学等接口才能成为动作。",
+      "ccf": "A",
+      "distinction": null,
+      "links": [
+        {
+          "label": "会议记录 / 出版来源",
+          "url": "https://proceedings.mlr.press/v235/zhou24f.html"
+        },
+        {
+          "label": "论文原文",
+          "url": "https://arxiv.org/pdf/2404.12377"
+        },
+        {
+          "label": "作者项目页",
+          "url": "https://robovideo.github.io/"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表信息核对",
+          "url": "https://proceedings.mlr.press/v235/zhou24f.html"
+        },
+        {
+          "label": "原文 Fig. 3 · p.3",
+          "url": "https://arxiv.org/pdf/2404.12377#page=3"
+        }
+      ],
+      "checkedAt": "2026-10-27",
+      "reviewScope": "已核对原文 Fig. 3（PDF 第 3 页）及第 3, 4 页相关方法段落，整理图示、输入、机制与输出；未完成全文实验复核或代码复现。"
+    },
+    {
+      "id": "r3m",
+      "name": "R3M",
+      "title": "R3M: A Universal Visual Representation for Robot Manipulation",
+      "year": 2022,
+      "kind": "paper",
+      "venue": "CoRL",
+      "track": "world-models",
+      "summary": "利用人类视频的时间关系、语言描述与稀疏正则预训练视觉表征，再用于机器人模仿学习。",
+      "why": "先理解“什么表征适合控制”，再进入 JEPA 与动作条件表征预测，能厘清模块边界。",
+      "watchFor": "R3M 是视觉编码器，不会自行预测动作后果；下游仍需要机器人演示和策略学习。",
+      "ccf": null,
+      "distinction": null,
+      "links": [
+        {
+          "label": "会议记录 / 出版来源",
+          "url": "https://proceedings.mlr.press/v205/nair23a.html"
+        },
+        {
+          "label": "论文原文",
+          "url": "https://arxiv.org/pdf/2203.12601"
+        },
+        {
+          "label": "作者项目页",
+          "url": "https://sites.google.com/view/robot-r3m/"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表信息核对",
+          "url": "https://proceedings.mlr.press/v205/nair23a.html"
+        },
+        {
+          "label": "原文 Fig. 2 · p.4",
+          "url": "https://arxiv.org/pdf/2203.12601#page=4"
+        }
+      ],
+      "checkedAt": "2026-10-27",
+      "reviewScope": "已核对原文 Fig. 2（PDF 第 4 页）及第 3, 4 页相关方法段落，整理图示、输入、机制与输出；未完成全文实验复核或代码复现。"
+    },
+    {
+      "id": "vip",
+      "name": "VIP",
+      "title": "VIP: Towards Universal Visual Reward and Representation via Value-Implicit Pre-Training",
+      "year": 2023,
+      "kind": "paper",
+      "venue": "ICLR",
+      "track": "world-models",
+      "summary": "从被动人类视频构造隐式价值预训练目标，让当前图像与目标图像的表征距离可用于视觉奖励。",
+      "why": "把视觉编码与奖励设计连接起来，帮助理解目标距离为何未必天然适合规划。",
+      "watchFor": "表征距离不是已验证的真实环境价值函数；奖励可迁移性要看任务与观测分布。",
+      "ccf": "A",
+      "distinction": null,
+      "links": [
+        {
+          "label": "会议记录 / 出版来源",
+          "url": "https://sites.google.com/view/vip-rl"
+        },
+        {
+          "label": "论文原文",
+          "url": "https://arxiv.org/pdf/2210.00030"
+        },
+        {
+          "label": "作者项目页",
+          "url": "https://sites.google.com/view/vip-rl"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表信息核对",
+          "url": "https://sites.google.com/view/vip-rl"
+        },
+        {
+          "label": "原文 Fig. 1 · p.2",
+          "url": "https://arxiv.org/pdf/2210.00030#page=2"
+        }
+      ],
+      "checkedAt": "2026-10-27",
+      "reviewScope": "已核对原文 Fig. 1（PDF 第 2 页）及第 3, 4 页相关方法段落，整理图示、输入、机制与输出；未完成全文实验复核或代码复现。"
+    },
+    {
+      "id": "vc1",
+      "name": "VC-1 / CortexBench",
+      "title": "Where are we in the search for an Artificial Visual Cortex for Embodied Intelligence?",
+      "year": 2023,
+      "kind": "paper",
+      "venue": "NeurIPS",
+      "track": "world-models",
+      "summary": "用 CortexBench 比较预训练视觉编码器在多类具身任务上的迁移，并研究 VC-1 的数据规模与任务适配。",
+      "why": "避免只在单一操作任务上判断表征优劣，为 R3M、VIP 与 JEPA 提供统一的评测视角。",
+      "watchFor": "更大模型和更多预训练数据并非在每个任务上都更好；区分冻结表征与任务适配结果。",
+      "ccf": "A",
+      "distinction": null,
+      "links": [
+        {
+          "label": "会议记录 / 出版来源",
+          "url": "https://papers.nips.cc/paper_files/paper/2023/hash/022ca1bed6b574b962c48a2856eb207b-Abstract-Conference.html"
+        },
+        {
+          "label": "论文原文",
+          "url": "https://arxiv.org/pdf/2303.18240"
+        },
+        {
+          "label": "作者项目页",
+          "url": "https://eai-vc.github.io/"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表信息核对",
+          "url": "https://papers.nips.cc/paper_files/paper/2023/hash/022ca1bed6b574b962c48a2856eb207b-Abstract-Conference.html"
+        },
+        {
+          "label": "原文 Fig. 2 · p.4",
+          "url": "https://arxiv.org/pdf/2303.18240#page=4"
+        }
+      ],
+      "checkedAt": "2026-10-27",
+      "reviewScope": "已核对原文 Fig. 2（PDF 第 4 页）及第 3, 4, 7 页相关方法段落，整理图示、输入、机制与输出；未完成全文实验复核或代码复现。"
+    },
+    {
+      "id": "transporter",
+      "name": "Transporter Networks",
+      "title": "Transporter Networks: Rearranging the Visual World for Robotic Manipulation",
+      "year": 2020,
+      "kind": "paper",
+      "venue": "CoRL",
+      "track": "vla",
+      "summary": "以抓取点周围的深度特征为查询，在整张场景特征图上做互相关，找到与抓取位置对应的放置位姿。",
+      "why": "从空间归纳偏置理解少样本操作，也是阅读 CLIPort 语义与空间双通路的前置工作。",
+      "watchFor": "搬运的是特征而非像素；关注俯视重建、动作维度与具体任务设定，不能泛化为任意机器人控制。",
+      "ccf": null,
+      "distinction": null,
+      "links": [
+        {
+          "label": "会议记录 / 出版来源",
+          "url": "https://proceedings.mlr.press/v155/zeng21a.html"
+        },
+        {
+          "label": "论文原文",
+          "url": "https://arxiv.org/pdf/2010.14406"
+        },
+        {
+          "label": "作者项目页",
+          "url": "https://transporternets.github.io/"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表信息核对",
+          "url": "https://proceedings.mlr.press/v155/zeng21a.html"
+        },
+        {
+          "label": "原文 Fig. 3 · p.4",
+          "url": "https://arxiv.org/pdf/2010.14406#page=4"
+        }
+      ],
+      "checkedAt": "2026-10-27",
+      "reviewScope": "已核对原文 Fig. 3（PDF 第 4 页）及第 4 页相关方法段落，整理图示、输入、机制与输出；未完成全文实验复核或代码复现。"
+    },
+    {
+      "id": "peract",
+      "name": "PerAct",
+      "title": "Perceiver-Actor: A Multi-Task Transformer for Robotic Manipulation",
+      "year": 2022,
+      "kind": "paper",
+      "venue": "CoRL",
+      "track": "vla",
+      "summary": "把 RGB-D 观测变成体素，与语言一起输入 PerceiverIO，预测下一关键帧的离散末端位姿。",
+      "why": "是语言条件三维操作的代表，可与 RVT 的多视图表示、DP3 的点云表示直接比较。",
+      "watchFor": "关键帧位姿仍由运动规划器执行；离散体素精度、深度质量与演示分布影响实际表现。",
+      "ccf": null,
+      "distinction": null,
+      "links": [
+        {
+          "label": "会议记录 / 出版来源",
+          "url": "https://proceedings.mlr.press/v205/shridhar23a.html"
+        },
+        {
+          "label": "论文原文",
+          "url": "https://peract.github.io/paper/peract_corl2022.pdf"
+        },
+        {
+          "label": "作者项目页",
+          "url": "https://peract.github.io/"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表信息核对",
+          "url": "https://proceedings.mlr.press/v205/shridhar23a.html"
+        },
+        {
+          "label": "原文 Fig. 2 · p.4",
+          "url": "https://peract.github.io/paper/peract_corl2022.pdf#page=4"
+        }
+      ],
+      "checkedAt": "2026-10-27",
+      "reviewScope": "已核对原文 Fig. 2（PDF 第 4 页）及第 4 页相关方法段落，整理图示、输入、机制与输出；未完成全文实验复核或代码复现。"
+    },
+    {
+      "id": "rvt",
+      "name": "RVT",
+      "title": "RVT: Robotic View Transformer for 3D Object Manipulation",
+      "year": 2023,
+      "kind": "paper",
+      "venue": "CoRL",
+      "track": "vla",
+      "summary": "把点云从固定虚拟视角重新渲染，多视图 Transformer 预测热力图，再反投影得到三维动作。",
+      "why": "展示三维操作不一定要使用昂贵体素网络，能拆解几何表示与动作预测的关系。",
+      "watchFor": "仍依赖 RGB-D、相机几何与关键帧示范；多视图渲染并不消除遮挡和深度误差。",
+      "ccf": null,
+      "distinction": null,
+      "links": [
+        {
+          "label": "会议记录 / 出版来源",
+          "url": "https://proceedings.mlr.press/v229/goyal23a.html"
+        },
+        {
+          "label": "论文原文",
+          "url": "https://d1qx31qr3h6wln.cloudfront.net/publications/RVT_Arxiv_2023.pdf"
+        },
+        {
+          "label": "作者项目页",
+          "url": "https://robotic-view-transformer.github.io/"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表信息核对",
+          "url": "https://proceedings.mlr.press/v229/goyal23a.html"
+        },
+        {
+          "label": "原文 Fig. 2 · p.3",
+          "url": "https://d1qx31qr3h6wln.cloudfront.net/publications/RVT_Arxiv_2023.pdf#page=3"
+        }
+      ],
+      "checkedAt": "2026-10-27",
+      "reviewScope": "已核对原文 Fig. 2（PDF 第 3 页）及第 3, 4 页相关方法段落，整理图示、输入、机制与输出；未完成全文实验复核或代码复现。"
+    },
+    {
+      "id": "rvt2",
+      "name": "RVT-2",
+      "title": "RVT-2: Learning Precise Manipulation from Few Demonstrations",
+      "year": 2024,
+      "kind": "paper",
+      "venue": "RSS",
+      "track": "vla",
+      "summary": "在 RVT 上增加由粗到细的局部重渲染，配合凸上采样和位置条件旋转预测提升精细操作。",
+      "why": "能直观看到从全局找位置到局部精定位的改进，也适合研究速度与精度的工程权衡。",
+      "watchFor": "不要把各项改进统一归因于模型变大；关注粗定位误差是否会传播到细分支。",
+      "ccf": null,
+      "distinction": null,
+      "links": [
+        {
+          "label": "会议记录 / 出版来源",
+          "url": "https://robotic-view-transformer-2.github.io/"
+        },
+        {
+          "label": "论文原文",
+          "url": "https://arxiv.org/pdf/2406.08545"
+        },
+        {
+          "label": "作者项目页",
+          "url": "https://robotic-view-transformer-2.github.io/"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表信息核对",
+          "url": "https://robotic-view-transformer-2.github.io/"
+        },
+        {
+          "label": "原文 Fig. 2 · p.4",
+          "url": "https://arxiv.org/pdf/2406.08545#page=4"
+        }
+      ],
+      "checkedAt": "2026-10-27",
+      "reviewScope": "已核对原文 Fig. 2（PDF 第 4 页）及第 4 页相关方法段落，整理图示、输入、机制与输出；未完成全文实验复核或代码复现。"
+    },
+    {
+      "id": "dp3",
+      "name": "DP3",
+      "title": "3D Diffusion Policy: Generalizable Visuomotor Policy Learning via Simple 3D Representations",
+      "year": 2024,
+      "kind": "paper",
+      "venue": "RSS",
+      "track": "vla",
+      "summary": "用轻量 MLP 编码稀疏点云，将紧凑三维表征和机器人状态作为扩散动作策略的条件。",
+      "why": "连接三维感知与动作分布生成，适合与二维 Diffusion Policy 及 RVT 位姿预测对照。",
+      "watchFor": "实验提升与点云裁剪、采样和传感器质量相关；不是不依赖环境结构的通用 VLA。",
+      "ccf": null,
+      "distinction": null,
+      "links": [
+        {
+          "label": "会议记录 / 出版来源",
+          "url": "https://doi.org/10.15607/rss.2024.xx.067"
+        },
+        {
+          "label": "论文原文",
+          "url": "https://arxiv.org/pdf/2403.03954"
+        },
+        {
+          "label": "作者项目页",
+          "url": "https://3d-diffusion-policy.github.io/"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表信息核对",
+          "url": "https://doi.org/10.15607/rss.2024.xx.067"
+        },
+        {
+          "label": "原文 Fig. 2 · p.4",
+          "url": "https://arxiv.org/pdf/2403.03954#page=4"
+        }
+      ],
+      "checkedAt": "2026-10-27",
+      "reviewScope": "已核对原文 Fig. 2（PDF 第 4 页）及第 4 页相关方法段落，整理图示、输入、机制与输出；未完成全文实验复核或代码复现。"
+    },
+    {
+      "id": "rt1",
+      "name": "RT-1",
+      "title": "RT-1: Robotics Transformer for Real-World Control at Scale",
+      "year": 2023,
+      "kind": "paper",
+      "venue": "RSS",
+      "track": "vla",
+      "summary": "通过语言条件视觉编码、TokenLearner 压缩和 Transformer，把图像历史与任务指令映射为离散机器人动作。",
+      "why": "补齐 RT-2 之前的规模化机器人模仿学习路径，区分视觉骨干预训练与视觉语言模型迁移。",
+      "watchFor": "语言条件并不等于直接继承互联网推理能力；其动作空间和训练机器人范围有明确边界。",
+      "ccf": null,
+      "distinction": null,
+      "links": [
+        {
+          "label": "会议记录 / 出版来源",
+          "url": "https://doi.org/10.15607/rss.2023.xix.025"
+        },
+        {
+          "label": "论文原文",
+          "url": "https://robotics-transformer1.github.io/assets/rt1.pdf"
+        },
+        {
+          "label": "作者项目页",
+          "url": "https://robotics-transformer1.github.io/"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表信息核对",
+          "url": "https://doi.org/10.15607/rss.2023.xix.025"
+        },
+        {
+          "label": "原文 Fig. 3 · p.6",
+          "url": "https://robotics-transformer1.github.io/assets/rt1.pdf#page=6"
+        }
+      ],
+      "checkedAt": "2026-10-27",
+      "reviewScope": "已核对原文 Fig. 3（PDF 第 6 页）及第 5, 6 页相关方法段落，整理图示、输入、机制与输出；未完成全文实验复核或代码复现。"
+    },
+    {
+      "id": "vima",
+      "name": "VIMA",
+      "title": "VIMA: Robot Manipulation with Multimodal Prompts",
+      "year": 2023,
+      "kind": "paper",
+      "venue": "ICML",
+      "track": "vla",
+      "summary": "用交织的文字与对象图像描述任务，以对象中心 token 表示提示和观测，经交叉注意力预测操作。",
+      "why": "为纯文本任务指令提供多模态提示对照，明确区分新布局、新组合、新对象与新任务泛化。",
+      "watchFor": "主要验证于仿真桌面操作；多模态提示泛化不能直接当作真实机器人跨本体泛化。",
+      "ccf": "A",
+      "distinction": null,
+      "links": [
+        {
+          "label": "会议记录 / 出版来源",
+          "url": "https://proceedings.mlr.press/v202/jiang23b.html"
+        },
+        {
+          "label": "论文原文",
+          "url": "https://arxiv.org/pdf/2210.03094"
+        },
+        {
+          "label": "作者项目页",
+          "url": "https://vimalabs.github.io/"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表信息核对",
+          "url": "https://proceedings.mlr.press/v202/jiang23b.html"
+        },
+        {
+          "label": "原文 Fig. 3 · p.4",
+          "url": "https://arxiv.org/pdf/2210.03094#page=4"
+        }
+      ],
+      "checkedAt": "2026-10-27",
+      "reviewScope": "已核对原文 Fig. 3（PDF 第 4 页）及第 4 页相关方法段落，整理图示、输入、机制与输出；未完成全文实验复核或代码复现。"
+    },
+    {
+      "id": "spatialvla",
+      "name": "SpatialVLA",
+      "title": "SpatialVLA: Exploring Spatial Representations for Visual-Language-Action Models",
+      "year": 2025,
+      "kind": "paper",
+      "venue": "RSS",
+      "track": "vla",
+      "summary": "向视觉 token 注入自我中心三维位置，以适应数据分布的动作网格编码机器人动作，并支持新机器人适配。",
+      "why": "把三维几何与 VLM 动作 token 连接起来，可与 OpenVLA 的动作离散化及连续动作专家比较。",
+      "watchFor": "位置嵌入依赖深度估计和相机内参；新机器人上的空间适配需要数据，不能等同于零样本迁移。",
+      "ccf": null,
+      "distinction": null,
+      "links": [
+        {
+          "label": "会议记录 / 出版来源",
+          "url": "https://doi.org/10.15607/rss.2025.xxi.011"
+        },
+        {
+          "label": "论文原文",
+          "url": "https://arxiv.org/pdf/2501.15830"
+        },
+        {
+          "label": "作者项目页",
+          "url": "https://spatialvla.github.io/"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表信息核对",
+          "url": "https://doi.org/10.15607/rss.2025.xxi.011"
+        },
+        {
+          "label": "原文 Fig. 2 · p.3",
+          "url": "https://arxiv.org/pdf/2501.15830#page=3"
+        }
+      ],
+      "checkedAt": "2026-10-27",
+      "reviewScope": "已核对原文 Fig. 2（PDF 第 3 页）及第 3, 4 页相关方法段落，整理图示、输入、机制与输出；未完成全文实验复核或代码复现。"
+    },
+    {
+      "id": "rdt1b",
+      "name": "RDT-1B",
+      "title": "RDT-1B: a Diffusion Foundation Model for Bimanual Manipulation",
+      "year": 2025,
+      "kind": "paper",
+      "venue": "ICLR",
+      "track": "vla",
+      "summary": "用统一动作空间组织多机器人数据，以语言与多视角图像条件训练扩散 Transformer，再适配双臂操作。",
+      "why": "补充以双臂操作为目标的动作基础模型，与 π0 的流匹配和 OpenVLA-OFT 的回归目标对照。",
+      "watchFor": "多机器人预训练用于改善双臂策略；论文并未因此证明一个模型可直接控制所有机器人。",
+      "ccf": "A",
+      "distinction": null,
+      "links": [
+        {
+          "label": "会议记录 / 出版来源",
+          "url": "https://arxiv.org/abs/2410.07864"
+        },
+        {
+          "label": "论文原文",
+          "url": "https://arxiv.org/pdf/2410.07864"
+        },
+        {
+          "label": "作者项目页",
+          "url": "https://rdt-robotics.github.io/rdt-robotics/"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表信息核对",
+          "url": "https://arxiv.org/abs/2410.07864"
+        },
+        {
+          "label": "原文 Fig. 3 · p.4",
+          "url": "https://arxiv.org/pdf/2410.07864#page=4"
+        }
+      ],
+      "checkedAt": "2026-10-27",
+      "reviewScope": "已核对原文 Fig. 3（PDF 第 4 页）及第 4, 5 页相关方法段落，整理图示、输入、机制与输出；未完成全文实验复核或代码复现。"
+    },
+    {
+      "id": "openvla-oft",
+      "name": "OpenVLA-OFT",
+      "title": "Fine-Tuning Vision-Language-Action Models: Optimizing Speed and Success",
+      "year": 2025,
+      "kind": "paper",
+      "venue": "RSS",
+      "track": "vla",
+      "summary": "保留 OpenVLA 预训练基础，通过并行解码、动作分块和连续 L1 回归调整微调方式，改善速度与任务成功率。",
+      "why": "用受控设计对比解释 VLA 的推理瓶颈，也提供连续动作不一定需要扩散采样的实例。",
+      "watchFor": "这是微调方案研究，不是重新预训练的新基础模型；收益依赖任务、硬件与动作块长度。",
+      "ccf": null,
+      "distinction": null,
+      "links": [
+        {
+          "label": "会议记录 / 出版来源",
+          "url": "https://doi.org/10.15607/rss.2025.xxi.017"
+        },
+        {
+          "label": "论文原文",
+          "url": "https://arxiv.org/pdf/2502.19645"
+        },
+        {
+          "label": "作者项目页",
+          "url": "https://openvla-oft.github.io/"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表信息核对",
+          "url": "https://doi.org/10.15607/rss.2025.xxi.017"
+        },
+        {
+          "label": "原文 Fig. 2 · p.3",
+          "url": "https://arxiv.org/pdf/2502.19645#page=3"
+        }
+      ],
+      "checkedAt": "2026-10-27",
+      "reviewScope": "已核对原文 Fig. 2（PDF 第 3 页）及第 3, 4 页相关方法段落，整理图示、输入、机制与输出；未完成全文实验复核或代码复现。"
+    },
+    {
+      "id": "bridge-v2",
+      "name": "BridgeData V2",
+      "title": "BridgeData V2: A Dataset for Robot Learning at Scale",
+      "year": 2023,
+      "kind": "paper",
+      "venue": "CoRL",
+      "track": "vla",
+      "summary": "提供覆盖不同环境、物体和技能的机器人操作轨迹，结合语言标注、示范与自主采集用于多任务学习。",
+      "why": "把基础策略前面的数据来源补上，理解训练覆盖面、任务划分和泛化评估之间的关系。",
+      "watchFor": "它是数据集而非新控制架构；数据规模不能代替对场景划分、机器人覆盖和测试泄漏的检查。",
+      "ccf": null,
+      "distinction": null,
+      "links": [
+        {
+          "label": "会议记录 / 出版来源",
+          "url": "https://proceedings.mlr.press/v229/walke23a.html"
+        },
+        {
+          "label": "论文原文",
+          "url": "https://arxiv.org/pdf/2308.12952"
+        },
+        {
+          "label": "作者项目页",
+          "url": "https://rail-berkeley.github.io/bridgedata/"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表信息核对",
+          "url": "https://proceedings.mlr.press/v229/walke23a.html"
+        },
+        {
+          "label": "原文 Fig. 1 · p.1",
+          "url": "https://arxiv.org/pdf/2308.12952#page=1"
+        }
+      ],
+      "checkedAt": "2026-10-27",
+      "reviewScope": "已核对原文 Fig. 1（PDF 第 1 页）及第 1, 3 页相关方法段落，整理图示、输入、机制与输出；未完成全文实验复核或代码复现。"
+    },
+    {
+      "id": "droid",
+      "name": "DROID",
+      "title": "DROID: A Large-Scale In-The-Wild Robot Manipulation Dataset",
+      "year": 2024,
+      "kind": "paper",
+      "venue": "RSS",
+      "track": "vla",
+      "summary": "用可移动的标准化 Franka 平台、多相机与 VR 遥操作，在不同真实场景分布式采集机器人操作数据。",
+      "why": "展示跨机构数据采集如何统一硬件、时间同步和标注流程，可与 BridgeData V2、UMI 比较采集代价。",
+      "watchFor": "多样环境不等于多样机器人本体；数据集的任务成功率也不是任意基础模型的直接性能。",
+      "ccf": null,
+      "distinction": null,
+      "links": [
+        {
+          "label": "会议记录 / 出版来源",
+          "url": "https://doi.org/10.15607/rss.2024.xx.120"
+        },
+        {
+          "label": "论文原文",
+          "url": "https://arxiv.org/pdf/2403.12945"
+        },
+        {
+          "label": "作者项目页",
+          "url": "https://droid-dataset.github.io/"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表信息核对",
+          "url": "https://doi.org/10.15607/rss.2024.xx.120"
+        },
+        {
+          "label": "原文 Fig. 2 · p.4",
+          "url": "https://arxiv.org/pdf/2403.12945#page=4"
+        }
+      ],
+      "checkedAt": "2026-10-27",
+      "reviewScope": "已核对原文 Fig. 2（PDF 第 4 页）及第 4 页相关方法段落，整理图示、输入、机制与输出；未完成全文实验复核或代码复现。"
+    },
+    {
+      "id": "umi",
+      "name": "UMI",
+      "title": "Universal Manipulation Interface: In-The-Wild Robot Teaching Without In-The-Wild Robots",
+      "year": 2024,
+      "kind": "paper",
+      "venue": "RSS",
+      "track": "vla",
+      "summary": "用手持夹爪、鱼眼相机与惯性追踪采集演示，统一观测和相对动作接口，再把策略部署到机器人上。",
+      "why": "提供无需携带整台机器人的数据采集路线，同时把硬件、动作表示和延迟处理放进同一系统。",
+      "watchFor": "机器人迁移依赖视觉惯性定位、可达性过滤与时序对齐；不能只用普通视频替代该采集流程。",
+      "ccf": null,
+      "distinction": null,
+      "links": [
+        {
+          "label": "会议记录 / 出版来源",
+          "url": "https://umi-gripper.github.io/"
+        },
+        {
+          "label": "论文原文",
+          "url": "https://arxiv.org/pdf/2402.10329"
+        },
+        {
+          "label": "作者项目页",
+          "url": "https://umi-gripper.github.io/"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表信息核对",
+          "url": "https://umi-gripper.github.io/"
+        },
+        {
+          "label": "原文 Fig. 2 · p.2",
+          "url": "https://arxiv.org/pdf/2402.10329#page=2"
+        }
+      ],
+      "checkedAt": "2026-10-27",
+      "reviewScope": "已核对原文 Fig. 2（PDF 第 2 页）及第 2, 3, 4 页相关方法段落，整理图示、输入、机制与输出；未完成全文实验复核或代码复现。"
+    },
+    {
+      "id": "cliport",
+      "name": "CLIPort",
+      "title": "CLIPort: What and Where Pathways for Robotic Manipulation",
+      "year": 2021,
+      "kind": "paper",
+      "venue": "CoRL",
+      "track": "robot-agentic",
+      "summary": "把冻结 CLIP 的语言视觉语义与 Transporter 的空间特征融合，预测语言条件的抓取和放置。",
+      "why": "理解“是什么”与“在哪里”如何共同决定动作，是从语言理解走向具身执行的清晰起点。",
+      "watchFor": "语义预训练不会自动解决新动作技能；策略仍需要演示，主要围绕桌面抓放任务验证。",
+      "ccf": null,
+      "distinction": null,
+      "links": [
+        {
+          "label": "会议记录 / 出版来源",
+          "url": "https://proceedings.mlr.press/v164/shridhar22a.html"
+        },
+        {
+          "label": "论文原文",
+          "url": "https://arxiv.org/pdf/2109.12098.pdf"
+        },
+        {
+          "label": "作者项目页",
+          "url": "https://cliport.github.io/"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表信息核对",
+          "url": "https://proceedings.mlr.press/v164/shridhar22a.html"
+        },
+        {
+          "label": "原文 Fig. 2 · p.4",
+          "url": "https://arxiv.org/pdf/2109.12098.pdf#page=4"
+        }
+      ],
+      "checkedAt": "2026-10-27",
+      "reviewScope": "已核对原文 Fig. 2（PDF 第 4 页）及第 4 页相关方法段落，整理图示、输入、机制与输出；未完成全文实验复核或代码复现。"
+    },
+    {
+      "id": "lm-nav",
+      "name": "LM-Nav",
+      "title": "LM-Nav: Robotic Navigation with Large Pre-Trained Models of Language, Vision, and Action",
+      "year": 2022,
+      "kind": "paper",
+      "venue": "CoRL",
+      "track": "robot-agentic",
+      "summary": "语言模型提取地标，视觉语言模型将地标对应到图像节点，视觉导航模型提供可达性与低层执行。",
+      "why": "把语言落地从机械臂扩展到真实导航，展示不同预训练模块通过拓扑图协同的方式。",
+      "watchFor": "需要目标环境的观测图和可执行导航模型；零样本语言组合不意味着无需环境建图。",
+      "ccf": null,
+      "distinction": null,
+      "links": [
+        {
+          "label": "会议记录 / 出版来源",
+          "url": "https://proceedings.mlr.press/v205/shah23b.html"
+        },
+        {
+          "label": "论文原文",
+          "url": "https://arxiv.org/pdf/2207.04429"
+        },
+        {
+          "label": "作者项目页",
+          "url": "https://sites.google.com/view/lmnav"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表信息核对",
+          "url": "https://proceedings.mlr.press/v205/shah23b.html"
+        },
+        {
+          "label": "原文 Fig. 3 · p.4",
+          "url": "https://arxiv.org/pdf/2207.04429#page=4"
+        }
+      ],
+      "checkedAt": "2026-10-27",
+      "reviewScope": "已核对原文 Fig. 3（PDF 第 4 页）及第 4 页相关方法段落，整理图示、输入、机制与输出；未完成全文实验复核或代码复现。"
+    },
+    {
+      "id": "code-as-policies",
+      "name": "Code as Policies",
+      "title": "Code as Policies: Language Model Programs for Embodied Control",
+      "year": 2023,
+      "kind": "paper",
+      "venue": "ICRA",
+      "track": "robot-agentic",
+      "summary": "让语言模型生成可调用感知与控制 API 的 Python 程序，并递归补全辅助函数以表达空间推理和反馈控制。",
+      "why": "把自然语言计划转为可执行程序，说明 API、对象状态和程序结构才是落地接口。",
+      "watchFor": "执行能力受感知与控制 API 限制；语法正确不保证任务、状态与几何约束正确。",
+      "ccf": "B",
+      "distinction": null,
+      "links": [
+        {
+          "label": "会议记录 / 出版来源",
+          "url": "https://doi.org/10.1109/icra48891.2023.10160591"
+        },
+        {
+          "label": "论文原文",
+          "url": "https://arxiv.org/pdf/2209.07753"
+        },
+        {
+          "label": "作者项目页",
+          "url": "https://code-as-policies.github.io/"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表信息核对",
+          "url": "https://doi.org/10.1109/icra48891.2023.10160591"
+        },
+        {
+          "label": "原文 Fig. 1 · p.1",
+          "url": "https://arxiv.org/pdf/2209.07753#page=1"
+        }
+      ],
+      "checkedAt": "2026-10-27",
+      "reviewScope": "已核对原文 Fig. 1（PDF 第 1 页）及第 1, 3 页相关方法段落，整理图示、输入、机制与输出；未完成全文实验复核或代码复现。"
+    },
+    {
+      "id": "progprompt",
+      "name": "ProgPrompt",
+      "title": "ProgPrompt: Generating Situated Robot Task Plans using Large Language Models",
+      "year": 2023,
+      "kind": "paper",
+      "venue": "ICRA",
+      "track": "robot-agentic",
+      "summary": "以类似程序的提示列出可用动作、场景对象和示例，让模型生成含状态断言与恢复步骤的任务计划。",
+      "why": "对照 Code as Policies：重点是如何在提示中表达当前环境和动作前置条件。",
+      "watchFor": "状态断言仍依赖感知与执行系统判断；生成的类 Python 计划不等于可无约束运行的通用程序。",
+      "ccf": "B",
+      "distinction": null,
+      "links": [
+        {
+          "label": "会议记录 / 出版来源",
+          "url": "https://doi.org/10.1109/ICRA48891.2023.10161317"
+        },
+        {
+          "label": "论文原文",
+          "url": "https://arxiv.org/pdf/2209.11302"
+        },
+        {
+          "label": "作者项目页",
+          "url": "https://progprompt.github.io/"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表信息核对",
+          "url": "https://doi.org/10.1109/ICRA48891.2023.10161317"
+        },
+        {
+          "label": "原文 Fig. 2 · p.2",
+          "url": "https://arxiv.org/pdf/2209.11302#page=2"
+        }
+      ],
+      "checkedAt": "2026-10-27",
+      "reviewScope": "已核对原文 Fig. 2（PDF 第 2 页）及第 2, 3, 4 页相关方法段落，整理图示、输入、机制与输出；未完成全文实验复核或代码复现。"
+    },
+    {
+      "id": "sayplan",
+      "name": "SayPlan",
+      "title": "SayPlan: Grounding Large Language Models using 3D Scene Graphs for Scalable Robot Task Planning",
+      "year": 2023,
+      "kind": "paper",
+      "venue": "CoRL",
+      "track": "robot-agentic",
+      "summary": "在三维场景图上逐步展开或折叠相关区域，结合传统路径规划与模拟反馈，迭代生成可执行任务计划。",
+      "why": "让场景规模进入讨论：不把整栋建筑一次塞进提示，而是按任务检索所需空间信息。",
+      "watchFor": "依赖结构化场景图、动作接口和模拟器反馈；图错误或现实变化仍会影响执行。",
+      "ccf": null,
+      "distinction": null,
+      "links": [
+        {
+          "label": "会议记录 / 出版来源",
+          "url": "https://proceedings.mlr.press/v229/rana23a.html"
+        },
+        {
+          "label": "论文原文",
+          "url": "https://proceedings.mlr.press/v229/rana23a/rana23a.pdf"
+        },
+        {
+          "label": "作者项目页",
+          "url": "https://sayplan.github.io/"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表信息核对",
+          "url": "https://proceedings.mlr.press/v229/rana23a.html"
+        },
+        {
+          "label": "原文 Fig. 1 · p.2",
+          "url": "https://proceedings.mlr.press/v229/rana23a/rana23a.pdf#page=2"
+        }
+      ],
+      "checkedAt": "2026-10-27",
+      "reviewScope": "已核对原文 Fig. 1（PDF 第 2 页）及第 2, 3, 4 页相关方法段落，整理图示、输入、机制与输出；未完成全文实验复核或代码复现。"
+    },
+    {
+      "id": "inner-monologue",
+      "name": "Inner Monologue",
+      "title": "Inner Monologue: Embodied Reasoning through Planning with Language Models",
+      "year": 2022,
+      "kind": "paper",
+      "venue": "CoRL",
+      "track": "robot-agentic",
+      "summary": "将成功检测、场景描述和人类反馈写回语言上下文，让模型根据执行结果持续调整计划。",
+      "why": "补齐 Agent 闭环的早期代表，区分一次性生成计划与观察失败后重新决策。",
+      "watchFor": "语言反馈不是环境真值；成功检测与场景描述错误会沿规划链条继续传播。",
+      "ccf": null,
+      "distinction": null,
+      "links": [
+        {
+          "label": "会议记录 / 出版来源",
+          "url": "https://proceedings.mlr.press/v205/huang23c.html"
+        },
+        {
+          "label": "论文原文",
+          "url": "https://arxiv.org/pdf/2207.05608"
+        },
+        {
+          "label": "作者项目页",
+          "url": "https://innermonologue.github.io/"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表信息核对",
+          "url": "https://proceedings.mlr.press/v205/huang23c.html"
+        },
+        {
+          "label": "原文 Fig. 1 · p.2",
+          "url": "https://arxiv.org/pdf/2207.05608#page=2"
+        }
+      ],
+      "checkedAt": "2026-10-27",
+      "reviewScope": "已核对原文 Fig. 1（PDF 第 2 页）及第 2, 3 页相关方法段落，整理图示、输入、机制与输出；未完成全文实验复核或代码复现。"
+    },
+    {
+      "id": "llm-planner",
+      "name": "LLM-Planner",
+      "title": "LLM-Planner: Few-Shot Grounded Planning for Embodied Agents with Large Language Models",
+      "year": 2023,
+      "kind": "paper",
+      "venue": "ICCV",
+      "track": "robot-agentic",
+      "summary": "检索相近任务示例并加入当前可见对象，用 LLM 生成高层子目标，交给低层规划器执行并根据观测重规划。",
+      "why": "把少样本语言规划具体落到 ALFRED 的可执行子目标，便于比较高层语义与低层导航的职责。",
+      "watchFor": "少量语言配对示例不等于整套系统无需训练；低层组件可以使用仿真数据和确定性规划。",
+      "ccf": "A",
+      "distinction": null,
+      "links": [
+        {
+          "label": "会议记录 / 出版来源",
+          "url": "https://openaccess.thecvf.com/content/ICCV2023/html/Song_LLM-Planner_Few-Shot_Grounded_Planning_for_Embodied_Agents_with_Large_Language_ICCV_2023_paper.html"
+        },
+        {
+          "label": "论文原文",
+          "url": "https://arxiv.org/pdf/2212.04088.pdf"
+        },
+        {
+          "label": "作者项目页",
+          "url": "https://dki-lab.github.io/LLM-Planner/"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表信息核对",
+          "url": "https://openaccess.thecvf.com/content/ICCV2023/html/Song_LLM-Planner_Few-Shot_Grounded_Planning_for_Embodied_Agents_with_Large_Language_ICCV_2023_paper.html"
+        },
+        {
+          "label": "原文 Fig. 2 · p.4",
+          "url": "https://arxiv.org/pdf/2212.04088.pdf#page=4"
+        }
+      ],
+      "checkedAt": "2026-10-27",
+      "reviewScope": "已核对原文 Fig. 2（PDF 第 4 页）及第 4 页相关方法段落，整理图示、输入、机制与输出；未完成全文实验复核或代码复现。"
+    },
+    {
+      "id": "rt-h",
+      "name": "RT-H",
+      "title": "RT-H: Action Hierarchies Using Language",
+      "year": 2024,
+      "kind": "paper",
+      "venue": "RSS",
+      "track": "robot-agentic",
+      "summary": "先预测“向左移动”等语言动作，再结合任务和观测生成低层动作 token，并用语言干预修正高层动作模型。",
+      "why": "连接 VLA 与 Agent：层级中间表示既可共享动作结构，也为人在回路中的纠错提供接口。",
+      "watchFor": "语言动作需要落到已训练的低层控制分布；干预更新并不保证任意新任务立即学会。",
+      "ccf": null,
+      "distinction": null,
+      "links": [
+        {
+          "label": "会议记录 / 出版来源",
+          "url": "https://doi.org/10.15607/rss.2024.xx.049"
+        },
+        {
+          "label": "论文原文",
+          "url": "https://arxiv.org/pdf/2403.01823.pdf"
+        },
+        {
+          "label": "作者项目页",
+          "url": "https://rt-hierarchy.github.io/"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表信息核对",
+          "url": "https://doi.org/10.15607/rss.2024.xx.049"
+        },
+        {
+          "label": "原文 Fig. 2 · p.4",
+          "url": "https://arxiv.org/pdf/2403.01823.pdf#page=4"
+        }
+      ],
+      "checkedAt": "2026-10-27",
+      "reviewScope": "已核对原文 Fig. 2（PDF 第 4 页）及第 4 页相关方法段落，整理图示、输入、机制与输出；未完成全文实验复核或代码复现。"
+    },
+    {
+      "id": "libero",
+      "name": "LIBERO",
+      "title": "LIBERO: Benchmarking Knowledge Transfer for Lifelong Robot Learning",
+      "year": 2023,
+      "kind": "paper",
+      "venue": "NeurIPS",
+      "track": "robot-agentic",
+      "summary": "程序化生成带语言描述、对象布局和逻辑目标的操作任务，用多组任务套件研究知识迁移与持续学习。",
+      "why": "补齐常见 VLA 分数背后的任务定义，区分空间、对象、目标与长程组合变化。",
+      "watchFor": "基准任务成功率不等同真实部署能力；不同任务套件、训练划分和评测设置不能混算。",
+      "ccf": "A",
+      "distinction": null,
+      "links": [
+        {
+          "label": "会议记录 / 出版来源",
+          "url": "https://papers.nips.cc/paper_files/paper/2023/hash/8c3c666820ea055a77726d66fc7d447f-Abstract-Datasets_and_Benchmarks.html"
+        },
+        {
+          "label": "论文原文",
+          "url": "https://arxiv.org/pdf/2306.03310"
+        },
+        {
+          "label": "作者项目页",
+          "url": "https://libero-project.github.io/"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表信息核对",
+          "url": "https://papers.nips.cc/paper_files/paper/2023/hash/8c3c666820ea055a77726d66fc7d447f-Abstract-Datasets_and_Benchmarks.html"
+        },
+        {
+          "label": "原文 Fig. 2 · p.4",
+          "url": "https://arxiv.org/pdf/2306.03310#page=4"
+        }
+      ],
+      "checkedAt": "2026-10-27",
+      "reviewScope": "已核对原文 Fig. 2（PDF 第 4 页）及第 4 页相关方法段落，整理图示、输入、机制与输出；未完成全文实验复核或代码复现。"
+    },
+    {
+      "id": "alfred",
+      "name": "ALFRED",
+      "title": "ALFRED: A Benchmark for Interpreting Grounded Instructions for Everyday Tasks",
+      "year": 2020,
+      "kind": "paper",
+      "venue": "CVPR",
+      "track": "robot-agentic",
+      "summary": "在 AI2-THOR 中配对专家操作轨迹、自然语言目标和逐步指令，评估导航与交互结合的长程任务。",
+      "why": "是理解 LLM-Planner 等具身规划工作的任务起点，能看到对象状态变化为何比纯导航更难。",
+      "watchFor": "专家轨迹生成器可用的元数据不等于测试智能体可用信息；已见与未见场景需分开评测。",
+      "ccf": "A",
+      "distinction": null,
+      "links": [
+        {
+          "label": "会议记录 / 出版来源",
+          "url": "https://openaccess.thecvf.com/content_CVPR_2020/papers/Shridhar_ALFRED_A_Benchmark_for_Interpreting_Grounded_Instructions_for_Everyday_Tasks_CVPR_2020_paper.pdf"
+        },
+        {
+          "label": "论文原文",
+          "url": "https://openaccess.thecvf.com/content_CVPR_2020/papers/Shridhar_ALFRED_A_Benchmark_for_Interpreting_Grounded_Instructions_for_Everyday_Tasks_CVPR_2020_paper.pdf"
+        }
+      ],
+      "evidence": [
+        {
+          "label": "发表信息核对",
+          "url": "https://openaccess.thecvf.com/content_CVPR_2020/papers/Shridhar_ALFRED_A_Benchmark_for_Interpreting_Grounded_Instructions_for_Everyday_Tasks_CVPR_2020_paper.pdf"
+        },
+        {
+          "label": "原文 Fig. 2 · p.3",
+          "url": "https://openaccess.thecvf.com/content_CVPR_2020/papers/Shridhar_ALFRED_A_Benchmark_for_Interpreting_Grounded_Instructions_for_Everyday_Tasks_CVPR_2020_paper.pdf#page=3"
+        }
+      ],
+      "checkedAt": "2026-10-27",
+      "reviewScope": "已核对原文 Fig. 2（PDF 第 3 页）及第 3 页相关方法段落，整理图示、输入、机制与输出；未完成全文实验复核或代码复现。"
     }
   ],
   "resources": [

@@ -37,7 +37,7 @@ test("curation has provenance, reading limits, and separate preprint/report gate
     if (paper.kind === "report") { assert.equal(paper.venue, "技术报告"); assert.equal(paper.ccf, null); }
     if (paper.distinction) { assert.equal(paper.kind, "paper"); safeURL(paper.distinction.url); assert.ok(["Oral", "Spotlight", "Best Paper"].includes(paper.distinction.label)); }
     if (["RSS", "CoRL"].includes(paper.venue)) assert.equal(paper.ccf, null);
-    if (paper.ccf) assert.equal(paper.ccf, { ICML: "A", ICLR: "A", NeurIPS: "A", CVPR: "A", ICRA: "B" }[paper.venue]);
+    if (paper.ccf) assert.equal(paper.ccf, { ICML: "A", ICLR: "A", NeurIPS: "A", CVPR: "A", ICCV: "A", ICRA: "B" }[paper.venue]);
   }
 });
 
