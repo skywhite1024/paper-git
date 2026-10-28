@@ -1,4 +1,5 @@
 import data from "@/content/catalog.json";
+import routes from "@/content/atlas-routes.json";
 
 export const catalog = data;
 export const tracks = catalog.tracks;
@@ -11,6 +12,5 @@ export function getPaper(id: string) { return papers.find((paper) => paper.id ==
 export function getTrack(id: string) { return tracks.find((track) => track.id === id); }
 export function papersFor(ids: string[]) { return ids.flatMap((id) => { const paper = getPaper(id); return paper ? [paper] : []; }); }
 export function nextPapers(paper: Paper) {
-  const sequence = getTrack(paper.track)?.stages.flatMap((stage) => stage.papers) ?? [];
-  return papersFor(sequence.slice(sequence.indexOf(paper.id) + 1, sequence.indexOf(paper.id) + 3));
+  return papersFor(routes.filter((edge) => edge.from === paper.id).map((edge) => edge.to).slice(0, 2));
 }

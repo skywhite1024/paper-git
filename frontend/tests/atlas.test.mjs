@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, statSync } from "node:fs";
-import { CARD_HEIGHT, CARD_WIDTH, createAtlasLayout, fitBounds, intersects, MAX_ZOOM, MIN_ZOOM, routeGeometry, viewportBounds, zoomAt } from "../lib/atlas-geometry.ts";
+import { CARD_HEIGHT, CARD_WIDTH, createAtlasLayout, figureTier, fitBounds, intersects, MAX_ZOOM, MIN_ZOOM, routeGeometry, viewportBounds, zoomAt } from "../lib/atlas-geometry.ts";
 
 const catalog = JSON.parse(readFileSync(new URL("../content/catalog.json", import.meta.url), "utf8"));
 const layout = createAtlasLayout(catalog.tracks);
@@ -24,6 +24,8 @@ test("development routes resolve to catalog papers and usable curves", () => {
     const from = layout.points.find((p) => p.id === route.from), to = layout.points.find((p) => p.id === route.to);
     assert.ok(from && to && from !== to);
     assert.ok(["reading", "evolution", "compare"].includes(route.kind));
+    assert.ok(route.explanation?.trim(), `${route.from} → ${route.to}: missing endpoint explanation`);
+    assert.match(route.source, /^https:\/\//);
     assert.ok(!pairs.has(`${route.from}:${route.to}`)); pairs.add(`${route.from}:${route.to}`);
     covered.add(from.id); covered.add(to.id);
     const curve = routeGeometry(from, to, layout.territories.find((a) => a.id === from.track).center);
@@ -37,13 +39,15 @@ test("development routes resolve to catalog papers and usable curves", () => {
 });
 
 test("branches grow beyond three rings without dropping or overlapping papers", () => {
-  const expanded = structuredClone(catalog.tracks);
-  expanded[0].stages[0].papers = Array.from({ length: 20 }, (_, i) => `future-${i}`);
-  const result = createAtlasLayout(expanded);
-  assert.equal(result.points.filter((p) => p.stage === expanded[0].stages[0].id).length, 20);
-  for (let i = 0; i < result.points.length; i++) for (const b of result.points.slice(i + 1)) {
-    const a = result.points[i];
-    assert.equal(intersects({ ...a, width: CARD_WIDTH, height: CARD_HEIGHT }, { ...b, width: CARD_WIDTH, height: CARD_HEIGHT }), false, `${a.id} / ${b.id}`);
+  for (const count of [20, 21, 27, 28, 35, 36]) {
+    const expanded = structuredClone(catalog.tracks);
+    expanded[0].stages[0].papers = Array.from({ length: count }, (_, i) => `future-${i}`);
+    const result = createAtlasLayout(expanded);
+    assert.equal(result.points.filter((p) => p.stage === expanded[0].stages[0].id).length, count);
+    for (let i = 0; i < result.points.length; i++) for (const b of result.points.slice(i + 1)) {
+      const a = result.points[i];
+      assert.equal(intersects({ ...a, width: CARD_WIDTH, height: CARD_HEIGHT }, { ...b, width: CARD_WIDTH, height: CARD_HEIGHT }), false, `${a.id} / ${b.id}`);
+    }
   }
 });
 
@@ -71,6 +75,21 @@ test("every paper has a small canvas preview, while its original stays available
     bytes += size;
   }
   assert.ok(bytes < Object.keys(frameworks).length * 40_000, `preview total: ${bytes}`);
+});
+
+test("overview uses a separate small image tier before readers request detail", () => {
+  assert.equal(figureTier(.02), "overview");
+  assert.equal(figureTier(.32), "overview");
+  assert.equal(figureTier(.62), "preview");
+  assert.equal(figureTier(1.1), "preview");
+  assert.equal(figureTier(1.11), "original");
+  let bytes = 0;
+  for (const id of Object.keys(frameworks)) {
+    const size = statSync(new URL(`../public/figures/overview/${id}.webp`, import.meta.url)).size;
+    assert.ok(size > 200 && size < 20_000, id);
+    bytes += size;
+  }
+  assert.ok(bytes < Object.keys(frameworks).length * 8000, `overview total: ${bytes}`);
 });
 
 test("every catalog paper occupies one non-overlapping card in its own island", () => {

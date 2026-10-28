@@ -2,17 +2,17 @@
 
 import { useCallback, useEffect, useRef, useState, type CSSProperties, type KeyboardEvent, type PointerEvent } from "react";
 import { atlasLayout, islands } from "@/lib/atlas";
-import { CARD_HEIGHT, CARD_WIDTH, fitBounds, intersects, MAX_ZOOM, MIN_ZOOM, viewportBounds, zoomAt, type Camera, type Point } from "@/lib/atlas-geometry";
+import { CARD_HEIGHT, CARD_WIDTH, figureTier, fitBounds, intersects, MAX_ZOOM, MIN_ZOOM, viewportBounds, zoomAt, type Camera, type Point } from "@/lib/atlas-geometry";
 import { Landmarks, MiniMapTerrain, PaperLayer, RouteLayer } from "./AtlasLayers";
 
 export type AtlasFocus = { kind: "paper" | "island" | "all"; id: string; sequence: number };
 type Props = {
   selectedId: string; filteredIds: Set<string>; focus: AtlasFocus | null;
   readerOpen: boolean; expanded: boolean; onSelect: (id: string) => void;
-  onToggleExpand: () => void; onCloseReader: () => void; onNavigateIsland: (id: string) => void;
+  onToggleExpand: () => void; onNavigateIsland: (id: string) => void;
 };
 
-export default function AtlasCanvas({ selectedId, filteredIds, focus, readerOpen, expanded, onSelect, onToggleExpand, onCloseReader, onNavigateIsland }: Props) {
+export default function AtlasCanvas({ selectedId, filteredIds, focus, readerOpen, expanded, onSelect, onToggleExpand, onNavigateIsland }: Props) {
   const host = useRef<HTMLDivElement>(null);
   const [camera, setCamera] = useState<Camera>({ x: 0, y: 0, zoom: .78 });
   const cameraRef = useRef(camera);
@@ -32,7 +32,10 @@ export default function AtlasCanvas({ selectedId, filteredIds, focus, readerOpen
   }, []);
   useEffect(() => () => { if (frame.current !== null) cancelAnimationFrame(frame.current); frame.current = null; }, []);
 
-  function availableWidth() { return Math.max(260, size.current.width - (readerOpen && size.current.width > 760 ? 510 : 0)); }
+  function availableWidth() {
+    const readerWidth = readerOpen && window.innerWidth > 760 ? (host.current?.parentElement?.querySelector<HTMLElement>(".atlas-reader")?.offsetWidth ?? 490) + 24 : 0;
+    return Math.max(260, size.current.width - readerWidth);
+  }
   const locatePaper = useCallback((id: string) => {
     const point = atlasLayout.points.find((item) => item.id === id);
     if (!point) return;
@@ -138,7 +141,6 @@ export default function AtlasCanvas({ selectedId, filteredIds, focus, readerOpen
     const pan: Record<string, Point> = { ArrowLeft: { x: 90, y: 0 }, ArrowRight: { x: -90, y: 0 }, ArrowUp: { x: 0, y: 90 }, ArrowDown: { x: 0, y: -90 } };
     if (pan[event.key]) { event.preventDefault(); commit({ ...cameraRef.current, x: cameraRef.current.x + pan[event.key].x, y: cameraRef.current.y + pan[event.key].y }); }
     if (["+", "=", "-", "Home", "0"].includes(event.key)) { event.preventDefault(); if (["Home", "0"].includes(event.key)) showAll(); else changeZoom(event.key === "-" ? 1 / 1.25 : 1.25); }
-    if (event.key === "Escape") { if (readerOpen) onCloseReader(); else if (expanded) onToggleExpand(); }
   }
 
   const view = viewportBounds(camera, viewport);
@@ -151,7 +153,7 @@ export default function AtlasCanvas({ selectedId, filteredIds, focus, readerOpen
     <div className="canvas-world" style={{ width: atlasLayout.bounds.width, height: atlasLayout.bounds.height, transform: `translate(${camera.x}px, ${camera.y}px) scale(${camera.zoom})` }}>
       <Landmarks onStage={locateStage} />
       {showRelations && <RouteLayer selectedId={selectedId} filteredIds={filteredIds} readerOpen={readerOpen} labels={camera.zoom > .28} />}
-      <PaperLayer visibleKey={visibleKey} selectedId={selectedId} filteredIds={filteredIds} originalImages={camera.zoom > 1.1} onSelect={onSelect} onLocate={locatePaper} />
+      <PaperLayer visibleKey={visibleKey} selectedId={selectedId} filteredIds={filteredIds} imageTier={figureTier(camera.zoom)} onSelect={onSelect} onLocate={locatePaper} />
     </div>
     <nav className="canvas-island-nav" data-canvas-control aria-label="群岛快捷定位">{islands.map((island) => <button key={island.id} style={{ "--island": island.color } as CSSProperties} onClick={() => onNavigateIsland(island.id)}><i />{island.id === "world-models" ? "世界模型" : island.id === "vla" ? "VLA" : "Agent"}<span>{atlasLayout.points.filter((point) => point.track === island.id).length}</span></button>)}</nav>
     <nav className="canvas-branch-nav" data-canvas-control aria-label="研究分支路线">{atlasLayout.stages.filter((stage) => stage.track === activeTrack).map((stage) => <button key={stage.id} aria-pressed={activeStage === stage.id} onClick={() => locateStage(stage.track, stage.id)}><span>0{stage.sector + 1}</span>{stage.name}</button>)}</nav>

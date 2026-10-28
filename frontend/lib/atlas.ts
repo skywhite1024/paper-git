@@ -16,8 +16,6 @@ export const atlasPoints = new Map(atlasLayout.points.map((point) => [point.id, 
 export type AtlasRelation = { from: string; to: string; kind: "reading" | "compare" | "evolution"; label: string; explanation: string; source: string };
 export const relations: AtlasRelation[] = routeData.map((edge) => ({
   ...edge, kind: edge.kind as AtlasRelation["kind"],
-  explanation: edge.explanation ?? frameworks[edge.to].change,
-  source: edge.source ?? frameworks[edge.to].figure.source,
 }));
 // Layout is content-dependent, not camera-dependent: calculate every curve once.
 export const atlasRoutes = relations.map((edge) => {

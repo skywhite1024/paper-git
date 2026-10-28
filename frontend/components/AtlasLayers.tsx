@@ -33,8 +33,8 @@ export const Landmarks = memo(function Landmarks({ onStage }: { onStage: (track:
 });
 
 // The camera moves the parent transform. Reconcile cards only when the visible set changes.
-export const PaperLayer = memo(function PaperLayer({ visibleKey, selectedId, filteredIds, originalImages, onSelect, onLocate }: {
-  visibleKey: string; selectedId: string; filteredIds: Set<string>; originalImages: boolean;
+export const PaperLayer = memo(function PaperLayer({ visibleKey, selectedId, filteredIds, imageTier, onSelect, onLocate }: {
+  visibleKey: string; selectedId: string; filteredIds: Set<string>; imageTier: "original" | "preview" | "overview";
   onSelect: (id: string) => void; onLocate: (id: string) => void;
 }) {
   const { entries } = useReading();
@@ -46,7 +46,7 @@ export const PaperLayer = memo(function PaperLayer({ visibleKey, selectedId, fil
       tabIndex={dimmed ? -1 : 0} aria-label={`查看 ${paper.name}，${paper.year}`} aria-pressed={id === selectedId} onClick={() => onSelect(id)}
       onFocus={(event) => { if (event.currentTarget.matches(":focus-visible")) onLocate(id); }}>
       <b className="canvas-step-number">{String(point.order).padStart(2, "0")}</b>
-      <div className="canvas-paper-image"><img src={assetPath(originalImages ? `/figures/${framework.figure.file}` : `/figures/previews/${id}.webp`)} alt={`${paper.name}：${framework.figure.title}`} draggable="false" decoding="async" loading="lazy" /><span>作者原图 ↗</span></div>
+      <div className="canvas-paper-image"><img src={assetPath(imageTier === "original" ? `/figures/${framework.figure.file}` : `/figures/${imageTier === "overview" ? "overview" : "previews"}/${id}.webp`)} alt={`${paper.name}：${framework.figure.title}`} draggable="false" decoding="async" loading="lazy" /><span>作者原图 ↗</span></div>
       <div className="canvas-paper-caption"><span><strong>{paper.name}</strong><em>{framework.mechanism}</em></span><small>{paper.year}{entries[id]?.status === "done" ? " · 已读" : ""}</small></div>
     </button>;
   })}</>;

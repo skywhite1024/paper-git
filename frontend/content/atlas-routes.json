@@ -3,241 +3,321 @@
     "from": "world-models",
     "to": "planet",
     "kind": "reading",
-    "label": "加入潜空间在线规划"
+    "label": "加入潜空间在线规划",
+    "explanation": "World Models 分开学习视觉、记忆和控制器；PlaNet 把动作条件潜动力学用于在线规划。",
+    "source": "https://arxiv.org/pdf/1811.04551.pdf#page=4"
   },
   {
     "from": "planet",
     "to": "dreamer",
     "kind": "reading",
-    "label": "从搜索动作到学习策略"
+    "label": "从搜索动作到学习策略",
+    "explanation": "PlaNet 在每次决策时搜索动作；Dreamer 在想象的潜轨迹中优化可部署策略。",
+    "source": "https://research.google/blog/introducing-dreamer-scalable-reinforcement-learning-using-world-models/"
   },
   {
     "from": "dreamer",
     "to": "dreamerv2",
     "kind": "evolution",
-    "label": "离散潜状态"
+    "label": "离散潜状态",
+    "explanation": "DreamerV2 延续 Dreamer 的想象策略学习框架，引入离散潜变量与改进训练目标。",
+    "source": "https://arxiv.org/pdf/2010.02193.pdf#page=3"
   },
   {
     "from": "dreamerv2",
     "to": "dreamerv3",
     "kind": "evolution",
-    "label": "跨任务稳定训练"
+    "label": "跨任务稳定训练",
+    "explanation": "DreamerV3 延续该框架，重点改进表示、损失尺度和训练稳定性以覆盖不同任务。",
+    "source": "https://arxiv.org/pdf/2301.04104#page=3"
   },
   {
     "from": "dreamerv3",
     "to": "tdmpc2",
     "kind": "compare",
-    "label": "想象策略 / 在线 MPC"
+    "label": "想象策略 / 在线 MPC",
+    "explanation": "DreamerV3 主要在模型中训练策略；TD-MPC2 以任务相关潜动力学进行在线 MPC，比较时需保留训练和规划成本。",
+    "source": "https://arxiv.org/pdf/2310.16828#page=3"
   },
   {
     "from": "tdmpc2",
     "to": "daydreamer",
     "kind": "compare",
-    "label": "控制模型 / 真机学习"
+    "label": "控制模型 / 真机学习",
+    "explanation": "TD-MPC2 展示多任务潜空间规划；DayDreamer 研究 Dreamer 式方法在真实机器人持续交互中的学习。",
+    "source": "https://proceedings.mlr.press/v205/wu23c/wu23c.pdf#page=3"
   },
   {
     "from": "dreamerv2",
     "to": "daydreamer",
     "kind": "evolution",
-    "label": "走向真机在线学习"
+    "label": "走向真机在线学习",
+    "explanation": "DayDreamer 将 Dreamer 式潜世界模型与想象策略训练带入多种真实机器人，增加真机采集与训练执行接口。",
+    "source": "https://proceedings.mlr.press/v205/wu23c/wu23c.pdf#page=3"
   },
   {
     "from": "unipi",
     "to": "genie",
     "kind": "compare",
-    "label": "语言计划 / 潜动作交互"
+    "label": "语言计划 / 潜动作交互",
+    "explanation": "UniPi 条件于语言和观测生成视频计划；Genie 从视频学习潜动作并生成可交互画面，动作接口不同。",
+    "source": "https://raw.githubusercontent.com/mlresearch/v235/main/assets/bruce24a/bruce24a.pdf#page=3"
   },
   {
     "from": "genie",
     "to": "diamond",
     "kind": "compare",
-    "label": "潜动作 / 已知动作条件"
+    "label": "潜动作 / 已知动作条件",
+    "explanation": "Genie 学习视频中的潜动作；DIAMOND 以已知动作条件训练扩散环境模型，两者不能仅按画面质量比较。",
+    "source": "https://arxiv.org/pdf/2405.12399#page=2"
   },
   {
     "from": "diamond",
     "to": "cosmos",
     "kind": "reading",
-    "label": "从环境模型到基础模型"
+    "label": "从环境模型到基础模型",
+    "explanation": "先理解 DIAMOND 的特定环境建模，再读 Cosmos 的视频基础模型及其条件、数据和应用边界。",
+    "source": "https://arxiv.org/pdf/2501.03575#page=3"
   },
   {
     "from": "ijepa",
     "to": "vjepa",
     "kind": "evolution",
-    "label": "图像 → 视频表征"
+    "label": "图像到视频目标预测",
+    "explanation": "V-JEPA 将联合嵌入预测扩展到视频时空内容，重点仍是视觉表示预训练。",
+    "source": "https://arxiv.org/pdf/2404.08471#page=4"
   },
   {
     "from": "vjepa",
     "to": "dino-wm",
     "kind": "compare",
-    "label": "预训练 / 目标规划"
+    "label": "视觉预训练 / 动作条件模型",
+    "explanation": "V-JEPA 主要研究视频表示；DINO-WM 在冻结 DINOv2 特征上学习动作条件动力学并规划。",
+    "source": "https://arxiv.org/pdf/2411.04983#page=4"
   },
   {
     "from": "dino-wm",
     "to": "vjepa2",
     "kind": "compare",
-    "label": "冻结 DINO / 视频后训练"
+    "label": "冻结 DINOv2 / 视频后训练",
+    "explanation": "DINO-WM 基于冻结 DINOv2；V-JEPA 2 结合视频预训练和动作条件后训练，比较模型与数据接口。",
+    "source": "https://github.com/facebookresearch/vjepa2"
   },
   {
     "from": "vjepa2",
     "to": "lewm",
     "kind": "compare",
-    "label": "预训练表示 / 端到端学习"
+    "label": "分阶段训练 / 端到端模型",
+    "explanation": "V-JEPA 2 从预训练表示进入动作条件模型；LeWorldModel 探索编码器和动力学端到端训练。",
+    "source": "https://arxiv.org/pdf/2603.19312#page=1"
   },
   {
     "from": "vjepa",
     "to": "vjepa2",
     "kind": "evolution",
-    "label": "加入动作条件规划"
+    "label": "加入动作条件规划",
+    "explanation": "V-JEPA 2 延续视频表征预测，并通过后训练引入动作条件世界模型与目标规划能力。",
+    "source": "https://github.com/facebookresearch/vjepa2"
   },
   {
     "from": "uwm",
     "to": "cosmos-policy",
     "kind": "compare",
-    "label": "联合扩散 / 潜帧注入"
+    "label": "联合扩散 / 潜帧注入",
+    "explanation": "UWM 联合建模世界与动作；Cosmos Policy 在视频基础模型中接入机器人状态和动作并探索规划。",
+    "source": "https://arxiv.org/pdf/2601.16163#page=4"
   },
   {
     "from": "cosmos-policy",
     "to": "dreamzero",
     "kind": "compare",
-    "label": "价值规划 / 实时闭环"
+    "label": "价值辅助 / 闭环生成",
+    "explanation": "比较 Cosmos Policy 的价值辅助规划与 DreamZero 的世界动作生成及实时闭环接口。",
+    "source": "https://arxiv.org/pdf/2602.15922#page=6"
   },
   {
     "from": "dreamzero",
     "to": "lingbot-va",
     "kind": "compare",
-    "label": "联合去噪 / 因果双流"
+    "label": "联合去噪 / 因果双流",
+    "explanation": "DreamZero 与 LingBot-VA 都连接视频和动作，但去噪结构、因果信息流与控制实现不同。",
+    "source": "https://raw.githubusercontent.com/Robbyant/lingbot-va/main/LingBot_VA_paper.pdf#page=4"
   },
   {
     "from": "lingbot-va",
     "to": "cosmos3",
     "kind": "reading",
-    "label": "扩展到全模态建模"
+    "label": "扩展模态与条件接口",
+    "explanation": "由 LingBot-VA 的视频动作模型进入 Cosmos 3 的更广模态接口，属于专题阅读扩展。",
+    "source": "https://research.nvidia.com/labs/cosmos-lab/cosmos3/technical-report.pdf#page=11"
   },
   {
     "from": "cosmos3",
     "to": "worldarena",
     "kind": "reading",
-    "label": "检查模型的实际效用"
+    "label": "由模型回到效用评测",
+    "explanation": "读过世界动作与基础模型后，用 WorldArena 检查交互、任务和下游行动评测。",
+    "source": "https://arxiv.org/pdf/2602.08971#page=6"
   },
   {
     "from": "act",
     "to": "diffusion-policy",
     "kind": "compare",
-    "label": "CVAE / 扩散动作块"
+    "label": "CVAE / 扩散动作块",
+    "explanation": "ACT 的条件 VAE 与时间集成、Diffusion Policy 的动作去噪解决动作序列建模的不同问题。",
+    "source": "https://arxiv.org/pdf/2303.04137v4#page=3"
   },
   {
     "from": "diffusion-policy",
     "to": "fast",
     "kind": "compare",
-    "label": "连续生成 / 压缩 token"
+    "label": "连续去噪 / 动作压缩",
+    "explanation": "Diffusion Policy 迭代去噪连续动作；FAST 将动作序列压缩成 token，改变了策略的生成接口。",
+    "source": "https://www.roboticsproceedings.org/rss21/p012.pdf#page=5"
   },
   {
     "from": "rt2",
     "to": "openx",
     "kind": "evolution",
-    "label": "跨机器人数据与 RT-X"
+    "label": "跨机器人数据与 RT-X",
+    "explanation": "Open X-Embodiment 汇集跨本体数据并训练 RT-X 模型；RT-2-X 延续 RT-2 的视觉语言迁移路线，数据集合与具体模型应分别理解。",
+    "source": "https://arxiv.org/pdf/2310.08864#page=4"
   },
   {
     "from": "openx",
     "to": "octo",
-    "kind": "evolution",
-    "label": "开放数据预训练"
+    "kind": "reading",
+    "label": "复用跨本体训练数据",
+    "explanation": "Octo 使用 Open X-Embodiment 数据训练自己的 Transformer 扩散策略；这表示数据复用，不是 RT-X 架构继承。",
+    "source": "https://arxiv.org/pdf/2405.12213#page=3"
   },
   {
     "from": "octo",
     "to": "openvla",
     "kind": "compare",
-    "label": "扩散策略 / VLM 动作 token"
+    "label": "目标扩散 / VLM 动作 token",
+    "explanation": "Octo 使用目标条件扩散策略；OpenVLA 把视觉语言骨干接到离散动作 token，两者训练接口不同。",
+    "source": "https://openvla.github.io/"
   },
   {
     "from": "pi0",
     "to": "pi05",
     "kind": "evolution",
-    "label": "异构数据与环境泛化"
+    "label": "扩展异构训练与泛化",
+    "explanation": "π0.5 延续 π0 动作专家路线，并扩展异构训练与高层语义接口以研究开放环境泛化。",
+    "source": "https://www.pi.website/download/pi05.pdf#page=4"
   },
   {
     "from": "pi05",
     "to": "groot-n1",
     "kind": "compare",
-    "label": "训练配方 / 双系统设计"
+    "label": "训练配方 / 双系统设计",
+    "explanation": "π0.5 与 GR00T N1 都连接视觉语言和连续动作，但模型分层、数据和动作专家结构不同。",
+    "source": "https://arxiv.org/pdf/2503.14734#page=4"
   },
   {
     "from": "pistar06",
     "to": "pi07",
     "kind": "reading",
-    "label": "经验改进 → 多模态引导"
+    "label": "经验改进到多模态引导",
+    "explanation": "由 π*0.6 的经验学习进入 π0.7 的多模态引导与能力扩展，属于编辑阅读安排。",
+    "source": "https://www.pi.website/download/pi07.pdf#page=4"
   },
   {
     "from": "pi05",
     "to": "pistar06",
     "kind": "reading",
-    "label": "把成功与失败变成经验"
+    "label": "把成功与失败变成经验",
+    "explanation": "先理解 π0.5 的预训练与泛化，再看 π*0.6 如何使用执行经验；数据收集、奖励和策略更新条件要单独核对。",
+    "source": "https://www.pi.website/download/pistar06.pdf#page=1"
   },
   {
     "from": "fast",
     "to": "pi05",
     "kind": "evolution",
-    "label": "用于离散动作预训练"
+    "label": "用于离散动作预训练",
+    "explanation": "FAST 动作 token 用于 π0.5 的离散动作预训练阶段；部署连续控制还涉及动作专家，不能把两者接口合并。",
+    "source": "https://www.pi.website/download/pi05.pdf#page=4"
   },
   {
     "from": "saycan",
     "to": "palm-e",
     "kind": "compare",
-    "label": "技能打分 / 观测入模"
+    "label": "技能打分 / 观测入模",
+    "explanation": "SayCan 将语言相关性与已有技能价值相乘选技能；PaLM-E 把具身观测编码为多模态输入，语言落地方式不同。",
+    "source": "https://palm-e.github.io/assets/palm-e.pdf#page=1"
   },
   {
     "from": "voxposer",
     "to": "rekep",
     "kind": "compare",
-    "label": "三维价值图 / 关键点约束"
+    "label": "三维价值图 / 关键点约束",
+    "explanation": "VoxPoser 将语言转成三维价值图；ReKep 将目标写成关键点之间的关系约束，再用优化求解动作。",
+    "source": "https://rekep-robot.github.io/"
   },
   {
     "from": "eureka",
     "to": "robogen",
     "kind": "reading",
-    "label": "从奖励扩展到任务场景"
+    "label": "奖励设计到任务生成",
+    "explanation": "Eureka 生成并优化奖励；RoboGen 扩展到任务、场景和训练流程，阅读时区分各层自动化。",
+    "source": "https://arxiv.org/pdf/2311.01455#page=4"
   },
   {
     "from": "hirobot",
     "to": "gemini-robotics",
     "kind": "compare",
-    "label": "分层交互 / 具身模型族"
+    "label": "分层指令 / 具身模型族",
+    "explanation": "Hi Robot 与 Gemini Robotics 的模型接口和训练条件不同，分别核对交互能力和闭环任务结果。",
+    "source": "https://arxiv.org/pdf/2503.20020#page=2"
   },
   {
     "from": "gemini-robotics",
     "to": "aspire",
     "kind": "compare",
-    "label": "模型能力 / 程序技能积累"
+    "label": "模型能力 / 程序技能积累",
+    "explanation": "Gemini Robotics 提供具身模型能力视角；ASPIRE 研究执行经验如何扩展程序技能库。",
+    "source": "https://research.nvidia.com/labs/gear/aspire/assets/aspire.pdf?v=20261016#page=2"
   },
   {
     "from": "saycan",
     "to": "voxposer",
     "kind": "reading",
-    "label": "从技能选择到空间规划"
+    "label": "从技能选择到空间规划",
+    "explanation": "从 SayCan 的已有技能选择进入 VoxPoser 的空间价值图与运动规划，比较可执行接口怎样限制语言计划。",
+    "source": "https://voxposer.github.io/"
   },
   {
     "from": "palm-e",
     "to": "hirobot",
     "kind": "reading",
-    "label": "把用户反馈接入层级控制"
+    "label": "把用户反馈接入层级控制",
+    "explanation": "先读 PaLM-E 的具身多模态输入，再看 Hi Robot 如何在层级策略中处理用户意图与反馈。",
+    "source": "https://raw.githubusercontent.com/mlresearch/v267/main/assets/shi25d/shi25d.pdf#page=4"
   },
   {
     "from": "unipi",
     "to": "uwm",
     "kind": "reading",
-    "label": "分离模型 → 联合建模"
+    "label": "分离模型 → 联合建模",
+    "explanation": "UniPi 以视频计划和动作恢复连接感知与控制；UWM 探索观察与动作的统一生成关系，重点看联合目标与接口。",
+    "source": "https://arxiv.org/pdf/2504.02792#page=4"
   },
   {
     "from": "dreamer",
     "to": "vjepa2",
     "kind": "compare",
-    "label": "奖励想象 / 特征目标规划"
+    "label": "奖励想象 / 特征目标规划",
+    "explanation": "Dreamer 使用奖励和潜世界模型训练策略；V-JEPA 2 的动作条件模型支持表征空间目标规划，监督与目标不同。",
+    "source": "https://github.com/facebookresearch/vjepa2"
   },
   {
     "from": "openvla",
     "to": "pi0",
     "kind": "compare",
-    "label": "离散 token / 连续动作"
+    "label": "离散 token / 连续动作",
+    "explanation": "OpenVLA 预测离散动作 token；π0 使用连续流匹配动作专家，比较时同时考虑动作块、控制频率与训练数据。",
+    "source": "https://arxiv.org/html/2410.24164v1#S2.F3"
   },
   {
     "to": "pets",
@@ -256,12 +336,12 @@
     "from": "pets"
   },
   {
+    "from": "mbpo",
     "to": "simple",
     "kind": "compare",
-    "label": "从状态回放到像素模拟",
-    "explanation": "比较状态空间短 rollout 与像素帧预测器，保持真实交互预算和任务差异可见。",
-    "source": "https://arxiv.org/pdf/1903.00374#page=4",
-    "from": "mbpo"
+    "label": "状态转移 / 像素模拟",
+    "explanation": "MBPO 以短模型轨迹辅助策略更新；SimPLe 学习像素模拟器并在其中训练策略。",
+    "source": "https://arxiv.org/pdf/1903.00374#page=4"
   },
   {
     "to": "planet",
@@ -280,68 +360,68 @@
     "from": "dreamerv3"
   },
   {
+    "from": "tdmpc",
     "to": "tdmpc2",
     "kind": "evolution",
     "label": "扩展多任务与规模",
-    "explanation": "TD-MPC2 扩展 TD-MPC 的模型控制路线，研究跨任务和模型规模的泛化。",
-    "source": "https://arxiv.org/pdf/2310.16828#page=3",
-    "from": "tdmpc"
+    "explanation": "TD-MPC2 延续 TD-MPC 的任务相关潜动力学与在线 MPC，扩展模型、任务覆盖和稳定训练。",
+    "source": "https://arxiv.org/pdf/2310.16828#page=3"
   },
   {
+    "from": "iris",
     "to": "diamond",
     "kind": "compare",
-    "label": "离散 token 与连续扩散",
-    "explanation": "两者都用学习的世界模型训练行为，重点对照离散图像压缩与连续像素扩散的误差。",
-    "source": "https://arxiv.org/pdf/2405.12399#page=2",
-    "from": "iris"
+    "label": "离散 token / 连续扩散",
+    "explanation": "IRIS 将图像量化为离散 token；DIAMOND 使用扩散模型生成动作条件图像，两者都需检查闭环策略效用。",
+    "source": "https://arxiv.org/pdf/2405.12399#page=2"
   },
   {
+    "from": "diamond",
     "to": "unipi",
     "kind": "compare",
-    "label": "环境模拟与视频计划",
-    "explanation": "DIAMOND 预测动作条件环境演化，UniPi 先生成目标条件视频计划再解码动作。",
-    "source": "https://papers.nips.cc/paper_files/paper/2023/file/1d5b9233ad716a43be5c0d3023cb82d0-Paper-Conference.pdf#page=4",
-    "from": "diamond"
+    "label": "环境模型 / 视频计划",
+    "explanation": "DIAMOND 以动作条件环境预测支持策略学习；UniPi 按语言任务生成视频计划，再恢复控制动作。",
+    "source": "https://papers.nips.cc/paper_files/paper/2023/file/1d5b9233ad716a43be5c0d3023cb82d0-Paper-Conference.pdf#page=4"
   },
   {
+    "from": "unipi",
     "to": "robodreamer",
     "kind": "reading",
-    "label": "从视频计划到语言组合",
-    "explanation": "先理解视频计划与逆动力学接口，再读 RoboDreamer 如何组合语言成分的生成条件。",
-    "source": "https://arxiv.org/pdf/2404.12377#page=3",
-    "from": "unipi"
+    "label": "视频计划到语言组合",
+    "explanation": "从 UniPi 的视频规划接口进入 RoboDreamer 的语言组合条件，关注新指令组合与可执行性的证据。",
+    "source": "https://arxiv.org/pdf/2404.12377#page=3"
   },
   {
+    "from": "robodreamer",
     "to": "unisim",
     "kind": "compare",
-    "label": "计划生成与交互模拟",
-    "explanation": "比较按指令生成任务视频与根据高低层动作持续响应的学习模拟器。",
-    "source": "https://arxiv.org/html/2310.06114v2#S2.F2",
-    "from": "robodreamer"
+    "label": "任务计划 / 交互模拟",
+    "explanation": "RoboDreamer 按任务描述生成未来计划；UniSim 学习带动作条件的交互模拟，使用方式不同。",
+    "source": "https://arxiv.org/html/2310.06114v2#S2.F2"
   },
   {
+    "from": "unisim",
     "to": "genie",
     "kind": "compare",
-    "label": "显式动作与潜动作",
-    "explanation": "UniSim 混合多种动作条件；Genie 研究从视频中学习潜动作以构建可控交互。",
-    "source": "https://raw.githubusercontent.com/mlresearch/v235/main/assets/bruce24a/bruce24a.pdf#page=3",
-    "from": "unisim"
+    "label": "显式动作 / 视频潜动作",
+    "explanation": "UniSim 使用显式动作条件；Genie 从视频中发现潜动作以支持交互生成，不能混用其控制接口。",
+    "source": "https://raw.githubusercontent.com/mlresearch/v235/main/assets/bruce24a/bruce24a.pdf#page=3"
   },
   {
+    "from": "r3m",
     "to": "vip",
     "kind": "compare",
-    "label": "表征复用与视觉奖励",
-    "explanation": "两者利用人类视频，R3M 强调时间和语言表征，VIP 强调目标条件价值导出的视觉奖励。",
-    "source": "https://arxiv.org/pdf/2210.00030#page=2",
-    "from": "r3m"
+    "label": "表征复用 / 视觉目标距离",
+    "explanation": "R3M 关注可迁移视觉编码；VIP 将视频中的时间结构用于目标条件视觉价值与奖励表示。",
+    "source": "https://arxiv.org/pdf/2210.00030#page=2"
   },
   {
+    "from": "vip",
     "to": "vc1",
     "kind": "reading",
-    "label": "从单个目标到跨任务评测",
-    "explanation": "先理解表征和奖励的目标，再用 CortexBench 的冻结与适配评测比较不同编码器。",
-    "source": "https://arxiv.org/pdf/2303.18240#page=4",
-    "from": "vip"
+    "label": "视觉奖励到跨任务评测",
+    "explanation": "由 VIP 的目标距离进入 VC-1 / CortexBench，检查视觉预训练目标在不同具身任务上的迁移。",
+    "source": "https://arxiv.org/pdf/2303.18240#page=4"
   },
   {
     "to": "ijepa",
@@ -352,28 +432,28 @@
     "from": "vc1"
   },
   {
+    "from": "transporter",
     "to": "peract",
     "kind": "compare",
-    "label": "空间搬运与三维体素动作",
-    "explanation": "比较俯视空间互相关与语言条件体素分类如何表达操作动作，不将二者当作版本继承。",
-    "source": "https://peract.github.io/paper/peract_corl2022.pdf#page=4",
-    "from": "transporter"
+    "label": "空间搬运 / 三维体素",
+    "explanation": "Transporter 通过空间特征相关预测抓放；PerAct 用语言条件三维体素表示学习关键位姿。",
+    "source": "https://peract.github.io/paper/peract_corl2022.pdf#page=4"
   },
   {
+    "from": "peract",
     "to": "rvt",
     "kind": "compare",
-    "label": "体素表示与虚拟多视图",
-    "explanation": "同样预测三维关键帧动作，PerAct 编码体素，RVT 重渲染多视图并将热力图提升回三维。",
-    "source": "https://d1qx31qr3h6wln.cloudfront.net/publications/RVT_Arxiv_2023.pdf#page=3",
-    "from": "peract"
+    "label": "体素场 / 虚拟视图",
+    "explanation": "PerAct 在体素空间定位动作；RVT 将点云投影为虚拟多视图并融合空间信息。",
+    "source": "https://d1qx31qr3h6wln.cloudfront.net/publications/RVT_Arxiv_2023.pdf#page=3"
   },
   {
+    "from": "rvt",
     "to": "rvt2",
     "kind": "evolution",
     "label": "全局定位到局部细化",
-    "explanation": "RVT-2 直接扩展 RVT，加入由粗到细的重渲染、凸上采样和位置条件旋转预测。",
-    "source": "https://arxiv.org/pdf/2406.08545#page=4",
-    "from": "rvt"
+    "explanation": "RVT-2 延续 RVT 的多视图路线，加入更高效的全局定位和局部细化机制。",
+    "source": "https://arxiv.org/pdf/2406.08545#page=4"
   },
   {
     "to": "act",
@@ -400,28 +480,28 @@
     "from": "dp3"
   },
   {
+    "from": "rt1",
     "to": "rt2",
     "kind": "evolution",
-    "label": "从机器人规模到视觉语言迁移",
-    "explanation": "RT-2 将动作编码为 token 并与视觉语言任务共训，扩展 RT-1 的规模化机器人策略路径。",
-    "source": "https://robotics-transformer2.github.io/",
-    "from": "rt1"
+    "label": "机器人学习到视觉语言迁移",
+    "explanation": "RT-2 延续机器人动作预测问题，把视觉语言预训练的知识接到动作 token 生成。",
+    "source": "https://robotics-transformer2.github.io/"
   },
   {
+    "from": "rt2",
     "to": "vima",
     "kind": "compare",
-    "label": "文本任务与多模态提示",
-    "explanation": "比较视觉语言模型迁移和对象中心图文提示；任务接口与验证环境不同。",
-    "source": "https://arxiv.org/pdf/2210.03094#page=4",
-    "from": "rt2"
+    "label": "语言任务 / 图文提示",
+    "explanation": "RT-2 从视觉语言骨干预测动作；VIMA 以交错图文提示表达不同操作任务。",
+    "source": "https://arxiv.org/pdf/2210.03094#page=4"
   },
   {
+    "from": "vima",
     "to": "openx",
     "kind": "reading",
-    "label": "从提示泛化到数据覆盖",
-    "explanation": "从如何表达任务转向训练数据来源，检查跨机器人数据的动作语义与协议。",
-    "source": "https://arxiv.org/pdf/2310.08864#page=4",
-    "from": "vima"
+    "label": "从提示接口到数据覆盖",
+    "explanation": "VIMA 关注任务提示与组合泛化；Open X-Embodiment 汇集跨本体经验，为理解预训练覆盖提供数据视角。",
+    "source": "https://arxiv.org/pdf/2310.08864#page=4"
   },
   {
     "to": "spatialvla",
@@ -432,20 +512,20 @@
     "from": "openvla"
   },
   {
+    "from": "groot-n1",
     "to": "rdt1b",
     "kind": "compare",
-    "label": "分层策略与双臂扩散",
-    "explanation": "比较分层视觉语言动作架构和面向双臂的统一动作空间扩散模型，关注目标本体。",
-    "source": "https://arxiv.org/pdf/2410.07864#page=4",
-    "from": "groot-n1"
+    "label": "分层通用策略 / 双臂扩散",
+    "explanation": "GR00T N1 连接慢速语义与快速动作；RDT-1B 重点研究大规模双臂扩散策略及统一动作表示。",
+    "source": "https://arxiv.org/pdf/2410.07864#page=4"
   },
   {
+    "from": "rdt1b",
     "to": "openvla-oft",
     "kind": "compare",
-    "label": "扩散采样与并行回归",
-    "explanation": "对照扩散动作生成和一次前向的连续回归；不是同一训练数据下的直接排名。",
-    "source": "https://arxiv.org/pdf/2502.19645#page=3",
-    "from": "rdt1b"
+    "label": "扩散采样 / 并行回归",
+    "explanation": "RDT-1B 生成扩散动作序列；OpenVLA-OFT 修改微调和解码以并行回归动作块。",
+    "source": "https://arxiv.org/pdf/2502.19645#page=3"
   },
   {
     "to": "droid",
@@ -456,12 +536,12 @@
     "from": "bridge-v2"
   },
   {
+    "from": "droid",
     "to": "umi",
     "kind": "compare",
-    "label": "移动机器人与手持教学",
-    "explanation": "DROID 把标准机器人平台带入场景；UMI 用手持夹爪采集并控制迁移中的观测和动作差异。",
-    "source": "https://arxiv.org/pdf/2402.10329#page=2",
-    "from": "droid"
+    "label": "机器人遥操作 / 手持采集",
+    "explanation": "DROID 使用机器人硬件采集；UMI 将采集接口转为手持夹爪，并处理观测动作时序与部署匹配。",
+    "source": "https://arxiv.org/pdf/2402.10329#page=2"
   },
   {
     "to": "pistar06",
@@ -472,52 +552,52 @@
     "from": "umi"
   },
   {
+    "from": "cliport",
     "to": "saycan",
     "kind": "compare",
-    "label": "语义抓放与可供性选技能",
-    "explanation": "CLIPort 直接预测语言条件抓放；SayCan 在高层结合语言概率和技能可行性。",
-    "source": "https://say-can.github.io/",
-    "from": "cliport"
+    "label": "语义抓放 / 可供性选技能",
+    "explanation": "CLIPort 将语言语义与空间抓放结合；SayCan 用语言相关性和技能价值选择已有技能。",
+    "source": "https://say-can.github.io/"
   },
   {
+    "from": "saycan",
     "to": "lm-nav",
     "kind": "compare",
-    "label": "技能可行性与导航可达性",
-    "explanation": "比较语言技能筛选和拓扑图上的地标匹配、可达性约束，任务接口各不相同。",
-    "source": "https://arxiv.org/pdf/2207.04429#page=4",
-    "from": "saycan"
+    "label": "技能可行性 / 导航可达性",
+    "explanation": "SayCan 对已有技能打分；LM-Nav 通过语言地标和拓扑导航把计划落到可达路径。",
+    "source": "https://arxiv.org/pdf/2207.04429#page=4"
   },
   {
+    "from": "lm-nav",
     "to": "palm-e",
     "kind": "compare",
-    "label": "模块组合与多模态输入",
-    "explanation": "LM-Nav 连接独立预训练模块，PaLM-E 把具身观测表示输入多模态语言模型。",
-    "source": "https://palm-e.github.io/assets/palm-e.pdf#page=1",
-    "from": "lm-nav"
+    "label": "模块组合 / 多模态输入",
+    "explanation": "LM-Nav 将不同基础模型和导航模块组合；PaLM-E 把视觉与具身传感输入统一到语言模型。",
+    "source": "https://palm-e.github.io/assets/palm-e.pdf#page=1"
   },
   {
+    "from": "code-as-policies",
     "to": "progprompt",
     "kind": "compare",
-    "label": "控制程序与状态断言",
-    "explanation": "比较递归生成感知控制程序与在程序式提示中列出对象、动作、断言和恢复步骤。",
-    "source": "https://arxiv.org/pdf/2209.11302#page=2",
-    "from": "code-as-policies"
+    "label": "控制程序 / 状态断言",
+    "explanation": "Code as Policies 生成调用机器人 API 的控制程序；ProgPrompt 在程序化计划中加入对象、动作和状态断言。",
+    "source": "https://arxiv.org/pdf/2209.11302#page=2"
   },
   {
+    "from": "progprompt",
     "to": "sayplan",
     "kind": "compare",
-    "label": "对象列表与分层场景图",
-    "explanation": "从局部环境词汇和状态检查，扩展到大场景的语义子图检索及模拟反馈。",
-    "source": "https://proceedings.mlr.press/v229/rana23a/rana23a.pdf#page=2",
-    "from": "progprompt"
+    "label": "对象接口 / 分层场景图",
+    "explanation": "ProgPrompt 使用对象与可执行动作接口；SayPlan 利用分层三维场景图约束大场景任务规划。",
+    "source": "https://proceedings.mlr.press/v229/rana23a/rana23a.pdf#page=2"
   },
   {
+    "from": "sayplan",
     "to": "voxposer",
     "kind": "compare",
-    "label": "场景图任务与三维价值图",
-    "explanation": "SayPlan 组织高层任务和导航计划，VoxPoser 用空间价值图连接语言与运动规划。",
-    "source": "https://voxposer.github.io/",
-    "from": "sayplan"
+    "label": "场景图任务 / 三维价值图",
+    "explanation": "SayPlan 在场景图上组织任务；VoxPoser 将语言约束转为三维价值图以求解运动。",
+    "source": "https://voxposer.github.io/"
   },
   {
     "to": "libero",
@@ -536,20 +616,20 @@
     "from": "libero"
   },
   {
+    "from": "inner-monologue",
     "to": "llm-planner",
     "kind": "compare",
-    "label": "语言反馈与层级重规划",
-    "explanation": "比较文本化成功反馈和结合可见对象、检索示例的高层子目标重规划。",
-    "source": "https://arxiv.org/pdf/2212.04088.pdf#page=4",
-    "from": "inner-monologue"
+    "label": "语言反馈 / 层级重规划",
+    "explanation": "Inner Monologue 将执行和环境反馈转成语言上下文；LLM-Planner 通过高低层规划和重新规划处理任务执行。",
+    "source": "https://arxiv.org/pdf/2212.04088.pdf#page=4"
   },
   {
+    "from": "llm-planner",
     "to": "rt-h",
     "kind": "compare",
-    "label": "任务子目标与语言动作层",
-    "explanation": "LLM-Planner 分解导航交互任务，RT-H 将语言动作作为低层控制的中间条件。",
-    "source": "https://arxiv.org/pdf/2403.01823.pdf#page=4",
-    "from": "llm-planner"
+    "label": "任务子目标 / 语言动作层",
+    "explanation": "LLM-Planner 处理任务级子目标；RT-H 在机器人策略内加入可纠正的语言动作层。",
+    "source": "https://arxiv.org/pdf/2403.01823.pdf#page=4"
   },
   {
     "to": "hirobot",
@@ -624,11 +704,643 @@
     "from": "vip"
   },
   {
+    "from": "genie",
     "to": "cosmos",
     "kind": "compare",
-    "label": "潜动作交互与视频基础模型",
-    "explanation": "比较从视频学习潜动作的交互模型与面向物理 AI 的视频基础模型，关注动作条件、数据和下游任务的差别。",
-    "source": "https://arxiv.org/pdf/2501.03575#page=3",
-    "from": "genie"
+    "label": "潜动作交互 / 基础模型",
+    "explanation": "Genie 研究从视频学习潜动作；Cosmos 提供视频世界基础模型，模型条件和下游应用需逐项核对。",
+    "source": "https://arxiv.org/pdf/2501.03575#page=3"
+  },
+  {
+    "from": "e2c",
+    "to": "world-models",
+    "kind": "compare",
+    "label": "局部线性 / 视觉记忆",
+    "explanation": "E2C 约束潜空间适合局部控制；World Models 分离视觉、记忆与控制模块，比较表示为控制服务的方式。",
+    "source": "https://worldmodels.github.io/"
+  },
+  {
+    "from": "world-models",
+    "to": "solar",
+    "kind": "compare",
+    "label": "模块学习 / 局部模型",
+    "explanation": "World Models 侧重模块化视觉记忆；SOLAR 联合学习表示和动力学先验，并拟合局部模型改进策略。",
+    "source": "https://proceedings.mlr.press/v97/zhang19m/zhang19m.pdf#page=3"
+  },
+  {
+    "from": "solar",
+    "to": "pets",
+    "kind": "compare",
+    "label": "图像潜状态 / 状态集成",
+    "explanation": "SOLAR 从图像学习结构化潜模型；PETS 在状态空间使用概率集成和轨迹采样，输入与不确定性表达不同。",
+    "source": "https://arxiv.org/pdf/1805.12114#page=2"
+  },
+  {
+    "from": "pets",
+    "to": "planet",
+    "kind": "compare",
+    "label": "概率集成 / 循环潜状态",
+    "explanation": "PETS 使用集成模型进行轨迹采样规划；PlaNet 用循环状态空间模型从像素学习潜动力学，再在线搜索动作。",
+    "source": "https://arxiv.org/pdf/1811.04551.pdf#page=4"
+  },
+  {
+    "from": "planet",
+    "to": "slac",
+    "kind": "compare",
+    "label": "在线规划 / 离策略学习",
+    "explanation": "PlaNet 在潜模型中规划；SLAC 用推断潜状态训练 soft Q，并从观测动作历史学习策略。",
+    "source": "https://papers.nips.cc/paper_files/paper/2020/file/08058bf500242562c0d031ff830ad094-Paper.pdf#page=4"
+  },
+  {
+    "from": "slac",
+    "to": "dreamer",
+    "kind": "compare",
+    "label": "潜状态价值 / 想象策略",
+    "explanation": "SLAC 重点是潜变量推断与离策略 actor–critic；Dreamer 在多步潜想象轨迹中训练策略。",
+    "source": "https://research.google/blog/introducing-dreamer-scalable-reinforcement-learning-using-world-models/"
+  },
+  {
+    "from": "dreamerv3",
+    "to": "daydreamer",
+    "kind": "reading",
+    "label": "从多任务到真机学习",
+    "explanation": "由 DreamerV3 的跨任务训练问题转向 DayDreamer 的真机在线采样与学习；不是按时间排列的后续版本。",
+    "source": "https://proceedings.mlr.press/v205/wu23c/wu23c.pdf#page=3"
+  },
+  {
+    "from": "daydreamer",
+    "to": "dreamerpro",
+    "kind": "compare",
+    "label": "真机接口 / 无重建目标",
+    "explanation": "DayDreamer 检验真实机器人中的模型学习；DreamerPro 改变世界模型的视觉目标，用原型分配替代像素重建。",
+    "source": "https://proceedings.mlr.press/v162/deng22a/deng22a.pdf#page=3"
+  },
+  {
+    "from": "dreamerpro",
+    "to": "mbpo",
+    "kind": "compare",
+    "label": "原型表征 / 短模型轨迹",
+    "explanation": "DreamerPro 在潜模型中学习策略；MBPO 用短合成轨迹辅助 SAC 离策略更新，模型使用位置不同。",
+    "source": "https://arxiv.org/pdf/1906.08253#page=6"
+  },
+  {
+    "from": "simple",
+    "to": "efficientzero",
+    "kind": "compare",
+    "label": "模拟训练 / 潜模型搜索",
+    "explanation": "SimPLe 在学习到的模拟器中训练策略；EfficientZero 用潜模型树搜索改善动作与价值目标。",
+    "source": "https://papers.nips.cc/paper_files/paper/2021/file/d5eca8dc3820cad9fe56a3bafda65ca1-Paper.pdf#page=5"
+  },
+  {
+    "from": "efficientzero",
+    "to": "efficientzero-v2",
+    "kind": "evolution",
+    "label": "搜索扩展到连续动作",
+    "explanation": "EfficientZero V2 延续 EfficientZero，用采样式 Gumbel 搜索和价值估计改进覆盖连续控制。",
+    "source": "https://raw.githubusercontent.com/mlresearch/v235/main/assets/wang24at/wang24at.pdf#page=3"
+  },
+  {
+    "from": "efficientzero-v2",
+    "to": "twm",
+    "kind": "compare",
+    "label": "树搜索 / 想象 actor–critic",
+    "explanation": "EfficientZero V2 使用搜索目标训练策略；TWM 用 Transformer-XL 世界模型产生想象经验训练 actor–critic。",
+    "source": "https://arxiv.org/pdf/2303.07109#page=1"
+  },
+  {
+    "from": "twm",
+    "to": "storm",
+    "kind": "compare",
+    "label": "独立模态 / 融合 token",
+    "explanation": "TWM 将潜状态、动作与奖励分别组织成 token；STORM 融合观测动作并调整模型训练结构。",
+    "source": "https://papers.nips.cc/paper_files/paper/2023/file/5647763d4245b23e6a1cb0a8947b38c9-Paper-Conference.pdf#page=4"
+  },
+  {
+    "from": "storm",
+    "to": "tdmpc",
+    "kind": "compare",
+    "label": "想象经验 / 在线 MPC",
+    "explanation": "STORM 在想象轨迹上更新策略；TD-MPC 用任务相关潜模型在线搜索动作，比较时保留基准差异。",
+    "source": "https://arxiv.org/pdf/2203.04955#page=4"
+  },
+  {
+    "from": "diffuser",
+    "to": "decision-diffuser",
+    "kind": "compare",
+    "label": "联合轨迹 / 状态加逆模型",
+    "explanation": "Diffuser 去噪状态动作轨迹；Decision Diffuser 生成条件状态序列，再用逆动力学恢复动作。",
+    "source": "https://arxiv.org/pdf/2211.15657.pdf#page=4"
+  },
+  {
+    "from": "decision-diffuser",
+    "to": "diffusion-forcing",
+    "kind": "compare",
+    "label": "整段去噪 / 逐步噪声",
+    "explanation": "Decision Diffuser 采用条件轨迹扩散；Diffusion Forcing 用因果网络处理各 token 不同的噪声等级。",
+    "source": "https://papers.nips.cc/paper_files/paper/2024/file/2aee1c4159e48407d68fe16ae8e6e49e-Paper-Conference.pdf#page=3"
+  },
+  {
+    "from": "diffusion-forcing",
+    "to": "iris",
+    "kind": "compare",
+    "label": "因果扩散 / 离散图像模型",
+    "explanation": "Diffusion Forcing 研究时间与噪声的联合调度；IRIS 用离散视觉 token 构建自回归环境模型并训练策略。",
+    "source": "https://arxiv.org/pdf/2209.00588#page=2"
+  },
+  {
+    "from": "dino",
+    "to": "mae",
+    "kind": "compare",
+    "label": "教师分布 / 像素重建",
+    "explanation": "DINO 匹配动量教师的输出分布；MAE 从可见 patch 重建缺失像素，属于不同的表征学习目标。",
+    "source": "https://openaccess.thecvf.com/content/CVPR2022/papers/He_Masked_Autoencoders_Are_Scalable_Vision_Learners_CVPR_2022_paper.pdf#page=1"
+  },
+  {
+    "from": "mae",
+    "to": "mvp",
+    "kind": "reading",
+    "label": "掩码预训练走向真机",
+    "explanation": "Real-world MAE 将掩码视觉预训练迁移到真实机器人，冻结共享编码器后分别训练下游策略。",
+    "source": "https://proceedings.mlr.press/v205/radosavovic23a/radosavovic23a.pdf#page=2"
+  },
+  {
+    "from": "mvp",
+    "to": "r3m",
+    "kind": "compare",
+    "label": "像素重建 / 时序语言",
+    "explanation": "Real-world MAE 用掩码重建预训练视觉编码器；R3M 利用时序和语言信息学习可复用控制表征。",
+    "source": "https://arxiv.org/pdf/2203.12601#page=4"
+  },
+  {
+    "from": "vc1",
+    "to": "dynamo",
+    "kind": "compare",
+    "label": "跨任务基础 / 域内动力学",
+    "explanation": "VC-1 提供通用视觉表征与跨任务评测；DynaMo 利用域内视频的潜逆动力学与前向预测学习控制特征。",
+    "source": "https://papers.nips.cc/paper_files/paper/2024/file/3b8db54b629e00537b59cbc6612026d7-Paper-Conference.pdf#page=4"
+  },
+  {
+    "from": "dynamo",
+    "to": "ijepa",
+    "kind": "compare",
+    "label": "潜动作预测 / 掩码目标表征",
+    "explanation": "DynaMo 依靠连续视频和潜转移学习；I-JEPA 在图像中预测目标区域表征，两者时序与控制监督不同。",
+    "source": "https://openaccess.thecvf.com/content/CVPR2023/papers/Assran_Self-Supervised_Learning_From_Images_With_a_Joint-Embedding_Predictive_Architecture_CVPR_2023_paper.pdf#page=3"
+  },
+  {
+    "from": "vpp",
+    "to": "flare",
+    "kind": "compare",
+    "label": "读取视频特征 / 策略内预测",
+    "explanation": "VPP 从视频预测模型提取内部特征；FLARE 在动作 DiT 中加入未来 token 和表征对齐监督。",
+    "source": "https://raw.githubusercontent.com/mlresearch/v305/main/assets/zheng25a/zheng25a.pdf#page=3"
+  },
+  {
+    "from": "flare",
+    "to": "dreamgen",
+    "kind": "compare",
+    "label": "未来表征 / 合成训练数据",
+    "explanation": "FLARE 用未来表征辅助动作模型训练；DreamGen 用视频世界模型生成视频并补伪动作以训练策略。",
+    "source": "https://raw.githubusercontent.com/mlresearch/v305/main/assets/jang25a/jang25a.pdf#page=2"
+  },
+  {
+    "from": "dreamgen",
+    "to": "diwa",
+    "kind": "compare",
+    "label": "生成示范 / 想象中强化",
+    "explanation": "DreamGen 生产带伪动作的训练轨迹；DiWA 在潜世界模型中用奖励与策略梯度适配扩散策略。",
+    "source": "https://raw.githubusercontent.com/mlresearch/v305/main/assets/chandra25a/chandra25a.pdf#page=4"
+  },
+  {
+    "from": "diwa",
+    "to": "uwm",
+    "kind": "compare",
+    "label": "模型内策略更新 / 联合生成",
+    "explanation": "DiWA 将动力学用于想象中的强化微调；UWM 统一建模观察和动作生成，目标与训练接口不同。",
+    "source": "https://arxiv.org/pdf/2504.02792#page=4"
+  },
+  {
+    "from": "rvt2",
+    "to": "act3d",
+    "kind": "compare",
+    "label": "视图定位 / 连续特征场",
+    "explanation": "RVT-2 在多视图中定位动作；Act3D 用三维特征场及粗到细候选点预测关键位姿。",
+    "source": "https://proceedings.mlr.press/v229/gervet23a/gervet23a.pdf#page=2"
+  },
+  {
+    "from": "act3d",
+    "to": "dp3",
+    "kind": "compare",
+    "label": "关键位姿 / 动作块去噪",
+    "explanation": "Act3D 预测关键位姿再接规划器；DP3 汇聚点云特征并去噪连续动作序列。",
+    "source": "https://arxiv.org/pdf/2403.03954#page=4"
+  },
+  {
+    "from": "dp3",
+    "to": "3d-diffuser-actor",
+    "kind": "compare",
+    "label": "汇聚点云 / 空间 token",
+    "explanation": "DP3 使用紧凑点云嵌入；3D Diffuser Actor 保留三维 token 的相对空间关系并联合预测位姿和轨迹。",
+    "source": "https://raw.githubusercontent.com/mlresearch/v270/main/assets/ke25a/ke25a.pdf#page=4"
+  },
+  {
+    "from": "3d-diffuser-actor",
+    "to": "equivariant-dp",
+    "kind": "compare",
+    "label": "三维关系 / 平面旋转保证",
+    "explanation": "3D Diffuser Actor 用三维相对注意力；Equivariant DP 在编码、去噪和解码中构造平面旋转等变性。",
+    "source": "https://raw.githubusercontent.com/mlresearch/v270/main/assets/wang25a/wang25a.pdf#page=5"
+  },
+  {
+    "from": "equivariant-dp",
+    "to": "equibot",
+    "kind": "compare",
+    "label": "SO(2) / SIM(3) 等变",
+    "explanation": "Equivariant DP 针对平面旋转；EquiBot 结合规范化和等变结构处理平移、三维旋转及尺度，变换保证不同。",
+    "source": "https://raw.githubusercontent.com/mlresearch/v270/main/assets/yang25a/yang25a.pdf#page=3"
+  },
+  {
+    "from": "equibot",
+    "to": "spatialvla",
+    "kind": "compare",
+    "label": "等变扩散 / 空间动作 token",
+    "explanation": "EquiBot 通过几何等变去噪生成动作；SpatialVLA 在视觉语言动作建模中使用空间表示和动作 token。",
+    "source": "https://arxiv.org/pdf/2501.15830#page=3"
+  },
+  {
+    "from": "ibc",
+    "to": "bet",
+    "kind": "compare",
+    "label": "能量优化 / 分箱残差",
+    "explanation": "IBC 在观测动作能量上优化动作；BeT 预测离散动作中心和连续偏移以表达多峰行为。",
+    "source": "https://papers.nips.cc/paper_files/paper/2022/file/90d17e882adbdda42349db6f50123817-Paper-Conference.pdf#page=4"
+  },
+  {
+    "from": "bet",
+    "to": "vq-bet",
+    "kind": "evolution",
+    "label": "固定分箱到学习式量化",
+    "explanation": "VQ-BeT 延伸 BeT 的离散加连续表示，改用残差向量量化学习动作或动作块的潜代码。",
+    "source": "https://raw.githubusercontent.com/mlresearch/v235/main/assets/lee24y/lee24y.pdf#page=4"
+  },
+  {
+    "from": "vq-bet",
+    "to": "act",
+    "kind": "compare",
+    "label": "潜代码 / 条件动作块",
+    "explanation": "VQ-BeT 用学习式代码表示多峰动作；ACT 用条件 VAE 生成动作块并进行时间集成。",
+    "source": "https://arxiv.org/pdf/2304.13705#page=4"
+  },
+  {
+    "from": "fast",
+    "to": "pi0",
+    "kind": "compare",
+    "label": "压缩 token / 连续流匹配",
+    "explanation": "FAST 提供离散动作序列接口；π0 用连续流匹配动作专家，比较动作生成形式与控制频率。",
+    "source": "https://arxiv.org/html/2410.24164v1#S2.F3"
+  },
+  {
+    "from": "openvla-oft",
+    "to": "dexvla",
+    "kind": "compare",
+    "label": "高效回归 / 预训练专家",
+    "explanation": "OpenVLA-OFT 强调动作回归和推理效率；DexVLA 独立预训练扩散动作专家再接入 VLM。",
+    "source": "https://raw.githubusercontent.com/mlresearch/v305/main/assets/wen25b/wen25b.pdf#page=3"
+  },
+  {
+    "from": "openvla",
+    "to": "hpt",
+    "kind": "compare",
+    "label": "统一 VLA / 异构模块主干",
+    "explanation": "OpenVLA 统一视觉语言动作接口；HPT 通过本体 stem、共享 trunk 与动作头处理异构观测和动作。",
+    "source": "https://papers.nips.cc/paper_files/paper/2024/file/e0f393e7980a24fd12fa6f15adfa25fb-Paper-Conference.pdf#page=3"
+  },
+  {
+    "from": "hpt",
+    "to": "crossformer",
+    "kind": "compare",
+    "label": "模块适配 / 可变模态 token",
+    "explanation": "HPT 强调本体专属 stem 和共享主干；CrossFormer 以可变观测 token 与动作读出连接更多本体类别。",
+    "source": "https://raw.githubusercontent.com/mlresearch/v270/main/assets/doshi25a/doshi25a.pdf#page=4"
+  },
+  {
+    "from": "crossformer",
+    "to": "robomamba",
+    "kind": "compare",
+    "label": "跨本体 Transformer / Mamba",
+    "explanation": "CrossFormer 研究多本体统一策略；RoboMamba 研究视觉语言对齐和 Mamba 骨干的推理与位姿输出。",
+    "source": "https://papers.nips.cc/paper_files/paper/2024/file/46a126492ea6fb87410e55a58df2e189-Paper-Conference.pdf#page=5"
+  },
+  {
+    "from": "robomamba",
+    "to": "cot-vla",
+    "kind": "compare",
+    "label": "位姿头 / 视觉子目标",
+    "explanation": "RoboMamba 用语言特征预测末端位姿；CoT-VLA 先生成视觉子目标，再输出动作块。",
+    "source": "https://openaccess.thecvf.com/content/CVPR2025/papers/Zhao_CoT-VLA_Visual_Chain-of-Thought_Reasoning_for_Vision-Language-Action_Models_CVPR_2025_paper.pdf#page=3"
+  },
+  {
+    "from": "cot-vla",
+    "to": "univla",
+    "kind": "compare",
+    "label": "视觉子目标 / 潜动作",
+    "explanation": "CoT-VLA 将未来图像作为中间表示；UniVLA 从视频表征中学习任务中心潜动作，再适配机器人控制。",
+    "source": "https://www.roboticsproceedings.org/rss21/p014.pdf#page=4"
+  },
+  {
+    "from": "roboturk",
+    "to": "robonet",
+    "kind": "compare",
+    "label": "众包采集 / 跨机构共享",
+    "explanation": "ROBOTURK 提供手机与云端遥操作采集；RoboNet 组织多机构、多机器人经验并研究迁移。",
+    "source": "https://proceedings.mlr.press/v100/dasari20a/dasari20a.pdf#page=2"
+  },
+  {
+    "from": "robonet",
+    "to": "robomimic",
+    "kind": "reading",
+    "label": "由共享数据到质量分析",
+    "explanation": "从 RoboNet 的经验覆盖进入 robomimic 的人类示范分析，检查质量、时间结构和观测配置。",
+    "source": "https://proceedings.mlr.press/v164/mandlekar22a/mandlekar22a.pdf#page=2"
+  },
+  {
+    "from": "robomimic",
+    "to": "bridge-v2",
+    "kind": "reading",
+    "label": "从数据因素到真实覆盖",
+    "explanation": "读过 robomimic 的数据质量问题，再看 BridgeData V2 的场景与技能覆盖，不能只按轨迹数比较。",
+    "source": "https://arxiv.org/pdf/2308.12952#page=1"
+  },
+  {
+    "from": "bridge-v2",
+    "to": "mimicgen",
+    "kind": "compare",
+    "label": "真实采集 / 示范重定向",
+    "explanation": "BridgeData V2 扩充真实机器人示范；MimicGen 根据对象位姿重定向已有片段并筛选成功执行。",
+    "source": "https://proceedings.mlr.press/v229/mandlekar23a/mandlekar23a.pdf#page=3"
+  },
+  {
+    "from": "mimicgen",
+    "to": "mimicplay",
+    "kind": "compare",
+    "label": "轨迹重定向 / 人类潜计划",
+    "explanation": "MimicGen 在新场景复用机器人片段；MimicPlay 用人类 play 学高层计划，再训练机器人控制器。",
+    "source": "https://proceedings.mlr.press/v229/wang23a/wang23a.pdf#page=4"
+  },
+  {
+    "from": "mimicplay",
+    "to": "droid",
+    "kind": "compare",
+    "label": "人类视频计划 / 机器人采集",
+    "explanation": "MimicPlay 利用人类手部轨迹辅助规划；DROID 通过统一协议跨场景采集真实机器人示范。",
+    "source": "https://arxiv.org/pdf/2403.12945#page=4"
+  },
+  {
+    "from": "umi",
+    "to": "mobile-aloha",
+    "kind": "compare",
+    "label": "手持示范 / 全身遥操作",
+    "explanation": "UMI 使用手持夹爪获取示范；Mobile ALOHA 同步遥操作双臂和移动底座，并联合训练静态数据。",
+    "source": "https://raw.githubusercontent.com/mlresearch/v270/main/assets/fu25b/fu25b.pdf#page=3"
+  },
+  {
+    "from": "mobile-aloha",
+    "to": "graspvla",
+    "kind": "compare",
+    "label": "全身真实示范 / 合成抓取",
+    "explanation": "Mobile ALOHA 的全身示范与 GraspVLA 的合成抓取数据解决不同数据问题，任务范围不可直接等同。",
+    "source": "https://raw.githubusercontent.com/mlresearch/v305/main/assets/deng25a/deng25a.pdf#page=5"
+  },
+  {
+    "from": "graspvla",
+    "to": "conrft",
+    "kind": "compare",
+    "label": "合成预训练 / 交互微调",
+    "explanation": "GraspVLA 侧重大规模合成抓取预训练；ConRFT 用示范初始化并通过在线交互和人工干预强化微调。",
+    "source": "https://www.roboticsproceedings.org/rss21/p019.pdf#page=3"
+  },
+  {
+    "from": "conrft",
+    "to": "pistar06",
+    "kind": "compare",
+    "label": "一致性策略更新 / 经验学习",
+    "explanation": "ConRFT 用一致性动作头与 Q 目标进行强化微调；π*0.6 展示另一类执行经验改进路线，需保留奖励与采集差异。",
+    "source": "https://www.pi.website/download/pistar06.pdf#page=1"
+  },
+  {
+    "from": "palm-e",
+    "to": "embodiedgpt",
+    "kind": "compare",
+    "label": "具身观测 / 计划表征",
+    "explanation": "PaLM-E 统一具身多模态输入；EmbodiedGPT 用具身计划监督和查询特征帮助低层控制。",
+    "source": "https://papers.nips.cc/paper_files/paper/2023/file/4ec43957eda1126ad4887995d05fae3b-Paper-Conference.pdf#page=4"
+  },
+  {
+    "from": "embodiedgpt",
+    "to": "leo",
+    "kind": "compare",
+    "label": "计划特征 / 三维统一任务",
+    "explanation": "EmbodiedGPT 连接语言计划与策略特征；LEO 显式编码二维图像、对象点云并统一三维问答和动作任务。",
+    "source": "https://raw.githubusercontent.com/mlresearch/v235/main/assets/huang24ae/huang24ae.pdf#page=2"
+  },
+  {
+    "from": "leo",
+    "to": "robopoint",
+    "kind": "compare",
+    "label": "三维通用接口 / 可供点",
+    "explanation": "LEO 覆盖多种三维语言动作任务；RoboPoint 专注依据图像和空间指令预测可供点，输出粒度不同。",
+    "source": "https://raw.githubusercontent.com/mlresearch/v270/main/assets/yuan25c/yuan25c.pdf#page=4"
+  },
+  {
+    "from": "voxposer",
+    "to": "moka",
+    "kind": "compare",
+    "label": "连续价值图 / 标记关键点",
+    "explanation": "VoxPoser 使用三维价值图；MOKA 通过图像标记提示选择可供点和属性，再连接运动规划器。",
+    "source": "https://www.roboticsproceedings.org/rss20/p062.pdf#page=3"
+  },
+  {
+    "from": "moka",
+    "to": "rekep",
+    "kind": "compare",
+    "label": "关键点选择 / 关系约束",
+    "explanation": "MOKA 预测关键点可供性和属性；ReKep 用关键点之间的关系函数定义阶段与路径约束。",
+    "source": "https://rekep-robot.github.io/"
+  },
+  {
+    "from": "rekep",
+    "to": "saytap",
+    "kind": "compare",
+    "label": "操作约束 / 足接触接口",
+    "explanation": "ReKep 约束操作关键点关系；SayTap 将语言转成足接触模式并交给四足低层控制器，体现不同可执行接口。",
+    "source": "https://proceedings.mlr.press/v229/tang23a/tang23a.pdf#page=4"
+  },
+  {
+    "from": "alfred",
+    "to": "behavior",
+    "kind": "compare",
+    "label": "指令跟随 / 活动目标",
+    "explanation": "ALFRED 用语言指令评估家庭任务；BEHAVIOR 用逻辑初始状态、目标和物理交互定义日常活动。",
+    "source": "https://proceedings.mlr.press/v164/srivastava22a/srivastava22a.pdf#page=2"
+  },
+  {
+    "from": "behavior",
+    "to": "behavior-1k",
+    "kind": "evolution",
+    "label": "活动与仿真能力扩展",
+    "explanation": "BEHAVIOR-1K 延续 BDDL 和活动评测接口，并扩展活动、场景、资产及 OmniGibson 的物理能力。",
+    "source": "https://proceedings.mlr.press/v205/li23a/li23a.pdf#page=4"
+  },
+  {
+    "from": "behavior-1k",
+    "to": "maniskill2",
+    "kind": "compare",
+    "label": "家庭活动 / 操作技能系统",
+    "explanation": "BEHAVIOR-1K 强调日常活动与状态变化；ManiSkill2 侧重泛化操作技能、控制接口转换及高效训练采样。",
+    "source": "https://arxiv.org/pdf/2302.04659#page=6"
+  },
+  {
+    "from": "maniskill2",
+    "to": "robocasa",
+    "kind": "compare",
+    "label": "技能系统 / 家庭训练数据",
+    "explanation": "ManiSkill2 提供多类操作任务和采样接口；RoboCasa 结合多样厨房、任务定义及示范生成扩充家庭训练数据。",
+    "source": "https://www.roboticsproceedings.org/rss20/p050.pdf#page=1"
+  },
+  {
+    "from": "robocasa",
+    "to": "libero",
+    "kind": "compare",
+    "label": "场景数据 / 持续学习评测",
+    "explanation": "RoboCasa 扩展家庭场景与训练数据；LIBERO 用特定任务划分研究持续学习和知识迁移。",
+    "source": "https://arxiv.org/pdf/2306.03310#page=4"
+  },
+  {
+    "from": "libero",
+    "to": "openeqa",
+    "kind": "compare",
+    "label": "操作迁移 / 环境问答",
+    "explanation": "LIBERO 检验操作策略迁移；OpenEQA 检验记忆或主动探索下的环境问答，能力与指标不同。",
+    "source": "https://openaccess.thecvf.com/content/CVPR2024/papers/Majumdar_OpenEQA_Embodied_Question_Answering_in_the_Era_of_Foundation_Models_CVPR_2024_paper.pdf#page=6"
+  },
+  {
+    "from": "openeqa",
+    "to": "eureka",
+    "kind": "reading",
+    "label": "从能力评测到奖励设计",
+    "explanation": "由 OpenEQA 的环境理解评测转向 Eureka 的奖励代码生成，作为训练环境与评测工具的专题对照。",
+    "source": "https://arxiv.org/pdf/2310.12931#page=2"
+  },
+  {
+    "from": "rt-h",
+    "to": "homerobot",
+    "kind": "compare",
+    "label": "语言动作 / 移动执行栈",
+    "explanation": "RT-H 研究语言动作纠错；HomeRobot 将开放词汇感知、搜索、导航、抓取和放置接成系统并评测。",
+    "source": "https://proceedings.mlr.press/v229/yenamandra23a/yenamandra23a.pdf#page=6"
+  },
+  {
+    "from": "homerobot",
+    "to": "robobrain",
+    "kind": "compare",
+    "label": "系统集成 / 空间能力模型",
+    "explanation": "HomeRobot 强调移动操作栈整体成功；RoboBrain 训练规划、可供区域和轨迹能力，仍需连接执行系统。",
+    "source": "https://openaccess.thecvf.com/content/CVPR2025/papers/Ji_RoboBrain_A_Unified_Brain_Model_for_Robotic_Manipulation_from_Abstract_CVPR_2025_paper.pdf#page=5"
+  },
+  {
+    "from": "robobrain",
+    "to": "hirobot",
+    "kind": "compare",
+    "label": "规划与空间输出 / 分层交互",
+    "explanation": "RoboBrain 将抽象任务落到区域和轨迹；Hi Robot 在层级策略中处理用户意图与交互反馈。",
+    "source": "https://raw.githubusercontent.com/mlresearch/v267/main/assets/shi25d/shi25d.pdf#page=4"
+  },
+  {
+    "from": "mae",
+    "to": "vc1",
+    "kind": "reading",
+    "label": "掩码重建与具身迁移",
+    "explanation": "从 MAE 的掩码视觉预训练进入 VC-1 / CortexBench，检查视觉目标在具身任务中的迁移证据。",
+    "source": "https://arxiv.org/pdf/2303.18240#page=4"
+  },
+  {
+    "from": "dino",
+    "to": "dino-wm",
+    "kind": "reading",
+    "label": "从自蒸馏到特征动力学",
+    "explanation": "DINO 提供自蒸馏表征基础；DINO-WM 实际使用后续 DINOv2 编码器，本边用于理解方法背景，不表示相同模型版本。",
+    "source": "https://arxiv.org/pdf/2411.04983#page=4"
+  },
+  {
+    "from": "diffusion-policy",
+    "to": "3d-diffuser-actor",
+    "kind": "reading",
+    "label": "动作扩散接入三维空间",
+    "explanation": "先读 Diffusion Policy 的动作去噪，再看 3D Diffuser Actor 如何用三维相对 token 条件化完整轨迹。",
+    "source": "https://raw.githubusercontent.com/mlresearch/v270/main/assets/ke25a/ke25a.pdf#page=4"
+  },
+  {
+    "from": "act",
+    "to": "mobile-aloha",
+    "kind": "reading",
+    "label": "从动作块到全身数据",
+    "explanation": "ACT 提供动作块模仿学习背景；Mobile ALOHA 扩展全身遥操作与静态/移动联合训练，硬件和数据变化需单独核对。",
+    "source": "https://raw.githubusercontent.com/mlresearch/v270/main/assets/fu25b/fu25b.pdf#page=3"
+  },
+  {
+    "from": "mimicgen",
+    "to": "robocasa",
+    "kind": "reading",
+    "label": "示范重定向用于家庭数据",
+    "explanation": "RoboCasa 使用遥操作与 MimicGen 扩充示范；本边表示数据生成工具的复用。",
+    "source": "https://www.roboticsproceedings.org/rss20/p050.pdf#page=1"
+  },
+  {
+    "from": "vpp",
+    "to": "cot-vla",
+    "kind": "compare",
+    "label": "预测特征 / 视觉子目标",
+    "explanation": "VPP 读取视频预测模型的内部特征；CoT-VLA 显式生成子目标图像再预测动作。",
+    "source": "https://openaccess.thecvf.com/content/CVPR2025/papers/Zhao_CoT-VLA_Visual_Chain-of-Thought_Reasoning_for_Vision-Language-Action_Models_CVPR_2025_paper.pdf#page=3"
+  },
+  {
+    "from": "flare",
+    "to": "pi0",
+    "kind": "compare",
+    "label": "未来辅助监督 / 基础动作目标",
+    "explanation": "π0 提供流匹配动作生成参照；FLARE 在动作模型中加入未来潜表征对齐，比较额外监督的作用。",
+    "source": "https://raw.githubusercontent.com/mlresearch/v305/main/assets/zheng25a/zheng25a.pdf#page=3"
+  },
+  {
+    "from": "dreamgen",
+    "to": "mimicgen",
+    "kind": "compare",
+    "label": "生成视频 / 重定向示范",
+    "explanation": "DreamGen 从生成视频推断伪动作；MimicGen 在环境中重定向并执行已有示范，数据有效性检验不同。",
+    "source": "https://proceedings.mlr.press/v229/mandlekar23a/mandlekar23a.pdf#page=3"
+  },
+  {
+    "from": "diwa",
+    "to": "conrft",
+    "kind": "compare",
+    "label": "模型内适配 / 在线交互",
+    "explanation": "DiWA 用既有数据训练世界模型并在想象中适配；ConRFT 的在线阶段收集环境交互和人工干预。",
+    "source": "https://www.roboticsproceedings.org/rss21/p019.pdf#page=3"
+  },
+  {
+    "from": "robopoint",
+    "to": "moka",
+    "kind": "compare",
+    "label": "训练式指向 / 标记式提示",
+    "explanation": "RoboPoint 学习合成空间指向监督；MOKA 用候选标记提示现成 VLM 推理可供点，二者均需执行接口。",
+    "source": "https://www.roboticsproceedings.org/rss20/p062.pdf#page=3"
+  },
+  {
+    "from": "dreamerv2",
+    "to": "dreamerpro",
+    "kind": "evolution",
+    "label": "从像素重建到原型预测",
+    "explanation": "DreamerPro 以 DreamerV2 的模型学习框架为基础，用原型分配与时序预测目标替代像素重建，学习更适合控制的潜表征。",
+    "source": "https://proceedings.mlr.press/v162/deng22a/deng22a.pdf#page=2"
   }
 ]

@@ -12,8 +12,10 @@ root = Path(__file__).resolve().parents[1]
 figures = root / "frontend/public/figures"
 previews = figures / "previews"
 previews.mkdir(exist_ok=True)
+overview = figures / "overview"
+overview.mkdir(exist_ok=True)
 frameworks = json.loads((root / "frontend/content/frameworks.json").read_text("utf-8"))
-original_bytes = preview_bytes = 0
+original_bytes = preview_bytes = overview_bytes = 0
 for paper_id, entry in frameworks.items():
     source = figures / entry["figure"]["file"]
     original_bytes += source.stat().st_size
@@ -31,4 +33,8 @@ for paper_id, entry in frameworks.items():
     target = previews / f"{paper_id}.webp"
     image.save(target, "WEBP", quality=84, method=6)
     preview_bytes += target.stat().st_size
-print(f"{len(frameworks)} previews: {preview_bytes:,} bytes; originals: {original_bytes:,} bytes")
+    image.thumbnail((192, 120), Image.Resampling.LANCZOS)
+    target = overview / f"{paper_id}.webp"
+    image.save(target, "WEBP", quality=76, method=6)
+    overview_bytes += target.stat().st_size
+print(f"{len(frameworks)} figures: overview {overview_bytes:,} bytes; previews {preview_bytes:,}; originals {original_bytes:,}")

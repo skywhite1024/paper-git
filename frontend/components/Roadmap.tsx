@@ -9,7 +9,6 @@ export default function Roadmap({ track }: { track: Track }) {
       <h3><Link href={`/tracks/${track.id}#${stage.id}`}>{stage.name}</Link></h3>
       <p>{stage.question}</p>
       <div className="stage-papers">{stage.papers.slice(0, 3).map((id) => <Link href={`/papers/${id}`} key={id}>{getPaper(id)?.name}</Link>)}{stage.papers.length > 3 && <Link className="more" href={`/tracks/${track.id}#${stage.id}`}>+{stage.papers.length - 3}</Link>}</div>
-      {index < track.stages.length - 1 && <span className="flow-arrow" aria-hidden="true">→</span>}
     </li>)}</ol>
   </section>;
 }

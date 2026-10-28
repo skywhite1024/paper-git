@@ -1,0 +1,22 @@
+{
+  "overview": {
+    "files": 128,
+    "bytes": 388172,
+    "pixels": 1998552,
+    "rgbaBytes": 7994208,
+    "maxWidth": 192,
+    "maxHeight": 120
+  },
+  "previews": {
+    "files": 128,
+    "bytes": 2862640,
+    "pixels": 22057162,
+    "rgbaBytes": 88228648,
+    "maxWidth": 640,
+    "maxHeight": 400
+  },
+  "originals": {
+    "files": 128,
+    "bytes": 12205482
+  }
+}

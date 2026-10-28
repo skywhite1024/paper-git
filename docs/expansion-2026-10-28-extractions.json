@@ -1,0 +1,907 @@
+{
+  "e2c": {
+    "url": "https://papers.nips.cc/paper_files/paper/2015/file/a1afc58c6ca9540d057299ec3016d726-Paper.pdf",
+    "page": 3,
+    "figure": "Fig. 1",
+    "crop": [
+      105,
+      60,
+      507,
+      170
+    ],
+    "sha256": "6e43ce260b159b617f53b3480e898b52e55b6673f770861259c62ab7ec585f86",
+    "methodPages": [
+      3,
+      4
+    ],
+    "readingScope": "图注、列出物理页中的相关段落与原图目视核对；未复现实验"
+  },
+  "solar": {
+    "url": "https://proceedings.mlr.press/v97/zhang19m/zhang19m.pdf",
+    "page": 3,
+    "figure": "Fig. 2",
+    "crop": [
+      52,
+      60,
+      292,
+      214
+    ],
+    "sha256": "2dfb424cbcedb0a8da5d6cde0f519ab0e7e571f31a61c0d0f6182accf1dec03d",
+    "methodPages": [
+      3,
+      4,
+      5
+    ],
+    "readingScope": "图注、列出物理页中的相关段落与原图目视核对；未复现实验"
+  },
+  "slac": {
+    "url": "https://papers.nips.cc/paper_files/paper/2020/file/08058bf500242562c0d031ff830ad094-Paper.pdf",
+    "page": 4,
+    "figure": "Fig. 1",
+    "crop": [
+      362,
+      330,
+      508,
+      423
+    ],
+    "sha256": "335edc98d2c694f7669cdd4cbebee17186dbf057919bd117cde434fd0b3abc0e",
+    "methodPages": [
+      4,
+      5
+    ],
+    "readingScope": "图注、列出物理页中的相关段落与原图目视核对；未复现实验"
+  },
+  "dreamerpro": {
+    "url": "https://proceedings.mlr.press/v162/deng22a/deng22a.pdf",
+    "page": 3,
+    "figure": "Fig. 1",
+    "crop": [
+      52,
+      60,
+      294,
+      220
+    ],
+    "sha256": "8e095aa19ee88d0346cfa719ab08e780b71d3526ac110f2cf41102d8e73cad69",
+    "methodPages": [
+      3,
+      4
+    ],
+    "readingScope": "图注、列出物理页中的相关段落与原图目视核对；未复现实验"
+  },
+  "efficientzero": {
+    "url": "https://papers.nips.cc/paper_files/paper/2021/file/d5eca8dc3820cad9fe56a3bafda65ca1-Paper.pdf",
+    "page": 5,
+    "figure": "Fig. 2",
+    "crop": [
+      345,
+      214,
+      510,
+      386
+    ],
+    "sha256": "9cb63d9454c7c8afb9144306979d355145ad814a6742ebcfd7611bbe9fc7567f",
+    "methodPages": [
+      4,
+      5,
+      6
+    ],
+    "readingScope": "图注、列出物理页中的相关段落与原图目视核对；未复现实验"
+  },
+  "efficientzero-v2": {
+    "url": "https://raw.githubusercontent.com/mlresearch/v235/main/assets/wang24at/wang24at.pdf",
+    "page": 3,
+    "figure": "Fig. 2",
+    "crop": [
+      52,
+      60,
+      546,
+      251
+    ],
+    "sha256": "abc3d81a997d0a343741ae941578bf8c0457dfbfc6561a67c651971670c27123",
+    "methodPages": [
+      3,
+      4,
+      5
+    ],
+    "readingScope": "图注、列出物理页中的相关段落与原图目视核对；未复现实验"
+  },
+  "diffuser": {
+    "url": "https://proceedings.mlr.press/v162/janner22a/janner22a.pdf",
+    "page": 2,
+    "figure": "Fig. 2",
+    "crop": [
+      52,
+      60,
+      294,
+      238
+    ],
+    "sha256": "f0982f9dcbc738dea8c72b794f647071261251a811f926ae4a5e05d618b2e1d4",
+    "methodPages": [
+      2,
+      3,
+      4
+    ],
+    "readingScope": "图注、列出物理页中的相关段落与原图目视核对；未复现实验"
+  },
+  "decision-diffuser": {
+    "url": "https://arxiv.org/pdf/2211.15657.pdf",
+    "page": 4,
+    "figure": "Fig. 3",
+    "crop": [
+      105,
+      60,
+      507,
+      252
+    ],
+    "sha256": "73235755dccd3a4327315f282578d205225736b2f0e654dc3f26bc3871e9a4e3",
+    "methodPages": [
+      3,
+      4,
+      5
+    ],
+    "readingScope": "图注、列出物理页中的相关段落与原图目视核对；未复现实验"
+  },
+  "diffusion-forcing": {
+    "url": "https://papers.nips.cc/paper_files/paper/2024/file/2aee1c4159e48407d68fe16ae8e6e49e-Paper-Conference.pdf",
+    "page": 3,
+    "figure": "Fig. 2",
+    "crop": [
+      105,
+      60,
+      507,
+      218
+    ],
+    "sha256": "0f654159799ae67af154f05523f64209191c2d736b1dee3132a07be43352f2bd",
+    "methodPages": [
+      3,
+      4,
+      5
+    ],
+    "readingScope": "图注、列出物理页中的相关段落与原图目视核对；未复现实验"
+  },
+  "dino": {
+    "url": "https://openaccess.thecvf.com/content/ICCV2021/papers/Caron_Emerging_Properties_in_Self-Supervised_Vision_Transformers_ICCV_2021_paper.pdf",
+    "page": 2,
+    "figure": "Fig. 2",
+    "crop": [
+      306,
+      60,
+      550,
+      227
+    ],
+    "sha256": "fa218769e59512c0f2ffc73f2280ddfa2a2d23821837833082510b51b991daac",
+    "methodPages": [
+      2,
+      3,
+      4
+    ],
+    "readingScope": "图注、列出物理页中的相关段落与原图目视核对；未复现实验"
+  },
+  "mae": {
+    "url": "https://openaccess.thecvf.com/content/CVPR2022/papers/He_Masked_Autoencoders_Are_Scalable_Vision_Learners_CVPR_2022_paper.pdf",
+    "page": 1,
+    "figure": "Fig. 1",
+    "crop": [
+      306,
+      201,
+      548,
+      338
+    ],
+    "sha256": "81bbc64bc197a64362927010470e46601a0f0311aa4c2014a355dfff0e5b3b6c",
+    "methodPages": [
+      1,
+      3
+    ],
+    "readingScope": "图注、列出物理页中的相关段落与原图目视核对；未复现实验"
+  },
+  "dynamo": {
+    "url": "https://papers.nips.cc/paper_files/paper/2024/file/3b8db54b629e00537b59cbc6612026d7-Paper-Conference.pdf",
+    "page": 4,
+    "figure": "Fig. 3",
+    "crop": [
+      105,
+      302,
+      507,
+      490
+    ],
+    "sha256": "2a8d00e0ce3ff0cc43fbaa7b722fd48dcd4afbb350404217ce4ec0cdb448bbb9",
+    "methodPages": [
+      3,
+      4,
+      5
+    ],
+    "readingScope": "图注、列出物理页中的相关段落与原图目视核对；未复现实验"
+  },
+  "vpp": {
+    "url": "https://raw.githubusercontent.com/mlresearch/v267/main/assets/hu25g/hu25g.pdf",
+    "page": 4,
+    "figure": "Fig. 2",
+    "crop": [
+      52,
+      60,
+      544,
+      265
+    ],
+    "sha256": "dd668ffe00f01bfa8683e4457b692e539712434e1cfb1e9b3195c0dac9500e89",
+    "methodPages": [
+      3,
+      4
+    ],
+    "readingScope": "图注、列出物理页中的相关段落与原图目视核对；未复现实验"
+  },
+  "mvp": {
+    "url": "https://proceedings.mlr.press/v205/radosavovic23a/radosavovic23a.pdf",
+    "page": 2,
+    "figure": "Fig. 1",
+    "crop": [
+      105,
+      60,
+      507,
+      217
+    ],
+    "sha256": "d017c4162d0cdbea1d6617c57982b6a9371de7aa7552cea57b42d16315cc8f0f",
+    "methodPages": [
+      2,
+      3
+    ],
+    "readingScope": "图注、列出物理页中的相关段落与原图目视核对；未复现实验"
+  },
+  "storm": {
+    "url": "https://papers.nips.cc/paper_files/paper/2023/file/5647763d4245b23e6a1cb0a8947b38c9-Paper-Conference.pdf",
+    "page": 4,
+    "figure": "Fig. 2",
+    "crop": [
+      105,
+      60,
+      507,
+      248
+    ],
+    "sha256": "eb0eaf67a32658f2d972b0acff3a0d62f99f3da7882f91a6d726ec8ca46c2de7",
+    "methodPages": [
+      3,
+      4,
+      5
+    ],
+    "readingScope": "图注、列出物理页中的相关段落与原图目视核对；未复现实验"
+  },
+  "twm": {
+    "url": "https://arxiv.org/pdf/2303.07109",
+    "page": 1,
+    "figure": "Fig. 1",
+    "crop": [
+      105,
+      548,
+      507,
+      682
+    ],
+    "sha256": "1d9c5de4598e455b00cab7a757e10680c41fc8416a1970c02f6f312af458cb4c",
+    "methodPages": [
+      1,
+      3,
+      4
+    ],
+    "readingScope": "图注、列出物理页中的相关段落与原图目视核对；未复现实验"
+  },
+  "ibc": {
+    "url": "https://proceedings.mlr.press/v164/florence22a/florence22a.pdf",
+    "page": 2,
+    "figure": "Fig. 1",
+    "crop": [
+      105,
+      60,
+      507,
+      155
+    ],
+    "sha256": "4f8da36923b4dbb65da244e9d000a3c720f5aeb8915e9369bbc23a09665253a3",
+    "methodPages": [
+      2,
+      6
+    ],
+    "readingScope": "图注、列出物理页中的相关段落与原图目视核对；未复现实验"
+  },
+  "bet": {
+    "url": "https://papers.nips.cc/paper_files/paper/2022/file/90d17e882adbdda42349db6f50123817-Paper-Conference.pdf",
+    "page": 4,
+    "figure": "Fig. 3",
+    "crop": [
+      105,
+      60,
+      508,
+      273
+    ],
+    "sha256": "8a56e1e82e0cbad886f49dcaa777424111aff67182e7e90bea062887a9c0e3e6",
+    "methodPages": [
+      4,
+      5
+    ],
+    "readingScope": "图注、列出物理页中的相关段落与原图目视核对；未复现实验"
+  },
+  "vq-bet": {
+    "url": "https://raw.githubusercontent.com/mlresearch/v235/main/assets/lee24y/lee24y.pdf",
+    "page": 4,
+    "figure": "Fig. 2",
+    "crop": [
+      52,
+      60,
+      544,
+      343
+    ],
+    "sha256": "b3e7e50a1069cd4b4a3c946d90e1005a30241592ee027042bdab2961721507fd",
+    "methodPages": [
+      3,
+      4
+    ],
+    "readingScope": "图注、列出物理页中的相关段落与原图目视核对；未复现实验"
+  },
+  "3d-diffuser-actor": {
+    "url": "https://raw.githubusercontent.com/mlresearch/v270/main/assets/ke25a/ke25a.pdf",
+    "page": 4,
+    "figure": "Fig. 1",
+    "crop": [
+      105,
+      60,
+      509,
+      332
+    ],
+    "sha256": "1a94bac493cfaf57c185bc0579cf13ad34b93f59ab431cde6e8c6867bb96eea3",
+    "methodPages": [
+      3,
+      4
+    ],
+    "readingScope": "图注、列出物理页中的相关段落与原图目视核对；未复现实验"
+  },
+  "equibot": {
+    "url": "https://raw.githubusercontent.com/mlresearch/v270/main/assets/yang25a/yang25a.pdf",
+    "page": 3,
+    "figure": "Fig. 2",
+    "crop": [
+      304,
+      253,
+      507,
+      426
+    ],
+    "sha256": "abceb9169f7ca8276eb530913706a383dd14ca3e3ed6d6be6e84fd0438d6fb2e",
+    "methodPages": [
+      3,
+      4
+    ],
+    "readingScope": "图注、列出物理页中的相关段落与原图目视核对；未复现实验"
+  },
+  "equivariant-dp": {
+    "url": "https://raw.githubusercontent.com/mlresearch/v270/main/assets/wang25a/wang25a.pdf",
+    "page": 5,
+    "figure": "Fig. 3",
+    "crop": [
+      322,
+      198,
+      508,
+      428
+    ],
+    "sha256": "e3fd0e63a1711dbc2ba7eff8c2e0bdb612f1e3d6f7f39bb602c55d4734acdadf",
+    "methodPages": [
+      3,
+      4,
+      5
+    ],
+    "readingScope": "图注、列出物理页中的相关段落与原图目视核对；未复现实验"
+  },
+  "hpt": {
+    "url": "https://papers.nips.cc/paper_files/paper/2024/file/e0f393e7980a24fd12fa6f15adfa25fb-Paper-Conference.pdf",
+    "page": 3,
+    "figure": "Fig. 2",
+    "crop": [
+      104,
+      69,
+      320,
+      237
+    ],
+    "sha256": "f72c6e09d78caefbfa5a3eb96619c525956ded9860fd3a51ee33ff1643655566",
+    "methodPages": [
+      3,
+      4,
+      5
+    ],
+    "readingScope": "图注、列出物理页中的相关段落与原图目视核对；未复现实验"
+  },
+  "crossformer": {
+    "url": "https://raw.githubusercontent.com/mlresearch/v270/main/assets/doshi25a/doshi25a.pdf",
+    "page": 4,
+    "figure": "Fig. 2",
+    "crop": [
+      105,
+      60,
+      507,
+      185
+    ],
+    "sha256": "6afe3bf67fab3a0f689b63d7aeaf6e452dfd231f3e2cb996b5040047bf018bee",
+    "methodPages": [
+      3,
+      4
+    ],
+    "readingScope": "图注、列出物理页中的相关段落与原图目视核对；未复现实验"
+  },
+  "robomamba": {
+    "url": "https://papers.nips.cc/paper_files/paper/2024/file/46a126492ea6fb87410e55a58df2e189-Paper-Conference.pdf",
+    "page": 5,
+    "figure": "Fig. 2",
+    "crop": [
+      105,
+      60,
+      508,
+      286
+    ],
+    "sha256": "9f9ea24fcef9c7371ddeb4bb9ba967019fe511833f522272893c6c9b38fbb9e6",
+    "methodPages": [
+      4,
+      5
+    ],
+    "readingScope": "图注、列出物理页中的相关段落与原图目视核对；未复现实验"
+  },
+  "roboturk": {
+    "url": "https://proceedings.mlr.press/v87/mandlekar18a/mandlekar18a.pdf",
+    "page": 3,
+    "figure": "Fig. 2",
+    "crop": [
+      105,
+      60,
+      509,
+      239
+    ],
+    "sha256": "a9451b0fe587247a70fe7234bdf9154d4bfea762c92975ec27f93338900c4dea",
+    "methodPages": [
+      2,
+      3
+    ],
+    "readingScope": "图注、列出物理页中的相关段落与原图目视核对；未复现实验"
+  },
+  "robonet": {
+    "url": "https://proceedings.mlr.press/v100/dasari20a/dasari20a.pdf",
+    "page": 2,
+    "figure": "Fig. 1",
+    "crop": [
+      105,
+      60,
+      507,
+      251
+    ],
+    "sha256": "57e83f21f1f97f06c0dde125266bdad5c3be837a79cc71f30bac9802f5f9aa1f",
+    "methodPages": [
+      3,
+      4
+    ],
+    "readingScope": "图注、列出物理页中的相关段落与原图目视核对；未复现实验"
+  },
+  "robomimic": {
+    "url": "https://proceedings.mlr.press/v164/mandlekar22a/mandlekar22a.pdf",
+    "page": 2,
+    "figure": "Fig. 1",
+    "crop": [
+      105,
+      60,
+      507,
+      268
+    ],
+    "sha256": "963aaa01b922f07c6d67848c06d1d5bd80664dd96e5e4a209b76d2e281318c66",
+    "methodPages": [
+      2,
+      3,
+      4
+    ],
+    "readingScope": "图注、列出物理页中的相关段落与原图目视核对；未复现实验"
+  },
+  "mimicgen": {
+    "url": "https://proceedings.mlr.press/v229/mandlekar23a/mandlekar23a.pdf",
+    "page": 3,
+    "figure": "Fig. 2",
+    "crop": [
+      105,
+      60,
+      507,
+      210
+    ],
+    "sha256": "5f65080fac4df7f9500ccd126dbca6071ca4289c566eb03704dad8b65426c509",
+    "methodPages": [
+      3,
+      4
+    ],
+    "readingScope": "图注、列出物理页中的相关段落与原图目视核对；未复现实验"
+  },
+  "mimicplay": {
+    "url": "https://proceedings.mlr.press/v229/wang23a/wang23a.pdf",
+    "page": 4,
+    "figure": "Fig. 2",
+    "crop": [
+      105,
+      60,
+      508,
+      201
+    ],
+    "sha256": "900611403ba7f0826399b3db9eca94cf17b89d4957b9ea80325da74bb6a17aa5",
+    "methodPages": [
+      3,
+      4
+    ],
+    "readingScope": "图注、列出物理页中的相关段落与原图目视核对；未复现实验"
+  },
+  "mobile-aloha": {
+    "url": "https://raw.githubusercontent.com/mlresearch/v270/main/assets/fu25b/fu25b.pdf",
+    "page": 3,
+    "figure": "Fig. 2",
+    "crop": [
+      105,
+      60,
+      507,
+      190
+    ],
+    "sha256": "307f769f66d808eb8fb3ce45da232137d9c578b80238a16ae381075fc4c590bc",
+    "methodPages": [
+      3,
+      4,
+      5
+    ],
+    "readingScope": "图注、列出物理页中的相关段落与原图目视核对；未复现实验"
+  },
+  "behavior": {
+    "url": "https://proceedings.mlr.press/v164/srivastava22a/srivastava22a.pdf",
+    "page": 2,
+    "figure": "Fig. 1",
+    "crop": [
+      105,
+      60,
+      508,
+      214
+    ],
+    "sha256": "b1e8872f6cc407052316bc71f5280b3787affec09c309a7c924f1789c6ec57d6",
+    "methodPages": [
+      2,
+      4
+    ],
+    "readingScope": "图注、列出物理页中的相关段落与原图目视核对；未复现实验"
+  },
+  "behavior-1k": {
+    "url": "https://proceedings.mlr.press/v205/li23a/li23a.pdf",
+    "page": 4,
+    "figure": "Fig. 2",
+    "crop": [
+      105,
+      60,
+      508,
+      210
+    ],
+    "sha256": "ef00521d9355d9ca938cda193551ba357086e4f753270f50668b2050125e5069",
+    "methodPages": [
+      3,
+      4
+    ],
+    "readingScope": "图注、列出物理页中的相关段落与原图目视核对；未复现实验"
+  },
+  "leo": {
+    "url": "https://raw.githubusercontent.com/mlresearch/v235/main/assets/huang24ae/huang24ae.pdf",
+    "page": 2,
+    "figure": "Fig. 1",
+    "crop": [
+      52,
+      60,
+      544,
+      310
+    ],
+    "sha256": "304899e7cf05d30bbe472d3f1b254656a1cb47453872603836241f50f35dc66b",
+    "methodPages": [
+      2,
+      4
+    ],
+    "readingScope": "图注、列出物理页中的相关段落与原图目视核对；未复现实验"
+  },
+  "robobrain": {
+    "url": "https://openaccess.thecvf.com/content/CVPR2025/papers/Ji_RoboBrain_A_Unified_Brain_Model_for_Robotic_Manipulation_from_Abstract_CVPR_2025_paper.pdf",
+    "page": 5,
+    "figure": "Fig. 4",
+    "crop": [
+      55,
+      60,
+      557,
+      344
+    ],
+    "sha256": "b5dfbaf82b5111181da5b7e88fa73915ac945e1c31b45af42dfa6e285a72e2ca",
+    "methodPages": [
+      4,
+      5
+    ],
+    "readingScope": "图注、列出物理页中的相关段落与原图目视核对；未复现实验"
+  },
+  "homerobot": {
+    "url": "https://proceedings.mlr.press/v229/yenamandra23a/yenamandra23a.pdf",
+    "page": 6,
+    "figure": "Fig. 4",
+    "crop": [
+      105,
+      60,
+      507,
+      224
+    ],
+    "sha256": "b6c45860e7fdffae0cc2f2481c284add0a53bed5334642c3d61cd69913d8c51a",
+    "methodPages": [
+      3,
+      6,
+      7
+    ],
+    "readingScope": "图注、列出物理页中的相关段落与原图目视核对；未复现实验"
+  },
+  "saytap": {
+    "url": "https://proceedings.mlr.press/v229/tang23a/tang23a.pdf",
+    "page": 4,
+    "figure": "Fig. 2",
+    "crop": [
+      105,
+      60,
+      508,
+      246
+    ],
+    "sha256": "0c7219a0ebb78d4e8aa32a77461fda3ee689fb073afebe1ba7690771553aa028",
+    "methodPages": [
+      3,
+      4,
+      5
+    ],
+    "readingScope": "图注、列出物理页中的相关段落与原图目视核对；未复现实验"
+  },
+  "embodiedgpt": {
+    "url": "https://papers.nips.cc/paper_files/paper/2023/file/4ec43957eda1126ad4887995d05fae3b-Paper-Conference.pdf",
+    "page": 4,
+    "figure": "Fig. 2",
+    "crop": [
+      105,
+      60,
+      507,
+      272
+    ],
+    "sha256": "71be4daf2e6db18dadadf32c1d7db30978a5f9ff56e8c4e94db112b8c28aae00",
+    "methodPages": [
+      4,
+      5
+    ],
+    "readingScope": "图注、列出物理页中的相关段落与原图目视核对；未复现实验"
+  },
+  "openeqa": {
+    "url": "https://openaccess.thecvf.com/content/CVPR2024/papers/Majumdar_OpenEQA_Embodied_Question_Answering_in_the_Era_of_Foundation_Models_CVPR_2024_paper.pdf",
+    "page": 6,
+    "figure": "Fig. 4",
+    "crop": [
+      47,
+      60,
+      548,
+      257
+    ],
+    "sha256": "d2c714b7cfdcee8fe6cde607296c15689ecff298b752611c913458fd3964ca48",
+    "methodPages": [
+      3,
+      4,
+      6
+    ],
+    "readingScope": "图注、列出物理页中的相关段落与原图目视核对；未复现实验"
+  },
+  "maniskill2": {
+    "url": "https://arxiv.org/pdf/2302.04659",
+    "page": 6,
+    "figure": "Fig. 2",
+    "crop": [
+      105,
+      60,
+      507,
+      216
+    ],
+    "sha256": "89fb794345d860ee696ca2f4d7a75059b15352b615794eeadb0e6075426136f0",
+    "methodPages": [
+      3,
+      5,
+      6
+    ],
+    "readingScope": "图注、列出物理页中的相关段落与原图目视核对；未复现实验"
+  },
+  "moka": {
+    "url": "https://www.roboticsproceedings.org/rss20/p062.pdf",
+    "page": 3,
+    "figure": "Fig. 2",
+    "crop": [
+      46,
+      60,
+      566,
+      237
+    ],
+    "sha256": "f8f9c625732b03a34bd17f074c3bdf2f886c03988fd714be3ec2bba2a4c2d749",
+    "methodPages": [
+      3,
+      4
+    ],
+    "readingScope": "图注、列出物理页中的相关段落与原图目视核对；未复现实验"
+  },
+  "robocasa": {
+    "url": "https://www.roboticsproceedings.org/rss20/p050.pdf",
+    "page": 1,
+    "figure": "Fig. 1",
+    "crop": [
+      46,
+      205,
+      566,
+      442
+    ],
+    "sha256": "ffad4c8fb66bbeb11ffb89f1a9e999ae73f83e84c126373aebbfe7f5f95630a5",
+    "methodPages": [
+      1,
+      3,
+      5
+    ],
+    "readingScope": "图注、列出物理页中的相关段落与原图目视核对；未复现实验"
+  },
+  "act3d": {
+    "url": "https://proceedings.mlr.press/v229/gervet23a/gervet23a.pdf",
+    "page": 2,
+    "figure": "Fig. 1",
+    "crop": [
+      105,
+      60,
+      507,
+      198
+    ],
+    "sha256": "a521bf1cc27e671ddbc80e565c8bb02b524cf07980c94a8ac447ed660a512991",
+    "methodPages": [
+      2,
+      3,
+      4
+    ],
+    "readingScope": "图注、列出物理页中的相关段落与原图目视核对；未复现实验"
+  },
+  "cot-vla": {
+    "url": "https://openaccess.thecvf.com/content/CVPR2025/papers/Zhao_CoT-VLA_Visual_Chain-of-Thought_Reasoning_for_Vision-Language-Action_Models_CVPR_2025_paper.pdf",
+    "page": 3,
+    "figure": "Fig. 2",
+    "crop": [
+      55,
+      60,
+      558,
+      237
+    ],
+    "sha256": "5a2bc4aa7041dd2e747c3c52daa711d8ece2779b479d95d8808649ce7f25d3b7",
+    "methodPages": [
+      3,
+      4
+    ],
+    "readingScope": "图注、列出物理页中的相关段落与原图目视核对；未复现实验"
+  },
+  "dexvla": {
+    "url": "https://raw.githubusercontent.com/mlresearch/v305/main/assets/wen25b/wen25b.pdf",
+    "page": 3,
+    "figure": "Fig. 2",
+    "crop": [
+      105,
+      60,
+      507,
+      202
+    ],
+    "sha256": "e8865110a447685e24e0dc0bb3c7f7fea8ec6da4a883e6b35f37e5f72885698e",
+    "methodPages": [
+      3,
+      5
+    ],
+    "readingScope": "图注、列出物理页中的相关段落与原图目视核对；未复现实验"
+  },
+  "graspvla": {
+    "url": "https://raw.githubusercontent.com/mlresearch/v305/main/assets/deng25a/deng25a.pdf",
+    "page": 5,
+    "figure": "Fig. 3",
+    "crop": [
+      105,
+      60,
+      507,
+      214
+    ],
+    "sha256": "6dab41017736f212c23622a28d1d24836345b5fcadf35ea0b3e24fe9c853fea5",
+    "methodPages": [
+      4,
+      5
+    ],
+    "readingScope": "图注、列出物理页中的相关段落与原图目视核对；未复现实验"
+  },
+  "flare": {
+    "url": "https://raw.githubusercontent.com/mlresearch/v305/main/assets/zheng25a/zheng25a.pdf",
+    "page": 3,
+    "figure": "Fig. 2",
+    "crop": [
+      105,
+      60,
+      508,
+      244
+    ],
+    "sha256": "fc769418d2e1de506340ec3ac7d289c74a2fb6462a815bcc894d403a55851c6e",
+    "methodPages": [
+      3,
+      4
+    ],
+    "readingScope": "图注、列出物理页中的相关段落与原图目视核对；未复现实验"
+  },
+  "dreamgen": {
+    "url": "https://raw.githubusercontent.com/mlresearch/v305/main/assets/jang25a/jang25a.pdf",
+    "page": 2,
+    "figure": "Fig. 2",
+    "crop": [
+      105,
+      60,
+      507,
+      305
+    ],
+    "sha256": "d2103c9f0384e16750a8a5692e410cc14da953eb9dd53a395a680471d30968c3",
+    "methodPages": [
+      2,
+      4
+    ],
+    "readingScope": "图注、列出物理页中的相关段落与原图目视核对；未复现实验"
+  },
+  "diwa": {
+    "url": "https://raw.githubusercontent.com/mlresearch/v305/main/assets/chandra25a/chandra25a.pdf",
+    "page": 4,
+    "figure": "Fig. 2",
+    "crop": [
+      105,
+      60,
+      509,
+      242
+    ],
+    "sha256": "13043ac4270361c6d46ac8ba194d6bd7a3a5170c32ee45f82cb05d86bc664453",
+    "methodPages": [
+      4,
+      5
+    ],
+    "readingScope": "图注、列出物理页中的相关段落与原图目视核对；未复现实验"
+  },
+  "robopoint": {
+    "url": "https://raw.githubusercontent.com/mlresearch/v270/main/assets/yuan25c/yuan25c.pdf",
+    "page": 4,
+    "figure": "Fig. 2",
+    "crop": [
+      105,
+      60,
+      507,
+      317
+    ],
+    "sha256": "c000a08d50b2e3d2b511cad7ffcb1941325185ca9b97224a01dd58da970d3c50",
+    "methodPages": [
+      3,
+      4
+    ],
+    "readingScope": "图注、列出物理页中的相关段落与原图目视核对；未复现实验"
+  },
+  "univla": {
+    "url": "https://www.roboticsproceedings.org/rss21/p014.pdf",
+    "page": 4,
+    "figure": "Fig. 2",
+    "crop": [
+      45,
+      50,
+      565,
+      202
+    ],
+    "sha256": "ea761e62b409e5f746699fc9f1e84cc78acc3455f6c28c50f664a33033d0e419",
+    "methodPages": [
+      3,
+      4,
+      5
+    ],
+    "readingScope": "图注、列出物理页中的相关段落与原图目视核对；未复现实验"
+  },
+  "conrft": {
+    "url": "https://www.roboticsproceedings.org/rss21/p019.pdf",
+    "page": 3,
+    "figure": "Fig. 1",
+    "crop": [
+      48,
+      50,
+      565,
+      276
+    ],
+    "sha256": "da785d496773f83dbdcd4d07081bb0010ec6e678e4e494e5094e9b2f9db1f14f",
+    "methodPages": [
+      3,
+      4
+    ],
+    "readingScope": "图注、列出物理页中的相关段落与原图目视核对；未复现实验"
+  }
+}

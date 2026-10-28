@@ -6,6 +6,10 @@ export const MAX_ZOOM = 2.5;
 export const CARD_WIDTH = 360;
 export const CARD_HEIGHT = 260;
 
+export function figureTier(zoom: number) {
+  return zoom > 1.1 ? "original" : zoom > .32 ? "preview" : "overview";
+}
+
 // Keep the world point underneath the cursor fixed during zooming.
 export function zoomAt(camera: Camera, zoom: number, anchor: Point): Camera {
   const next = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, zoom));
