@@ -52,6 +52,9 @@ main.container:has(.research-atlas) { width:calc(100% - 32px); max-width:none; p
 .canvas-paper-caption em { display:block; font-style:normal; color:#8a9680; font-size:10px; margin-top:4px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .canvas-paper-caption strong { font:500 15px/1.25 Arial,"Microsoft YaHei",sans-serif; color:#455445; overflow-wrap:anywhere; }
 .canvas-paper-caption small { font-size:11px; color:#8d9586; flex-shrink:0; }
+.canvas-paper>.paper-metrics-block { flex-shrink:0; padding:0 12px 7px; background:#fbfcf6; }
+.canvas-paper .paper-metrics { flex-wrap:nowrap; gap:9px; font-size:10px; line-height:18px; }
+.atlas-reader-metrics { padding:10px 20px 0; }
 .canvas-paper-summary { height:185px; flex-shrink:0; width:100%; padding:18px; background:linear-gradient(145deg,#f5f7ef,#fffefb); }
 .canvas-paper-summary>span { display:flex; justify-content:space-between; gap:10px; font-size:12px; color:var(--island); }
 .canvas-paper-summary small { font-size:10px; color:#999d8e; }
@@ -138,6 +141,7 @@ main.container:has(.research-atlas) { width:calc(100% - 32px); max-width:none; p
   .research-atlas .atlas-workbench>.atlas-reader { top:8px; bottom:8px; right:8px; width:calc(100% - 16px); max-width:none; }
   .research-atlas .atlas-reader .atlas-figure-image { min-height:230px; }
   .research-atlas .atlas-reader-content { padding:16px; }.research-atlas .atlas-reader-identity { padding:16px 16px 0; }
+  .atlas-reader-metrics { padding:10px 16px 0; }
   .research-atlas .atlas-reader-tabs { margin-top:14px; margin-left:16px; margin-right:16px; }
   .research-atlas .atlas-reader-title h2 { font-size:23px; }
 }

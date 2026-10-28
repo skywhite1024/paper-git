@@ -21,6 +21,14 @@ strong { font-weight:600; }
 .container { width:min(1280px,calc(100% - 96px)); margin:0 auto; }
 main.container { padding:48px 0 72px; min-height:calc(100vh - 180px); }
 .sr-only { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; }
+.paper-metrics { display:flex; flex-wrap:wrap; align-items:center; gap:4px 12px; color:#686e61; font-size:11px; line-height:1.65; font-variant-numeric:tabular-nums; }
+.paper-metrics>* { white-space:nowrap; }
+.paper-metrics a:hover { color:#365d47; text-decoration:underline; text-underline-offset:3px; }
+.paper-metrics .metrics-github.open { color:#456849; }
+.paper-metrics .metrics-github.public { color:#806c46; }
+.paper-metrics-date { margin-top:4px; color:#74766d; font-size:10px; line-height:1.65; }
+.paper-metrics-date a { text-decoration:underline; text-underline-offset:2px; }
+.paper-card .paper-metrics-block,.paper-hero .paper-metrics-block { margin-top:12px; }
 .skip-link { position:fixed; top:-100px; left:20px; z-index:100; background:var(--ink); color:white; padding:12px; }
 .skip-link:focus { top:12px; }
 .site-header { height:89px; border-bottom:1px solid var(--line); background:rgba(250,249,245,.97); }

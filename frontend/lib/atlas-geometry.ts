@@ -4,7 +4,7 @@ export type Bounds = Point & { width: number; height: number };
 export const MIN_ZOOM = .02;
 export const MAX_ZOOM = 2.5;
 export const CARD_WIDTH = 360;
-export const CARD_HEIGHT = 260;
+export const CARD_HEIGHT = 284;
 
 export function figureTier(zoom: number) {
   return zoom > 1.1 ? "original" : zoom > .32 ? "preview" : "overview";

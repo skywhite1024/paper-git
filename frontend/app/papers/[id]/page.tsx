@@ -5,6 +5,7 @@ import { PaperBadges } from "@/components/PaperCard";
 import ReadingEditor from "@/components/ReadingEditor";
 import FrameworkFigure from "@/components/FrameworkFigure";
 import { frameworks } from "@/lib/atlas";
+import PaperMetrics from "@/components/PaperMetrics";
 export function generateStaticParams() { return papers.map(({ id }) => ({ id })); }
 export const dynamicParams = false;
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) { return { title: getPaper((await params).id)?.name ?? "资料详情" }; }
@@ -17,7 +18,7 @@ export default async function PaperPage({ params }: { params: Promise<{ id: stri
   const links = paper.links.filter((link, index, all) => all.findIndex((other) => other.url === link.url) === index);
   return <div className={`tone-${paper.track}`}>
     <Link className="back-link" href={`/tracks/${track.id}#${stage.id}`}>← {track.name} / {stage.name}</Link>
-    <header className="paper-hero"><p className="eyebrow">{kindNames[paper.kind]} / {track.english}</p><h1>{paper.name}</h1><p className="full-title">{paper.title}</p><PaperBadges paper={paper} /><div className="button-row">{links.map((link, i) => <a key={link.url} className={`button ${i === 0 ? "primary" : ""}`} href={link.url} target="_blank" rel="noreferrer">{link.label} ↗</a>)}</div></header>
+    <header className="paper-hero"><p className="eyebrow">{kindNames[paper.kind]} / {track.english}</p><h1>{paper.name}</h1><p className="full-title">{paper.title}</p><PaperBadges paper={paper} /><PaperMetrics id={paper.id} showDate /><div className="button-row">{links.map((link, i) => <a key={link.url} className={`button ${i === 0 ? "primary" : ""}`} href={link.url} target="_blank" rel="noreferrer">{link.label} ↗</a>)}</div></header>
     <div className="paper-detail-grid"><div className="paper-body">
       {frameworks[paper.id] && <FrameworkFigure paper={paper} />}
       <section className="detail-section"><p className="eyebrow">THE IDEA</p><h2>它在解决什么</h2><p className="lead">{paper.summary}</p></section>

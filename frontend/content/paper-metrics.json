@@ -1,0 +1,2696 @@
+{
+  "checkedAt": "2026-10-28",
+  "timezone": "Asia/Shanghai",
+  "citationProvider": "Semantic Scholar",
+  "githubProvider": "GitHub REST API",
+  "papers": {
+    "planet": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/google-research/planet",
+        "repo": "google-research/planet",
+        "stars": 1263,
+        "license": "Apache-2.0",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://danijar.com/project/planet/"
+      },
+      "citations": {
+        "count": 2319,
+        "url": "https://www.semanticscholar.org/paper/fea3e63c97c7292dc6fbcb3ffe7131eb54053986",
+        "paperId": "fea3e63c97c7292dc6fbcb3ffe7131eb54053986",
+        "lookupId": "fea3e63c97c7292dc6fbcb3ffe7131eb54053986",
+        "title": "Learning Latent Dynamics for Planning from Pixels",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "dreamer": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/danijar/dreamer",
+        "repo": "danijar/dreamer",
+        "stars": 625,
+        "license": "MIT",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://danijar.com/project/dreamer/"
+      },
+      "citations": {
+        "count": 2503,
+        "url": "https://www.semanticscholar.org/paper/270b95262f2100c279c4c65ef2521473841ca8ad",
+        "paperId": "270b95262f2100c279c4c65ef2521473841ca8ad",
+        "lookupId": "270b95262f2100c279c4c65ef2521473841ca8ad",
+        "title": "Dream to Control: Learning Behaviors by Latent Imagination",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "dreamerv2": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/danijar/dreamerv2",
+        "repo": "danijar/dreamerv2",
+        "stars": 1061,
+        "license": "MIT",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://danijar.com/project/dreamerv2/"
+      },
+      "citations": {
+        "count": 1427,
+        "url": "https://www.semanticscholar.org/paper/b44bb1762640ed72091fd5f5fdc20719a6dc24af",
+        "paperId": "b44bb1762640ed72091fd5f5fdc20719a6dc24af",
+        "lookupId": "b44bb1762640ed72091fd5f5fdc20719a6dc24af",
+        "title": "Mastering Atari with Discrete World Models",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "dreamerv3": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/danijar/dreamerv3",
+        "repo": "danijar/dreamerv3",
+        "stars": 3912,
+        "license": "MIT",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://danijar.com/project/dreamerv3/"
+      },
+      "citations": {
+        "count": 803,
+        "url": "https://www.semanticscholar.org/paper/32720f16a4433ac6bb33a0f7d32bffb3cdda053e",
+        "paperId": "32720f16a4433ac6bb33a0f7d32bffb3cdda053e",
+        "lookupId": "32720f16a4433ac6bb33a0f7d32bffb3cdda053e",
+        "title": "Mastering diverse control tasks through world models",
+        "basis": "正式版 DOI 记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "tdmpc2": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/nicklashansen/tdmpc2",
+        "repo": "nicklashansen/tdmpc2",
+        "stars": 991,
+        "license": "MIT",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://www.tdmpc2.com/"
+      },
+      "citations": {
+        "count": 758,
+        "url": "https://www.semanticscholar.org/paper/8eeccf1033fd759c868b29ccb6aa70f5ffd1887c",
+        "paperId": "8eeccf1033fd759c868b29ccb6aa70f5ffd1887c",
+        "lookupId": "8eeccf1033fd759c868b29ccb6aa70f5ffd1887c",
+        "title": "TD-MPC2: Scalable, Robust World Models for Continuous Control",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "genie": {
+      "github": {
+        "status": "unconfirmed",
+        "url": null,
+        "repo": null,
+        "stars": null,
+        "license": null,
+        "shared": false,
+        "note": "已核对论文及作者资料，本次未核实到官方 GitHub 实现；这不表示确定未开源。",
+        "evidence": "https://proceedings.mlr.press/v235/bruce24a.html"
+      },
+      "citations": {
+        "count": 989,
+        "url": "https://www.semanticscholar.org/paper/c064de2c71ebc5cf05493f49dc312b033c36b3b9",
+        "paperId": "c064de2c71ebc5cf05493f49dc312b033c36b3b9",
+        "lookupId": "c064de2c71ebc5cf05493f49dc312b033c36b3b9",
+        "title": "Genie: Generative Interactive Environments",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "diamond": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/eloialonso/diamond",
+        "repo": "eloialonso/diamond",
+        "stars": 2123,
+        "license": "MIT",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://diamond-wm.github.io/"
+      },
+      "citations": {
+        "count": 399,
+        "url": "https://www.semanticscholar.org/paper/02f4516502bc0d05fb8971687f37c5f319ca2704",
+        "paperId": "02f4516502bc0d05fb8971687f37c5f319ca2704",
+        "lookupId": "02f4516502bc0d05fb8971687f37c5f319ca2704",
+        "title": "Diffusion for World Modeling: Visual Details Matter in Atari",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "cosmos": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/nvidia-cosmos/cosmos-predict1",
+        "repo": "nvidia-cosmos/cosmos-predict1",
+        "stars": 475,
+        "license": "Apache-2.0",
+        "shared": false,
+        "note": "此处选择原始 Cosmos-Predict1 模型实现仓库，不使用整个 Cosmos 平台的 Stars。",
+        "evidence": "https://arxiv.org/abs/2501.03575"
+      },
+      "citations": {
+        "count": 985,
+        "url": "https://www.semanticscholar.org/paper/b95baf93d1cfb406b50aa370ce5ba18788b5891d",
+        "paperId": "b95baf93d1cfb406b50aa370ce5ba18788b5891d",
+        "lookupId": "b95baf93d1cfb406b50aa370ce5ba18788b5891d",
+        "title": "Cosmos World Foundation Model Platform for Physical AI",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "dino-wm": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/gaoyuezhou/dino_wm",
+        "repo": "gaoyuezhou/dino_wm",
+        "stars": 612,
+        "license": "MIT",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://dino-wm.github.io/"
+      },
+      "citations": {
+        "count": 537,
+        "url": "https://www.semanticscholar.org/paper/badf5d00486111d936b056e52f13c26c1bbbd573",
+        "paperId": "badf5d00486111d936b056e52f13c26c1bbbd573",
+        "lookupId": "badf5d00486111d936b056e52f13c26c1bbbd573",
+        "title": "DINO-WM: World Models on Pre-trained Visual Features enable Zero-shot Planning",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "vjepa2": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/facebookresearch/vjepa2",
+        "repo": "facebookresearch/vjepa2",
+        "stars": 4825,
+        "license": "MIT",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://ai.meta.com/research/vjepa/"
+      },
+      "citations": {
+        "count": 991,
+        "url": "https://www.semanticscholar.org/paper/b202faf38efbffcb26470c702e1140b047d6f6e7",
+        "paperId": "b202faf38efbffcb26470c702e1140b047d6f6e7",
+        "lookupId": "b202faf38efbffcb26470c702e1140b047d6f6e7",
+        "title": "V-JEPA 2: Self-Supervised Video Models Enable Understanding, Prediction and Planning",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "lewm": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/lucas-maes/le-wm",
+        "repo": "lucas-maes/le-wm",
+        "stars": 4580,
+        "license": "MIT",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://le-wm.github.io/"
+      },
+      "citations": {
+        "count": 341,
+        "url": "https://www.semanticscholar.org/paper/530dab86cb8034bc12a32d21508aaa3f2cc00aa1",
+        "paperId": "530dab86cb8034bc12a32d21508aaa3f2cc00aa1",
+        "lookupId": "530dab86cb8034bc12a32d21508aaa3f2cc00aa1",
+        "title": "LeWorldModel: Stable End-to-End Joint-Embedding Predictive Architecture from Pixels",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "cosmos-policy": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/NVlabs/cosmos-policy",
+        "repo": "NVlabs/cosmos-policy",
+        "stars": 893,
+        "license": "Apache-2.0",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://github.com/NVlabs/cosmos-policy#readme"
+      },
+      "citations": {
+        "count": 417,
+        "url": "https://www.semanticscholar.org/paper/e1042da4004da8b246737df2ee1ea96012b17824",
+        "paperId": "e1042da4004da8b246737df2ee1ea96012b17824",
+        "lookupId": "e1042da4004da8b246737df2ee1ea96012b17824",
+        "title": "Cosmos Policy: Fine-Tuning Video Models for Visuomotor Control and Planning",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "worldarena": {
+      "github": {
+        "status": "public",
+        "url": "https://github.com/tsinghua-fib-lab/WorldArena",
+        "repo": "tsinghua-fib-lab/WorldArena",
+        "stars": 271,
+        "license": null,
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://world-arena.ai/v1/"
+      },
+      "citations": {
+        "count": 82,
+        "url": "https://www.semanticscholar.org/paper/6e5f625e2210bbfc26962659bce49cc45c38c055",
+        "paperId": "6e5f625e2210bbfc26962659bce49cc45c38c055",
+        "lookupId": "6e5f625e2210bbfc26962659bce49cc45c38c055",
+        "title": "WorldArena: A Unified Benchmark for Evaluating Perception and Functional Utility of Embodied World Models",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "act": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/tonyzhaozh/act",
+        "repo": "tonyzhaozh/act",
+        "stars": 2300,
+        "license": "MIT",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://tonyzhaozh.github.io/aloha/"
+      },
+      "citations": {
+        "count": 2821,
+        "url": "https://www.semanticscholar.org/paper/91eb20f923ea3b0246868902aef4e9bea572b800",
+        "paperId": "91eb20f923ea3b0246868902aef4e9bea572b800",
+        "lookupId": "91eb20f923ea3b0246868902aef4e9bea572b800",
+        "title": "Learning Fine-Grained Bimanual Manipulation with Low-Cost Hardware",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "diffusion-policy": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/real-stanford/diffusion_policy",
+        "repo": "real-stanford/diffusion_policy",
+        "stars": 4692,
+        "license": "MIT",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://diffusion-policy.cs.columbia.edu/"
+      },
+      "citations": {
+        "count": 4938,
+        "url": "https://www.semanticscholar.org/paper/bdba3bd30a49ea4c5b20b43dbd8f0eb59e9d80e2",
+        "paperId": "bdba3bd30a49ea4c5b20b43dbd8f0eb59e9d80e2",
+        "lookupId": "bdba3bd30a49ea4c5b20b43dbd8f0eb59e9d80e2",
+        "title": "Diffusion policy: Visuomotor policy learning via action diffusion",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "rt2": {
+      "github": {
+        "status": "unconfirmed",
+        "url": null,
+        "repo": null,
+        "stars": null,
+        "license": null,
+        "shared": false,
+        "note": "已核对论文及作者资料，本次未核实到官方 GitHub 实现；这不表示确定未开源。",
+        "evidence": "https://proceedings.mlr.press/v229/zitkovich23a.html"
+      },
+      "citations": {
+        "count": 4943,
+        "url": "https://www.semanticscholar.org/paper/38939304bb760473141c2aca0305e44fbe04e6e8",
+        "paperId": "38939304bb760473141c2aca0305e44fbe04e6e8",
+        "lookupId": "38939304bb760473141c2aca0305e44fbe04e6e8",
+        "title": "RT-2: Vision-Language-Action Models Transfer Web Knowledge to Robotic Control",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "openx": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/google-deepmind/open_x_embodiment",
+        "repo": "google-deepmind/open_x_embodiment",
+        "stars": 2086,
+        "license": "Apache-2.0",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://robotics-transformer-x.github.io/"
+      },
+      "citations": {
+        "count": 1264,
+        "url": "https://www.semanticscholar.org/paper/ef7d31137ef06c5be8c2824ecc5af6ce3358cc8f",
+        "paperId": "ef7d31137ef06c5be8c2824ecc5af6ce3358cc8f",
+        "lookupId": "ef7d31137ef06c5be8c2824ecc5af6ce3358cc8f",
+        "title": "Open X-Embodiment: Robotic Learning Datasets and RT-X Models : Open X-Embodiment Collaboration0",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "octo": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/octo-models/octo",
+        "repo": "octo-models/octo",
+        "stars": 1810,
+        "license": "MIT",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://octo-models.github.io/"
+      },
+      "citations": {
+        "count": 2166,
+        "url": "https://www.semanticscholar.org/paper/1d2753d74025e7a71594506623be81f18b073adb",
+        "paperId": "1d2753d74025e7a71594506623be81f18b073adb",
+        "lookupId": "1d2753d74025e7a71594506623be81f18b073adb",
+        "title": "Octo: An Open-Source Generalist Robot Policy",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "openvla": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/openvla/openvla",
+        "repo": "openvla/openvla",
+        "stars": 7230,
+        "license": "MIT",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://openvla.github.io/"
+      },
+      "citations": {
+        "count": 4183,
+        "url": "https://www.semanticscholar.org/paper/8f9ceb5ffad8e7a066dfc9d9aaa5153b714740ee",
+        "paperId": "8f9ceb5ffad8e7a066dfc9d9aaa5153b714740ee",
+        "lookupId": "8f9ceb5ffad8e7a066dfc9d9aaa5153b714740ee",
+        "title": "OpenVLA: An Open-Source Vision-Language-Action Model",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "pi0": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/Physical-Intelligence/openpi",
+        "repo": "Physical-Intelligence/openpi",
+        "stars": 14436,
+        "license": "Apache-2.0",
+        "shared": true,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://github.com/Physical-Intelligence/openpi#readme"
+      },
+      "citations": {
+        "count": 173,
+        "url": "https://www.semanticscholar.org/paper/7e1ed5d9a72c5b63e34b2023fca4c1ad7b872140",
+        "paperId": "7e1ed5d9a72c5b63e34b2023fca4c1ad7b872140",
+        "lookupId": "7e1ed5d9a72c5b63e34b2023fca4c1ad7b872140",
+        "title": "π₀: A Vision-Language-Action Flow Model for General Robot Control",
+        "basis": "正式版 DOI 记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "pi05": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/Physical-Intelligence/openpi",
+        "repo": "Physical-Intelligence/openpi",
+        "stars": 14436,
+        "license": "Apache-2.0",
+        "shared": true,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://github.com/Physical-Intelligence/openpi#readme"
+      },
+      "citations": {
+        "count": 2556,
+        "url": "https://www.semanticscholar.org/paper/1e2a82ef5e0325a26ca0344c4f8c256c52fae7ec",
+        "paperId": "1e2a82ef5e0325a26ca0344c4f8c256c52fae7ec",
+        "lookupId": "1e2a82ef5e0325a26ca0344c4f8c256c52fae7ec",
+        "title": "π0.5: a Vision-Language-Action Model with Open-World Generalization",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "groot-n1": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/NVIDIA/Isaac-GR00T",
+        "repo": "NVIDIA/Isaac-GR00T",
+        "stars": 8280,
+        "license": "Apache-2.0",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://huggingface.co/datasets/nvidia/PhysicalAI-Robotics-GR00T-X-Embodiment-Sim"
+      },
+      "citations": {
+        "count": 1668,
+        "url": "https://www.semanticscholar.org/paper/731c50b0d6af4c1cb8d95f506541681ea487973b",
+        "paperId": "731c50b0d6af4c1cb8d95f506541681ea487973b",
+        "lookupId": "731c50b0d6af4c1cb8d95f506541681ea487973b",
+        "title": "GR00T N1: An Open Foundation Model for Generalist Humanoid Robots",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "pistar06": {
+      "github": {
+        "status": "unconfirmed",
+        "url": null,
+        "repo": null,
+        "stars": null,
+        "license": null,
+        "shared": false,
+        "note": "已核对论文及作者资料，本次未核实到官方 GitHub 实现；这不表示确定未开源。",
+        "evidence": "https://www.pi.website/blog/pistar06"
+      },
+      "citations": {
+        "count": 397,
+        "url": "https://www.semanticscholar.org/paper/319e005858f32a7b1eddb05a62b1652ca8ea4611",
+        "paperId": "319e005858f32a7b1eddb05a62b1652ca8ea4611",
+        "lookupId": "319e005858f32a7b1eddb05a62b1652ca8ea4611",
+        "title": "π*0.6: a VLA That Learns From Experience",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "pi07": {
+      "github": {
+        "status": "unconfirmed",
+        "url": null,
+        "repo": null,
+        "stars": null,
+        "license": null,
+        "shared": false,
+        "note": "已核对论文及作者资料，本次未核实到官方 GitHub 实现；这不表示确定未开源。",
+        "evidence": "https://www.pi.website/blog/pi07"
+      },
+      "citations": {
+        "count": null,
+        "url": null,
+        "paperId": null,
+        "lookupId": null,
+        "title": null,
+        "basis": "未核实",
+        "note": "本次未能核实与该报告对应的 Semantic Scholar 记录。"
+      }
+    },
+    "saycan": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/google-research/google-research/tree/master/saycan",
+        "repo": "google-research/google-research",
+        "stars": 39043,
+        "license": "Apache-2.0",
+        "shared": true,
+        "note": "作者公开的桌面演示代码；不代表原论文完整机器人系统及权重开放。",
+        "evidence": "https://say-can.github.io/"
+      },
+      "citations": {
+        "count": 4058,
+        "url": "https://www.semanticscholar.org/paper/cb5e3f085caefd1f3d5e08637ab55d39e61234fc",
+        "paperId": "cb5e3f085caefd1f3d5e08637ab55d39e61234fc",
+        "lookupId": "cb5e3f085caefd1f3d5e08637ab55d39e61234fc",
+        "title": "Do As I Can, Not As I Say: Grounding Language in Robotic Affordances",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "palm-e": {
+      "github": {
+        "status": "unconfirmed",
+        "url": null,
+        "repo": null,
+        "stars": null,
+        "license": null,
+        "shared": false,
+        "note": "已核对论文及作者资料，本次未核实到官方 GitHub 实现；这不表示确定未开源。",
+        "evidence": "https://proceedings.mlr.press/v202/driess23a.html"
+      },
+      "citations": {
+        "count": 3399,
+        "url": "https://www.semanticscholar.org/paper/38fe8f324d2162e63a967a9ac6648974fc4c66f3",
+        "paperId": "38fe8f324d2162e63a967a9ac6648974fc4c66f3",
+        "lookupId": "38fe8f324d2162e63a967a9ac6648974fc4c66f3",
+        "title": "PaLM-E: An Embodied Multimodal Language Model",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "voxposer": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/huangwl18/VoxPoser",
+        "repo": "huangwl18/VoxPoser",
+        "stars": 837,
+        "license": "MIT",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://voxposer.github.io/"
+      },
+      "citations": {
+        "count": 1303,
+        "url": "https://www.semanticscholar.org/paper/1cd8373490efc2d74c2796f4b2aa27c7d4415ec9",
+        "paperId": "1cd8373490efc2d74c2796f4b2aa27c7d4415ec9",
+        "lookupId": "1cd8373490efc2d74c2796f4b2aa27c7d4415ec9",
+        "title": "VoxPoser: Composable 3D Value Maps for Robotic Manipulation with Language Models",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "rekep": {
+      "github": {
+        "status": "public",
+        "url": "https://github.com/huangwl18/ReKep",
+        "repo": "huangwl18/ReKep",
+        "stars": 991,
+        "license": null,
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://rekep-robot.github.io/"
+      },
+      "citations": {
+        "count": 516,
+        "url": "https://www.semanticscholar.org/paper/559583b7cf7ca50416e2a776dc3ae3c5fb6ba700",
+        "paperId": "559583b7cf7ca50416e2a776dc3ae3c5fb6ba700",
+        "lookupId": "559583b7cf7ca50416e2a776dc3ae3c5fb6ba700",
+        "title": "ReKep: Spatio-Temporal Reasoning of Relational Keypoint Constraints for Robotic Manipulation",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "eureka": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/eureka-research/Eureka",
+        "repo": "eureka-research/Eureka",
+        "stars": 3212,
+        "license": "MIT",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://eureka-research.github.io/"
+      },
+      "citations": {
+        "count": 840,
+        "url": "https://www.semanticscholar.org/paper/6ca16c1c2c60ceda87242c8f8e522d12cc4a13bc",
+        "paperId": "6ca16c1c2c60ceda87242c8f8e522d12cc4a13bc",
+        "lookupId": "6ca16c1c2c60ceda87242c8f8e522d12cc4a13bc",
+        "title": "Eureka: Human-Level Reward Design via Coding Large Language Models",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "robogen": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/Genesis-Embodied-AI/RoboGen",
+        "repo": "Genesis-Embodied-AI/RoboGen",
+        "stars": 1230,
+        "license": "Apache-2.0",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://robogen-ai.github.io/"
+      },
+      "citations": {
+        "count": 325,
+        "url": "https://www.semanticscholar.org/paper/c62711f6b5d8620ba36bc2c378ec6ab53f6e197c",
+        "paperId": "c62711f6b5d8620ba36bc2c378ec6ab53f6e197c",
+        "lookupId": "c62711f6b5d8620ba36bc2c378ec6ab53f6e197c",
+        "title": "RoboGen: Towards Unleashing Infinite Data for Automated Robot Learning via Generative Simulation",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "gemini-robotics": {
+      "github": {
+        "status": "unconfirmed",
+        "url": null,
+        "repo": null,
+        "stars": null,
+        "license": null,
+        "shared": false,
+        "note": "已核对论文及作者资料，本次未核实到官方 GitHub 实现；这不表示确定未开源。",
+        "evidence": "https://arxiv.org/abs/2503.20020"
+      },
+      "citations": {
+        "count": 0,
+        "url": "https://www.semanticscholar.org/paper/8382ce3c671d5451490bf618b37e3a663c2edade",
+        "paperId": "8382ce3c671d5451490bf618b37e3a663c2edade",
+        "lookupId": "8382ce3c671d5451490bf618b37e3a663c2edade",
+        "title": "Gemini Robotics: Bringing AI into the Physical World",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "aspire": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/NVlabs/ASPIRE",
+        "repo": "NVlabs/ASPIRE",
+        "stars": 897,
+        "license": "Apache-2.0",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://research.nvidia.com/labs/gear/aspire/"
+      },
+      "citations": {
+        "count": 95,
+        "url": "https://www.semanticscholar.org/paper/0608739f6db8ba222d9075cd3507ad1eb6710f59",
+        "paperId": "0608739f6db8ba222d9075cd3507ad1eb6710f59",
+        "lookupId": "0608739f6db8ba222d9075cd3507ad1eb6710f59",
+        "title": "ASPIRE: Agentic /Skills Discovery for Robotics",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "world-models": {
+      "github": {
+        "status": "public",
+        "url": "https://github.com/hardmaru/WorldModelsExperiments",
+        "repo": "hardmaru/WorldModelsExperiments",
+        "stars": 750,
+        "license": null,
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://github.com/hardmaru/WorldModelsExperiments#readme"
+      },
+      "citations": {
+        "count": 1568,
+        "url": "https://www.semanticscholar.org/paper/41cca0b0a27ba363ca56e7033569aeb1922b0ac9",
+        "paperId": "41cca0b0a27ba363ca56e7033569aeb1922b0ac9",
+        "lookupId": "41cca0b0a27ba363ca56e7033569aeb1922b0ac9",
+        "title": "Recurrent World Models Facilitate Policy Evolution",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "daydreamer": {
+      "github": {
+        "status": "public",
+        "url": "https://github.com/danijar/daydreamer",
+        "repo": "danijar/daydreamer",
+        "stars": 469,
+        "license": null,
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://github.com/danijar/daydreamer#readme"
+      },
+      "citations": {
+        "count": 643,
+        "url": "https://www.semanticscholar.org/paper/25bc06b508b2c63b9faf77881e528530b147b988",
+        "paperId": "25bc06b508b2c63b9faf77881e528530b147b988",
+        "lookupId": "25bc06b508b2c63b9faf77881e528530b147b988",
+        "title": "DayDreamer: World Models for Physical Robot Learning",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "ijepa": {
+      "github": {
+        "status": "public",
+        "url": "https://github.com/facebookresearch/ijepa",
+        "repo": "facebookresearch/ijepa",
+        "stars": 3487,
+        "license": null,
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://github.com/facebookresearch/ijepa"
+      },
+      "citations": {
+        "count": 1506,
+        "url": "https://www.semanticscholar.org/paper/ee57e4d7a125f4ca8916284a857c3760d7d378d3",
+        "paperId": "ee57e4d7a125f4ca8916284a857c3760d7d378d3",
+        "lookupId": "ee57e4d7a125f4ca8916284a857c3760d7d378d3",
+        "title": "Self-Supervised Learning from Images with a Joint-Embedding Predictive Architecture",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "vjepa": {
+      "github": {
+        "status": "public",
+        "url": "https://github.com/facebookresearch/jepa",
+        "repo": "facebookresearch/jepa",
+        "stars": 4183,
+        "license": null,
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://www.midoassran.ca/"
+      },
+      "citations": {
+        "count": 673,
+        "url": "https://www.semanticscholar.org/paper/872d78c04c8fb115d492eea98199407991670533",
+        "paperId": "872d78c04c8fb115d492eea98199407991670533",
+        "lookupId": "872d78c04c8fb115d492eea98199407991670533",
+        "title": "Revisiting Feature Prediction for Learning Visual Representations from Video",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "unipi": {
+      "github": {
+        "status": "unconfirmed",
+        "url": null,
+        "repo": null,
+        "stars": null,
+        "license": null,
+        "shared": false,
+        "note": "已核对论文及作者资料，本次未核实到官方 GitHub 实现；这不表示确定未开源。",
+        "evidence": "https://universal-policy.github.io/"
+      },
+      "citations": {
+        "count": 797,
+        "url": "https://www.semanticscholar.org/paper/da2fe6cd385194b0274d04d04ee72e8caf3854d4",
+        "paperId": "da2fe6cd385194b0274d04d04ee72e8caf3854d4",
+        "lookupId": "da2fe6cd385194b0274d04d04ee72e8caf3854d4",
+        "title": "Learning Universal Policies via Text-Guided Video Generation",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "uwm": {
+      "github": {
+        "status": "public",
+        "url": "https://github.com/WEIRDLabUW/unified-world-model",
+        "repo": "WEIRDLabUW/unified-world-model",
+        "stars": 257,
+        "license": null,
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://weirdlabuw.github.io/uwm/"
+      },
+      "citations": {
+        "count": 318,
+        "url": "https://www.semanticscholar.org/paper/514b9977bdb57f6e9586461f36fcf6467a775b3c",
+        "paperId": "514b9977bdb57f6e9586461f36fcf6467a775b3c",
+        "lookupId": "514b9977bdb57f6e9586461f36fcf6467a775b3c",
+        "title": "Unified World Models: Coupling Video and Action Diffusion for Pretraining on Large Robotic Datasets",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "dreamzero": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/dreamzero0/dreamzero",
+        "repo": "dreamzero0/dreamzero",
+        "stars": 2740,
+        "license": "Apache-2.0",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://github.com/dreamzero0/dreamzero"
+      },
+      "citations": {
+        "count": 568,
+        "url": "https://www.semanticscholar.org/paper/badf8adcf2b6a6780a308881de75f148a4cacea0",
+        "paperId": "badf8adcf2b6a6780a308881de75f148a4cacea0",
+        "lookupId": "badf8adcf2b6a6780a308881de75f148a4cacea0",
+        "title": "World Action Models are Zero-shot Policies",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "lingbot-va": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/Robbyant/lingbot-va",
+        "repo": "Robbyant/lingbot-va",
+        "stars": 1957,
+        "license": "Apache-2.0",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://github.com/robbyant/lingbot-va"
+      },
+      "citations": {
+        "count": 403,
+        "url": "https://www.semanticscholar.org/paper/fede426322c5c40242f6642b816caa8adf782676",
+        "paperId": "fede426322c5c40242f6642b816caa8adf782676",
+        "lookupId": "fede426322c5c40242f6642b816caa8adf782676",
+        "title": "Causal World Modeling for Robot Control",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "cosmos3": {
+      "github": {
+        "status": "public",
+        "url": "https://github.com/NVIDIA/cosmos",
+        "repo": "NVIDIA/cosmos",
+        "stars": 12184,
+        "license": null,
+        "shared": true,
+        "note": "作者提供的 Cosmos 平台仓库入口；Stars 为该平台仓库总数，不是 Cosmos 3 单独的关注数。",
+        "evidence": "https://research.nvidia.com/labs/cosmos-lab/cosmos3/"
+      },
+      "citations": {
+        "count": 201,
+        "url": "https://www.semanticscholar.org/paper/3e381da585aab631ec29e97d3f7a084281247df1",
+        "paperId": "3e381da585aab631ec29e97d3f7a084281247df1",
+        "lookupId": "3e381da585aab631ec29e97d3f7a084281247df1",
+        "title": "Cosmos 3: Omnimodal World Models for Physical AI",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "fast": {
+      "github": {
+        "status": "unconfirmed",
+        "url": null,
+        "repo": null,
+        "stars": null,
+        "license": null,
+        "shared": false,
+        "note": "作者在 Hugging Face 公开 tokenizer 代码与模型；未核实到专属 GitHub 实现仓库。",
+        "evidence": "https://huggingface.co/physical-intelligence/fast"
+      },
+      "citations": {
+        "count": 810,
+        "url": "https://www.semanticscholar.org/paper/3880f5bad862ba1b18f4f8ec060038b326b118ed",
+        "paperId": "3880f5bad862ba1b18f4f8ec060038b326b118ed",
+        "lookupId": "3880f5bad862ba1b18f4f8ec060038b326b118ed",
+        "title": "FAST: Efficient Action Tokenization for Vision-Language-Action Models",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "hirobot": {
+      "github": {
+        "status": "unconfirmed",
+        "url": null,
+        "repo": null,
+        "stars": null,
+        "license": null,
+        "shared": false,
+        "note": "已核对论文及作者资料，本次未核实到官方 GitHub 实现；这不表示确定未开源。",
+        "evidence": "https://www.pi.website/research/hirobot"
+      },
+      "citations": {
+        "count": 315,
+        "url": "https://www.semanticscholar.org/paper/69afd10d387423a03617d461c3f47a5f3033cc54",
+        "paperId": "69afd10d387423a03617d461c3f47a5f3033cc54",
+        "lookupId": "69afd10d387423a03617d461c3f47a5f3033cc54",
+        "title": "Hi Robot: Open-Ended Instruction Following with Hierarchical Vision-Language-Action Models",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "pets": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/kchua/handful-of-trials",
+        "repo": "kchua/handful-of-trials",
+        "stars": 484,
+        "license": "MIT",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://github.com/kchua/handful-of-trials#readme"
+      },
+      "citations": {
+        "count": 1697,
+        "url": "https://www.semanticscholar.org/paper/56136aa0b2c347cbcf3d50821f310c4253155026",
+        "paperId": "56136aa0b2c347cbcf3d50821f310c4253155026",
+        "lookupId": "56136aa0b2c347cbcf3d50821f310c4253155026",
+        "title": "Deep Reinforcement Learning in a Handful of Trials using Probabilistic Dynamics Models",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "mbpo": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/jannerm/mbpo",
+        "repo": "jannerm/mbpo",
+        "stars": 565,
+        "license": "MIT",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://jannerm.github.io/mbpo-www/"
+      },
+      "citations": {
+        "count": 1371,
+        "url": "https://www.semanticscholar.org/paper/9001698e033524864d4d45f051a5ba362d4afd9e",
+        "paperId": "9001698e033524864d4d45f051a5ba362d4afd9e",
+        "lookupId": "9001698e033524864d4d45f051a5ba362d4afd9e",
+        "title": "When to Trust Your Model: Model-Based Policy Optimization",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "simple": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/tensorflow/tensor2tensor/tree/master/tensor2tensor/rl",
+        "repo": "tensorflow/tensor2tensor",
+        "stars": 17474,
+        "license": "Apache-2.0",
+        "shared": true,
+        "note": "SimPLe 实现位于 Tensor2Tensor 的 rl 子目录；Stars 为整个框架仓库总数。",
+        "evidence": "https://github.com/tensorflow/tensor2tensor#readme"
+      },
+      "citations": {
+        "count": 1024,
+        "url": "https://www.semanticscholar.org/paper/1fd4694e7c2d9c872a427d50e81b5475056de6bc",
+        "paperId": "1fd4694e7c2d9c872a427d50e81b5475056de6bc",
+        "lookupId": "1fd4694e7c2d9c872a427d50e81b5475056de6bc",
+        "title": "Model-Based Reinforcement Learning for Atari",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "tdmpc": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/nicklashansen/tdmpc",
+        "repo": "nicklashansen/tdmpc",
+        "stars": 529,
+        "license": "MIT",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://www.nicklashansen.com/td-mpc/"
+      },
+      "citations": {
+        "count": 565,
+        "url": "https://www.semanticscholar.org/paper/d46eef8b0d46cfdebefe9941a0f60aeeed31ded0",
+        "paperId": "d46eef8b0d46cfdebefe9941a0f60aeeed31ded0",
+        "lookupId": "d46eef8b0d46cfdebefe9941a0f60aeeed31ded0",
+        "title": "Temporal Difference Learning for Model Predictive Control",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "iris": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/eloialonso/iris",
+        "repo": "eloialonso/iris",
+        "stars": 903,
+        "license": "GPL-3.0",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://arxiv.org/abs/2209.00588"
+      },
+      "citations": {
+        "count": 412,
+        "url": "https://www.semanticscholar.org/paper/235303a8bc1e4892efd525a38ead657422d8a519",
+        "paperId": "235303a8bc1e4892efd525a38ead657422d8a519",
+        "lookupId": "235303a8bc1e4892efd525a38ead657422d8a519",
+        "title": "Transformers are Sample Efficient World Models",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "unisim": {
+      "github": {
+        "status": "unconfirmed",
+        "url": null,
+        "repo": null,
+        "stars": null,
+        "license": null,
+        "shared": false,
+        "note": "已核对论文及作者资料，本次未核实到官方 GitHub 实现；这不表示确定未开源。",
+        "evidence": "https://universal-simulator.github.io/unisim/"
+      },
+      "citations": {
+        "count": 597,
+        "url": "https://www.semanticscholar.org/paper/c3d14e7a319ab764297a60112ce74af201762a73",
+        "paperId": "c3d14e7a319ab764297a60112ce74af201762a73",
+        "lookupId": "c3d14e7a319ab764297a60112ce74af201762a73",
+        "title": "Learning Interactive Real-World Simulators",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "robodreamer": {
+      "github": {
+        "status": "public",
+        "url": "https://github.com/rainbow979/robodreamer",
+        "repo": "rainbow979/robodreamer",
+        "stars": 102,
+        "license": null,
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://robovideo.github.io/"
+      },
+      "citations": {
+        "count": 252,
+        "url": "https://www.semanticscholar.org/paper/458b47731153b8462f2d3265c3fdfa15d38a6f55",
+        "paperId": "458b47731153b8462f2d3265c3fdfa15d38a6f55",
+        "lookupId": "458b47731153b8462f2d3265c3fdfa15d38a6f55",
+        "title": "RoboDreamer: Learning Compositional World Models for Robot Imagination",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "r3m": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/facebookresearch/r3m",
+        "repo": "facebookresearch/r3m",
+        "stars": 375,
+        "license": "MIT",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://sites.google.com/view/robot-r3m/"
+      },
+      "citations": {
+        "count": 1085,
+        "url": "https://www.semanticscholar.org/paper/c9bdc9ad2c3cf3230ba9aac7b5783ab411f0d204",
+        "paperId": "c9bdc9ad2c3cf3230ba9aac7b5783ab411f0d204",
+        "lookupId": "c9bdc9ad2c3cf3230ba9aac7b5783ab411f0d204",
+        "title": "R3M: A Universal Visual Representation for Robot Manipulation",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "vip": {
+      "github": {
+        "status": "public",
+        "url": "https://github.com/facebookresearch/vip",
+        "repo": "facebookresearch/vip",
+        "stars": 188,
+        "license": null,
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://sites.google.com/view/vip-rl"
+      },
+      "citations": {
+        "count": 582,
+        "url": "https://www.semanticscholar.org/paper/3fbe2e8413df0207c26ff393c9aaa8488e3ca4c3",
+        "paperId": "3fbe2e8413df0207c26ff393c9aaa8488e3ca4c3",
+        "lookupId": "3fbe2e8413df0207c26ff393c9aaa8488e3ca4c3",
+        "title": "VIP: Towards Universal Visual Reward and Representation via Value-Implicit Pre-Training",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "vc1": {
+      "github": {
+        "status": "public",
+        "url": "https://github.com/facebookresearch/eai-vc",
+        "repo": "facebookresearch/eai-vc",
+        "stars": 509,
+        "license": null,
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://eai-vc.github.io/"
+      },
+      "citations": {
+        "count": 345,
+        "url": "https://www.semanticscholar.org/paper/326f6a8011e43322c433751b9cc31fd56564621c",
+        "paperId": "326f6a8011e43322c433751b9cc31fd56564621c",
+        "lookupId": "326f6a8011e43322c433751b9cc31fd56564621c",
+        "title": "Where are we in the search for an Artificial Visual Cortex for Embodied Intelligence?",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "transporter": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/google-research/ravens",
+        "repo": "google-research/ravens",
+        "stars": 629,
+        "license": "Apache-2.0",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://transporternets.github.io/"
+      },
+      "citations": {
+        "count": 625,
+        "url": "https://www.semanticscholar.org/paper/eb6b9bc4ff3e4e2cf1724324d79ce7de43131478",
+        "paperId": "eb6b9bc4ff3e4e2cf1724324d79ce7de43131478",
+        "lookupId": "eb6b9bc4ff3e4e2cf1724324d79ce7de43131478",
+        "title": "Transporter Networks: Rearranging the Visual World for Robotic Manipulation",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "peract": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/peract/peract",
+        "repo": "peract/peract",
+        "stars": 497,
+        "license": "Apache-2.0",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://peract.github.io/"
+      },
+      "citations": {
+        "count": 986,
+        "url": "https://www.semanticscholar.org/paper/60c8d0619481eaafdd1189af610d0e636271fed5",
+        "paperId": "60c8d0619481eaafdd1189af610d0e636271fed5",
+        "lookupId": "60c8d0619481eaafdd1189af610d0e636271fed5",
+        "title": "Perceiver-Actor: A Multi-Task Transformer for Robotic Manipulation",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "rvt": {
+      "github": {
+        "status": "public",
+        "url": "https://github.com/NVlabs/RVT",
+        "repo": "NVlabs/RVT",
+        "stars": 409,
+        "license": null,
+        "shared": true,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://robotic-view-transformer.github.io/"
+      },
+      "citations": {
+        "count": 366,
+        "url": "https://www.semanticscholar.org/paper/a118acfe34381d4508c2e084f9247c9f7bfc6f48",
+        "paperId": "a118acfe34381d4508c2e084f9247c9f7bfc6f48",
+        "lookupId": "a118acfe34381d4508c2e084f9247c9f7bfc6f48",
+        "title": "RVT: Robotic View Transformer for 3D Object Manipulation",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "rvt2": {
+      "github": {
+        "status": "public",
+        "url": "https://github.com/NVlabs/RVT",
+        "repo": "NVlabs/RVT",
+        "stars": 409,
+        "license": null,
+        "shared": true,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://robotic-view-transformer-2.github.io/"
+      },
+      "citations": {
+        "count": 220,
+        "url": "https://www.semanticscholar.org/paper/fcbbb3bba6618a8871f01e6f0e67b4cb4c8f55ff",
+        "paperId": "fcbbb3bba6618a8871f01e6f0e67b4cb4c8f55ff",
+        "lookupId": "fcbbb3bba6618a8871f01e6f0e67b4cb4c8f55ff",
+        "title": "RVT-2: Learning Precise Manipulation from Few Demonstrations",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "dp3": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/YanjieZe/3D-Diffusion-Policy",
+        "repo": "YanjieZe/3D-Diffusion-Policy",
+        "stars": 1467,
+        "license": "MIT",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://3d-diffusion-policy.github.io/"
+      },
+      "citations": {
+        "count": 153,
+        "url": "https://www.semanticscholar.org/paper/8bb32652e0a935b6ba1f54bd3d39cad80db09908",
+        "paperId": "8bb32652e0a935b6ba1f54bd3d39cad80db09908",
+        "lookupId": "8bb32652e0a935b6ba1f54bd3d39cad80db09908",
+        "title": "3D Diffusion Policy",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "rt1": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/google-research/robotics_transformer",
+        "repo": "google-research/robotics_transformer",
+        "stars": 1739,
+        "license": "Apache-2.0",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://robotics-transformer1.github.io/"
+      },
+      "citations": {
+        "count": 3123,
+        "url": "https://www.semanticscholar.org/paper/fd1cf28a2b8caf2fe29af5e7fa9191cecfedf84d",
+        "paperId": "fd1cf28a2b8caf2fe29af5e7fa9191cecfedf84d",
+        "lookupId": "fd1cf28a2b8caf2fe29af5e7fa9191cecfedf84d",
+        "title": "RT-1: Robotics Transformer for Real-World Control at Scale",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "vima": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/vimalabs/VIMA",
+        "repo": "vimalabs/VIMA",
+        "stars": 857,
+        "license": "MIT",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://vimalabs.github.io/"
+      },
+      "citations": {
+        "count": 644,
+        "url": "https://www.semanticscholar.org/paper/25425e299101b13ec2872417a14f961f4f8aa18e",
+        "paperId": "25425e299101b13ec2872417a14f961f4f8aa18e",
+        "lookupId": "25425e299101b13ec2872417a14f961f4f8aa18e",
+        "title": "VIMA: General Robot Manipulation with Multimodal Prompts",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "spatialvla": {
+      "github": {
+        "status": "public",
+        "url": "https://github.com/SpatialVLA/SpatialVLA",
+        "repo": "SpatialVLA/SpatialVLA",
+        "stars": 734,
+        "license": null,
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://spatialvla.github.io/"
+      },
+      "citations": {
+        "count": 639,
+        "url": "https://www.semanticscholar.org/paper/10301766e5686bda76722ef2af1362213b934cc0",
+        "paperId": "10301766e5686bda76722ef2af1362213b934cc0",
+        "lookupId": "10301766e5686bda76722ef2af1362213b934cc0",
+        "title": "SpatialVLA: Exploring Spatial Representations for Visual-Language-Action Model",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "rdt1b": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/thu-ml/RoboticsDiffusionTransformer",
+        "repo": "thu-ml/RoboticsDiffusionTransformer",
+        "stars": 1815,
+        "license": "MIT",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://rdt-robotics.github.io/rdt-robotics/"
+      },
+      "citations": {
+        "count": 1020,
+        "url": "https://www.semanticscholar.org/paper/41ba8127b73abd32051a89764cb976095b1dee94",
+        "paperId": "41ba8127b73abd32051a89764cb976095b1dee94",
+        "lookupId": "41ba8127b73abd32051a89764cb976095b1dee94",
+        "title": "RDT-1B: a Diffusion Foundation Model for Bimanual Manipulation",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "openvla-oft": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/moojink/openvla-oft",
+        "repo": "moojink/openvla-oft",
+        "stars": 1436,
+        "license": "MIT",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://openvla-oft.github.io/"
+      },
+      "citations": {
+        "count": 1136,
+        "url": "https://www.semanticscholar.org/paper/5088b84507462bf725bb4898623d1dead4c6a206",
+        "paperId": "5088b84507462bf725bb4898623d1dead4c6a206",
+        "lookupId": "5088b84507462bf725bb4898623d1dead4c6a206",
+        "title": "Fine-Tuning Vision-Language-Action Models: Optimizing Speed and Success",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "bridge-v2": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/rail-berkeley/bridge_data_v2",
+        "repo": "rail-berkeley/bridge_data_v2",
+        "stars": 293,
+        "license": "MIT",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://rail-berkeley.github.io/bridgedata/"
+      },
+      "citations": {
+        "count": 959,
+        "url": "https://www.semanticscholar.org/paper/6a375be82efc01ec4ed73334655935a56ba82d38",
+        "paperId": "6a375be82efc01ec4ed73334655935a56ba82d38",
+        "lookupId": "6a375be82efc01ec4ed73334655935a56ba82d38",
+        "title": "BridgeData V2: A Dataset for Robot Learning at Scale",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "droid": {
+      "github": {
+        "status": "public",
+        "url": "https://github.com/droid-dataset/droid",
+        "repo": "droid-dataset/droid",
+        "stars": 460,
+        "license": null,
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://droid-dataset.github.io/"
+      },
+      "citations": {
+        "count": 1282,
+        "url": "https://www.semanticscholar.org/paper/ee5070fe52fd17da9a89d3f342fb07cc9ae51afe",
+        "paperId": "ee5070fe52fd17da9a89d3f342fb07cc9ae51afe",
+        "lookupId": "ee5070fe52fd17da9a89d3f342fb07cc9ae51afe",
+        "title": "DROID: A Large-Scale In-The-Wild Robot Manipulation Dataset",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "umi": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/real-stanford/universal_manipulation_interface",
+        "repo": "real-stanford/universal_manipulation_interface",
+        "stars": 1621,
+        "license": "MIT",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://umi-gripper.github.io/"
+      },
+      "citations": {
+        "count": 820,
+        "url": "https://www.semanticscholar.org/paper/40beef770a0f6b8cb2aa90587988b61080c40ba9",
+        "paperId": "40beef770a0f6b8cb2aa90587988b61080c40ba9",
+        "lookupId": "40beef770a0f6b8cb2aa90587988b61080c40ba9",
+        "title": "Universal Manipulation Interface: In-The-Wild Robot Teaching Without In-The-Wild Robots",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "cliport": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/cliport/cliport",
+        "repo": "cliport/cliport",
+        "stars": 547,
+        "license": "Apache-2.0",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://cliport.github.io/"
+      },
+      "citations": {
+        "count": 1062,
+        "url": "https://www.semanticscholar.org/paper/69ee9b3a915951cc84b74599a3a2699a66d4004f",
+        "paperId": "69ee9b3a915951cc84b74599a3a2699a66d4004f",
+        "lookupId": "69ee9b3a915951cc84b74599a3a2699a66d4004f",
+        "title": "CLIPort: What and Where Pathways for Robotic Manipulation",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "lm-nav": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/blazejosinski/lm_nav",
+        "repo": "blazejosinski/lm_nav",
+        "stars": 272,
+        "license": "MIT",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://sites.google.com/view/lmnav"
+      },
+      "citations": {
+        "count": 828,
+        "url": "https://www.semanticscholar.org/paper/cdf54c147434c83a4a380916b6c1279b0ca19fc2",
+        "paperId": "cdf54c147434c83a4a380916b6c1279b0ca19fc2",
+        "lookupId": "cdf54c147434c83a4a380916b6c1279b0ca19fc2",
+        "title": "LM-Nav: Robotic Navigation with Large Pre-Trained Models of Language, Vision, and Action",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "code-as-policies": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/google-research/google-research/tree/master/code_as_policies",
+        "repo": "google-research/google-research",
+        "stars": 39043,
+        "license": "Apache-2.0",
+        "shared": true,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://code-as-policies.github.io/"
+      },
+      "citations": {
+        "count": 2187,
+        "url": "https://www.semanticscholar.org/paper/91deaf9d324c8feafc189da0da03e60a60287bca",
+        "paperId": "91deaf9d324c8feafc189da0da03e60a60287bca",
+        "lookupId": "91deaf9d324c8feafc189da0da03e60a60287bca",
+        "title": "Code as Policies: Language Model Programs for Embodied Control",
+        "basis": "正式版 DOI 记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "progprompt": {
+      "github": {
+        "status": "public",
+        "url": "https://github.com/NVlabs/progprompt-vh",
+        "repo": "NVlabs/progprompt-vh",
+        "stars": 156,
+        "license": null,
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://progprompt.github.io/"
+      },
+      "citations": {
+        "count": 1192,
+        "url": "https://www.semanticscholar.org/paper/c03fa01fbb9c77fe3d10609ba5f1dee33a723867",
+        "paperId": "c03fa01fbb9c77fe3d10609ba5f1dee33a723867",
+        "lookupId": "c03fa01fbb9c77fe3d10609ba5f1dee33a723867",
+        "title": "ProgPrompt: Generating Situated Robot Task Plans using Large Language Models",
+        "basis": "正式版 DOI 记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "sayplan": {
+      "github": {
+        "status": "unconfirmed",
+        "url": null,
+        "repo": null,
+        "stars": null,
+        "license": null,
+        "shared": false,
+        "note": "已核对论文及作者资料，本次未核实到官方 GitHub 实现；这不表示确定未开源。",
+        "evidence": "https://sayplan.github.io/"
+      },
+      "citations": {
+        "count": 552,
+        "url": "https://www.semanticscholar.org/paper/3843469976bd895851bfa08c8208350745bf649f",
+        "paperId": "3843469976bd895851bfa08c8208350745bf649f",
+        "lookupId": "3843469976bd895851bfa08c8208350745bf649f",
+        "title": "SayPlan: Grounding Large Language Models using 3D Scene Graphs for Scalable Task Planning",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "inner-monologue": {
+      "github": {
+        "status": "unconfirmed",
+        "url": null,
+        "repo": null,
+        "stars": null,
+        "license": null,
+        "shared": false,
+        "note": "已核对论文及作者资料，本次未核实到官方 GitHub 实现；这不表示确定未开源。",
+        "evidence": "https://innermonologue.github.io/"
+      },
+      "citations": {
+        "count": 1774,
+        "url": "https://www.semanticscholar.org/paper/f3cf71c51b882fe3111d71c4bf104297d38197f8",
+        "paperId": "f3cf71c51b882fe3111d71c4bf104297d38197f8",
+        "lookupId": "f3cf71c51b882fe3111d71c4bf104297d38197f8",
+        "title": "Inner Monologue: Embodied Reasoning through Planning with Language Models",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "llm-planner": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/OSU-NLP-Group/LLM-Planner",
+        "repo": "OSU-NLP-Group/LLM-Planner",
+        "stars": 227,
+        "license": "MIT",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://dki-lab.github.io/LLM-Planner/"
+      },
+      "citations": {
+        "count": 809,
+        "url": "https://www.semanticscholar.org/paper/8ee45aeb7c97e3346cc62f216f673b91277ac718",
+        "paperId": "8ee45aeb7c97e3346cc62f216f673b91277ac718",
+        "lookupId": "8ee45aeb7c97e3346cc62f216f673b91277ac718",
+        "title": "LLM-Planner: Few-Shot Grounded Planning for Embodied Agents with Large Language Models",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "rt-h": {
+      "github": {
+        "status": "unconfirmed",
+        "url": null,
+        "repo": null,
+        "stars": null,
+        "license": null,
+        "shared": false,
+        "note": "已核对论文及作者资料，本次未核实到官方 GitHub 实现；这不表示确定未开源。",
+        "evidence": "https://rt-hierarchy.github.io/"
+      },
+      "citations": {
+        "count": 278,
+        "url": "https://www.semanticscholar.org/paper/2bbc0b48052f1f3f52cbd46ece378baa61fa711b",
+        "paperId": "2bbc0b48052f1f3f52cbd46ece378baa61fa711b",
+        "lookupId": "2bbc0b48052f1f3f52cbd46ece378baa61fa711b",
+        "title": "RT-H: Action Hierarchies Using Language",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "libero": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/Lifelong-Robot-Learning/LIBERO",
+        "repo": "Lifelong-Robot-Learning/LIBERO",
+        "stars": 2486,
+        "license": "MIT",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://github.com/Lifelong-Robot-Learning/LIBERO#readme"
+      },
+      "citations": {
+        "count": 2094,
+        "url": "https://www.semanticscholar.org/paper/98cfd7b1b29453c4e82536f5afdc6ddc58bbb1b3",
+        "paperId": "98cfd7b1b29453c4e82536f5afdc6ddc58bbb1b3",
+        "lookupId": "98cfd7b1b29453c4e82536f5afdc6ddc58bbb1b3",
+        "title": "LIBERO: Benchmarking Knowledge Transfer for Lifelong Robot Learning",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "alfred": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/askforalfred/alfred",
+        "repo": "askforalfred/alfred",
+        "stars": 532,
+        "license": "MIT",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://github.com/askforalfred/alfred#readme"
+      },
+      "citations": {
+        "count": 1261,
+        "url": "https://www.semanticscholar.org/paper/f4cf4246f3882aa6337e9c05d5675a3b8463a32e",
+        "paperId": "f4cf4246f3882aa6337e9c05d5675a3b8463a32e",
+        "lookupId": "f4cf4246f3882aa6337e9c05d5675a3b8463a32e",
+        "title": "ALFRED: A Benchmark for Interpreting Grounded Instructions for Everyday Tasks",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "e2c": {
+      "github": {
+        "status": "unconfirmed",
+        "url": null,
+        "repo": null,
+        "stars": null,
+        "license": null,
+        "shared": false,
+        "note": "已核对论文及作者资料，本次未核实到官方 GitHub 实现；这不表示确定未开源。",
+        "evidence": "https://papers.nips.cc/paper_files/paper/2015/file/a1afc58c6ca9540d057299ec3016d726-Paper.pdf"
+      },
+      "citations": {
+        "count": 944,
+        "url": "https://www.semanticscholar.org/paper/bb1a17010254abfa5e1f2a17553582ce449f8e16",
+        "paperId": "bb1a17010254abfa5e1f2a17553582ce449f8e16",
+        "lookupId": "bb1a17010254abfa5e1f2a17553582ce449f8e16",
+        "title": "Embed to Control: A Locally Linear Latent Dynamics Model for Control from Raw Images",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "solar": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/sharadmv/parasol",
+        "repo": "sharadmv/parasol",
+        "stars": 67,
+        "license": "MIT",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://proceedings.mlr.press/v97/zhang19m.html"
+      },
+      "citations": {
+        "count": 43,
+        "url": "https://www.semanticscholar.org/paper/e75271c7f985752a8dcce2347ce922d7f4cd3df1",
+        "paperId": "e75271c7f985752a8dcce2347ce922d7f4cd3df1",
+        "lookupId": "e75271c7f985752a8dcce2347ce922d7f4cd3df1",
+        "title": "SOLAR: Deep Structured Latent Representations for Model-Based Reinforcement Learning",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "slac": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/alexlee-gk/slac",
+        "repo": "alexlee-gk/slac",
+        "stars": 154,
+        "license": "MIT",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://alexlee-gk.github.io/slac/"
+      },
+      "citations": {
+        "count": 439,
+        "url": "https://www.semanticscholar.org/paper/69d1ee8a99f55e9228f33fdb3a0339541ad1201c",
+        "paperId": "69d1ee8a99f55e9228f33fdb3a0339541ad1201c",
+        "lookupId": "69d1ee8a99f55e9228f33fdb3a0339541ad1201c",
+        "title": "Stochastic Latent Actor-Critic: Deep Reinforcement Learning with a Latent Variable Model",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "dreamerpro": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/fdeng18/dreamer-pro",
+        "repo": "fdeng18/dreamer-pro",
+        "stars": 38,
+        "license": "MIT",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://github.com/fdeng18/dreamer-pro#readme"
+      },
+      "citations": {
+        "count": 103,
+        "url": "https://www.semanticscholar.org/paper/48632df62a1e1c8ed7ad04b3ffd1bc62c133b3af",
+        "paperId": "48632df62a1e1c8ed7ad04b3ffd1bc62c133b3af",
+        "lookupId": "48632df62a1e1c8ed7ad04b3ffd1bc62c133b3af",
+        "title": "DreamerPro: Reconstruction-Free Model-Based Reinforcement Learning with Prototypical Representations",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "efficientzero": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/YeWR/EfficientZero",
+        "repo": "YeWR/EfficientZero",
+        "stars": 945,
+        "license": "GPL-3.0",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://papers.nips.cc/paper_files/paper/2021/hash/d5eca8dc3820cad9fe56a3bafda65ca1-Abstract.html"
+      },
+      "citations": {
+        "count": 354,
+        "url": "https://www.semanticscholar.org/paper/3b3d7adb9047d01af6dfa2975ad8addd69715e96",
+        "paperId": "3b3d7adb9047d01af6dfa2975ad8addd69715e96",
+        "lookupId": "3b3d7adb9047d01af6dfa2975ad8addd69715e96",
+        "title": "Mastering Atari Games with Limited Data",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "efficientzero-v2": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/Shengjiewang-Jason/EfficientZeroV2",
+        "repo": "Shengjiewang-Jason/EfficientZeroV2",
+        "stars": 125,
+        "license": "GPL-3.0",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://github.com/Shengjiewang-Jason/EfficientZeroV2#readme"
+      },
+      "citations": {
+        "count": 48,
+        "url": "https://www.semanticscholar.org/paper/9d7b0bd13d5d7efd31123691c5960993fe610239",
+        "paperId": "9d7b0bd13d5d7efd31123691c5960993fe610239",
+        "lookupId": "9d7b0bd13d5d7efd31123691c5960993fe610239",
+        "title": "EfficientZero V2: Mastering Discrete and Continuous Control with Limited Data",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "diffuser": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/jannerm/diffuser",
+        "repo": "jannerm/diffuser",
+        "stars": 1315,
+        "license": "MIT",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://diffusion-planning.github.io/"
+      },
+      "citations": {
+        "count": 1521,
+        "url": "https://www.semanticscholar.org/paper/3ebdd3db0dd91069fa0cd31cbf8308b60b1b565e",
+        "paperId": "3ebdd3db0dd91069fa0cd31cbf8308b60b1b565e",
+        "lookupId": "3ebdd3db0dd91069fa0cd31cbf8308b60b1b565e",
+        "title": "Planning with Diffusion for Flexible Behavior Synthesis",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "diffusion-forcing": {
+      "github": {
+        "status": "public",
+        "url": "https://github.com/buoyancy99/diffusion-forcing",
+        "repo": "buoyancy99/diffusion-forcing",
+        "stars": 1302,
+        "license": null,
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://boyuan.space/diffusion-forcing/"
+      },
+      "citations": {
+        "count": 839,
+        "url": "https://www.semanticscholar.org/paper/40d63dc2b465c9081e4efc5a19514da151e97fe7",
+        "paperId": "40d63dc2b465c9081e4efc5a19514da151e97fe7",
+        "lookupId": "40d63dc2b465c9081e4efc5a19514da151e97fe7",
+        "title": "Diffusion Forcing: Next-token Prediction Meets Full-Sequence Diffusion",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "dino": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/facebookresearch/dino",
+        "repo": "facebookresearch/dino",
+        "stars": 7608,
+        "license": "Apache-2.0",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://github.com/facebookresearch/dino#readme"
+      },
+      "citations": {
+        "count": 10744,
+        "url": "https://www.semanticscholar.org/paper/ad4a0938c48e61b7827869e4ac3baffd0aefab35",
+        "paperId": "ad4a0938c48e61b7827869e4ac3baffd0aefab35",
+        "lookupId": "ad4a0938c48e61b7827869e4ac3baffd0aefab35",
+        "title": "Emerging Properties in Self-Supervised Vision Transformers",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "mae": {
+      "github": {
+        "status": "public",
+        "url": "https://github.com/facebookresearch/mae",
+        "repo": "facebookresearch/mae",
+        "stars": 8360,
+        "license": null,
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://github.com/facebookresearch/mae#readme"
+      },
+      "citations": {
+        "count": 13357,
+        "url": "https://www.semanticscholar.org/paper/6351ebb4a3287f5f3e1273464b3b91e5df5a16d7",
+        "paperId": "6351ebb4a3287f5f3e1273464b3b91e5df5a16d7",
+        "lookupId": "6351ebb4a3287f5f3e1273464b3b91e5df5a16d7",
+        "title": "Masked Autoencoders Are Scalable Vision Learners",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "dynamo": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/jeffacce/dynamo_ssl",
+        "repo": "jeffacce/dynamo_ssl",
+        "stars": 122,
+        "license": "MIT",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://dynamo-ssl.github.io"
+      },
+      "citations": {
+        "count": 63,
+        "url": "https://www.semanticscholar.org/paper/cf3b71fe73e7b61ab807a92be7156c3075b2482f",
+        "paperId": "cf3b71fe73e7b61ab807a92be7156c3075b2482f",
+        "lookupId": "cf3b71fe73e7b61ab807a92be7156c3075b2482f",
+        "title": "DynaMo: In-Domain Dynamics Pretraining for Visuo-Motor Control",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "vpp": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/roboterax/video-prediction-policy",
+        "repo": "roboterax/video-prediction-policy",
+        "stars": 418,
+        "license": "MIT",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://proceedings.mlr.press/v267/hu25g.html"
+      },
+      "citations": {
+        "count": 405,
+        "url": "https://www.semanticscholar.org/paper/3461cadf487a14afc0444df4602773b1cd0445d9",
+        "paperId": "3461cadf487a14afc0444df4602773b1cd0445d9",
+        "lookupId": "3461cadf487a14afc0444df4602773b1cd0445d9",
+        "title": "Video Prediction Policy: A Generalist Robot Policy with Predictive Visual Representations",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "ibc": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/google-research/ibc",
+        "repo": "google-research/ibc",
+        "stars": 377,
+        "license": "Apache-2.0",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://github.com/google-research/ibc#readme"
+      },
+      "citations": {
+        "count": 783,
+        "url": "https://www.semanticscholar.org/paper/5c74b1021aebd0575c339ce4dfd47e183009a9c5",
+        "paperId": "5c74b1021aebd0575c339ce4dfd47e183009a9c5",
+        "lookupId": "5c74b1021aebd0575c339ce4dfd47e183009a9c5",
+        "title": "Implicit Behavioral Cloning",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "bet": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/notmahi/bet",
+        "repo": "notmahi/bet",
+        "stars": 152,
+        "license": "MIT",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://mahis.life/bet"
+      },
+      "citations": {
+        "count": 495,
+        "url": "https://www.semanticscholar.org/paper/dc3b2ba8f69ac50b42337d997aa53cf604c44075",
+        "paperId": "dc3b2ba8f69ac50b42337d997aa53cf604c44075",
+        "lookupId": "dc3b2ba8f69ac50b42337d997aa53cf604c44075",
+        "title": "Behavior Transformers: Cloning k modes with one stone",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "vq-bet": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/jayLEE0301/vq_bet_official",
+        "repo": "jayLEE0301/vq_bet_official",
+        "stars": 221,
+        "license": "MIT",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://sjlee.cc/vq-bet/"
+      },
+      "citations": {
+        "count": 249,
+        "url": "https://www.semanticscholar.org/paper/ea6fc33de0c82add215415757946f1f31c074948",
+        "paperId": "ea6fc33de0c82add215415757946f1f31c074948",
+        "lookupId": "ea6fc33de0c82add215415757946f1f31c074948",
+        "title": "Behavior Generation with Latent Actions",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "3d-diffuser-actor": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/nickgkan/3d_diffuser_actor",
+        "repo": "nickgkan/3d_diffuser_actor",
+        "stars": 396,
+        "license": "MIT",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://proceedings.mlr.press/v270/ke25a.html"
+      },
+      "citations": {
+        "count": 429,
+        "url": "https://www.semanticscholar.org/paper/97fc977b8d167ff648c5c6672aea4d05f98fd79e",
+        "paperId": "97fc977b8d167ff648c5c6672aea4d05f98fd79e",
+        "lookupId": "97fc977b8d167ff648c5c6672aea4d05f98fd79e",
+        "title": "3D Diffuser Actor: Policy Diffusion with 3D Scene Representations",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "equibot": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/yjy0625/equibot",
+        "repo": "yjy0625/equibot",
+        "stars": 176,
+        "license": "MIT",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://proceedings.mlr.press/v270/yang25a.html"
+      },
+      "citations": {
+        "count": 122,
+        "url": "https://www.semanticscholar.org/paper/80d29b985f148d700ef8781bdf3894dade8dc80a",
+        "paperId": "80d29b985f148d700ef8781bdf3894dade8dc80a",
+        "lookupId": "80d29b985f148d700ef8781bdf3894dade8dc80a",
+        "title": "EquiBot: SIM(3)-Equivariant Diffusion Policy for Generalizable and Data Efficient Learning",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "equivariant-dp": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/pointW/equidiff",
+        "repo": "pointW/equidiff",
+        "stars": 141,
+        "license": "MIT",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://equidiff.github.io"
+      },
+      "citations": {
+        "count": 105,
+        "url": "https://www.semanticscholar.org/paper/afd5e580742773da94e8b0bbc47b4dccb9b62cf9",
+        "paperId": "afd5e580742773da94e8b0bbc47b4dccb9b62cf9",
+        "lookupId": "afd5e580742773da94e8b0bbc47b4dccb9b62cf9",
+        "title": "Equivariant Diffusion Policy",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "hpt": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/liruiw/HPT",
+        "repo": "liruiw/HPT",
+        "stars": 546,
+        "license": "MIT",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://liruiw.github.io/hpt"
+      },
+      "citations": {
+        "count": 217,
+        "url": "https://www.semanticscholar.org/paper/35700b2794a8c221aff817cd1d7d01a36539df28",
+        "paperId": "35700b2794a8c221aff817cd1d7d01a36539df28",
+        "lookupId": "35700b2794a8c221aff817cd1d7d01a36539df28",
+        "title": "Scaling Proprioceptive-Visual Learning with Heterogeneous Pre-trained Transformers",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "crossformer": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/rail-berkeley/crossformer",
+        "repo": "rail-berkeley/crossformer",
+        "stars": 285,
+        "license": "MIT",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://proceedings.mlr.press/v270/doshi25a.html"
+      },
+      "citations": {
+        "count": 178,
+        "url": "https://www.semanticscholar.org/paper/9fbade2b7936b805f808825c46aebd604883fca9",
+        "paperId": "9fbade2b7936b805f808825c46aebd604883fca9",
+        "lookupId": "9fbade2b7936b805f808825c46aebd604883fca9",
+        "title": "Scaling Cross-Embodied Learning: One Policy for Manipulation, Navigation, Locomotion and Aviation",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "robomamba": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/lmzpai/roboMamba",
+        "repo": "lmzpai/roboMamba",
+        "stars": 151,
+        "license": "MIT",
+        "shared": false,
+        "note": "仓库提供测试代码与检查点；作者说明训练代码需另行联系。",
+        "evidence": "https://github.com/lmzpai/roboMamba#readme"
+      },
+      "citations": {
+        "count": 167,
+        "url": "https://www.semanticscholar.org/paper/9ec9d316ba8d8dd731dd810f2a000d47d06924bf",
+        "paperId": "9ec9d316ba8d8dd731dd810f2a000d47d06924bf",
+        "lookupId": "9ec9d316ba8d8dd731dd810f2a000d47d06924bf",
+        "title": "RoboMamba: Efficient Vision-Language-Action Model for Robotic Reasoning and Manipulation",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "roboturk": {
+      "github": {
+        "status": "unconfirmed",
+        "url": null,
+        "repo": null,
+        "stars": null,
+        "license": null,
+        "shared": false,
+        "note": "已核对论文及作者资料，本次未核实到官方 GitHub 实现；这不表示确定未开源。",
+        "evidence": "https://proceedings.mlr.press/v87/mandlekar18a/mandlekar18a.pdf"
+      },
+      "citations": {
+        "count": 418,
+        "url": "https://www.semanticscholar.org/paper/cda470bede832f2965e594f9bdee79d6973a91e9",
+        "paperId": "cda470bede832f2965e594f9bdee79d6973a91e9",
+        "lookupId": "cda470bede832f2965e594f9bdee79d6973a91e9",
+        "title": "ROBOTURK: A Crowdsourcing Platform for Robotic Skill Learning through Imitation",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "robonet": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/SudeepDasari/RoboNet",
+        "repo": "SudeepDasari/RoboNet",
+        "stars": 178,
+        "license": "MIT",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://github.com/SudeepDasari/RoboNet#readme"
+      },
+      "citations": {
+        "count": 471,
+        "url": "https://www.semanticscholar.org/paper/3e519d85cdcefdd1d2ad89829d6ad445695d8c58",
+        "paperId": "3e519d85cdcefdd1d2ad89829d6ad445695d8c58",
+        "lookupId": "3e519d85cdcefdd1d2ad89829d6ad445695d8c58",
+        "title": "RoboNet: Large-Scale Multi-Robot Learning",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "robomimic": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/ARISE-Initiative/robomimic",
+        "repo": "ARISE-Initiative/robomimic",
+        "stars": 1591,
+        "license": "MIT",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://github.com/ARISE-Initiative/robomimic#readme"
+      },
+      "citations": {
+        "count": 1156,
+        "url": "https://www.semanticscholar.org/paper/3032844d6ac6882ccb03e7a2c22a0026b210ac05",
+        "paperId": "3032844d6ac6882ccb03e7a2c22a0026b210ac05",
+        "lookupId": "3032844d6ac6882ccb03e7a2c22a0026b210ac05",
+        "title": "What Matters in Learning from Offline Human Demonstrations for Robot Manipulation",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "mimicgen": {
+      "github": {
+        "status": "public",
+        "url": "https://github.com/NVlabs/mimicgen",
+        "repo": "NVlabs/mimicgen",
+        "stars": 661,
+        "license": null,
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://mimicgen.github.io"
+      },
+      "citations": {
+        "count": 558,
+        "url": "https://www.semanticscholar.org/paper/54f107c7cdffc43490ba18e3e4313a8b4dff4950",
+        "paperId": "54f107c7cdffc43490ba18e3e4313a8b4dff4950",
+        "lookupId": "54f107c7cdffc43490ba18e3e4313a8b4dff4950",
+        "title": "MimicGen: A Data Generation System for Scalable Robot Learning using Human Demonstrations",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "mimicplay": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/j96w/MimicPlay",
+        "repo": "j96w/MimicPlay",
+        "stars": 312,
+        "license": "MIT",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://mimic-play.github.io"
+      },
+      "citations": {
+        "count": 404,
+        "url": "https://www.semanticscholar.org/paper/a68db57f08f6d72c0d3b22d451d2606dca880f94",
+        "paperId": "a68db57f08f6d72c0d3b22d451d2606dca880f94",
+        "lookupId": "a68db57f08f6d72c0d3b22d451d2606dca880f94",
+        "title": "MimicPlay: Long-Horizon Imitation Learning by Watching Human Play",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "mobile-aloha": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/MarkFzp/mobile-aloha",
+        "repo": "MarkFzp/mobile-aloha",
+        "stars": 4477,
+        "license": "MIT",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://proceedings.mlr.press/v270/fu25b.html"
+      },
+      "citations": {
+        "count": 813,
+        "url": "https://www.semanticscholar.org/paper/fc3819a50705fc3cf90ab92f2a206b858fef3b19",
+        "paperId": "fc3819a50705fc3cf90ab92f2a206b858fef3b19",
+        "lookupId": "fc3819a50705fc3cf90ab92f2a206b858fef3b19",
+        "title": "Mobile ALOHA: Learning Bimanual Mobile Manipulation with Low-Cost Whole-Body Teleoperation",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "behavior": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/j96w/behavior",
+        "repo": "j96w/behavior",
+        "stars": 0,
+        "license": "MIT",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://github.com/j96w/behavior#readme"
+      },
+      "citations": {
+        "count": 289,
+        "url": "https://www.semanticscholar.org/paper/c0c9f77cb097f2ce53feb91802bcfbae57fcc42f",
+        "paperId": "c0c9f77cb097f2ce53feb91802bcfbae57fcc42f",
+        "lookupId": "c0c9f77cb097f2ce53feb91802bcfbae57fcc42f",
+        "title": "BEHAVIOR: Benchmark for Everyday Household Activities in Virtual, Interactive, and Ecological Environments",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "behavior-1k": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/StanfordVL/BEHAVIOR-1K",
+        "repo": "StanfordVL/BEHAVIOR-1K",
+        "stars": 1783,
+        "license": "MIT",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://github.com/StanfordVL/BEHAVIOR-1K#readme"
+      },
+      "citations": {
+        "count": 492,
+        "url": "https://www.semanticscholar.org/paper/69764fcc646e4c608ac08eeb4c784cf8465268d2",
+        "paperId": "69764fcc646e4c608ac08eeb4c784cf8465268d2",
+        "lookupId": "69764fcc646e4c608ac08eeb4c784cf8465268d2",
+        "title": "BEHAVIOR-1K: A Benchmark for Embodied AI with 1, 000 Everyday Activities and Realistic Simulation",
+        "basis": "正式版记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "leo": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/embodied-generalist/embodied-generalist",
+        "repo": "embodied-generalist/embodied-generalist",
+        "stars": 491,
+        "license": "MIT",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://embodied-generalist.github.io/"
+      },
+      "citations": {
+        "count": 471,
+        "url": "https://www.semanticscholar.org/paper/13d12b26db345f62e8e512db181b96a7f8763b47",
+        "paperId": "13d12b26db345f62e8e512db181b96a7f8763b47",
+        "lookupId": "13d12b26db345f62e8e512db181b96a7f8763b47",
+        "title": "An Embodied Generalist Agent in 3D World",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "robopoint": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/wentaoyuan/RoboPoint",
+        "repo": "wentaoyuan/RoboPoint",
+        "stars": 232,
+        "license": "Apache-2.0",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://proceedings.mlr.press/v270/yuan25c.html"
+      },
+      "citations": {
+        "count": 342,
+        "url": "https://www.semanticscholar.org/paper/715a93dbd51aaf7278e22c921af184a8eaffbd2e",
+        "paperId": "715a93dbd51aaf7278e22c921af184a8eaffbd2e",
+        "lookupId": "715a93dbd51aaf7278e22c921af184a8eaffbd2e",
+        "title": "RoboPoint: A Vision-Language Model for Spatial Affordance Prediction for Robotics",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "robobrain": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/FlagOpen/RoboBrain",
+        "repo": "FlagOpen/RoboBrain",
+        "stars": 565,
+        "license": "Apache-2.0",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://superrobobrain.github.io/"
+      },
+      "citations": {
+        "count": 220,
+        "url": "https://www.semanticscholar.org/paper/c1fa31734bf75df4cdd1a6a04f63307d9817ed9a",
+        "paperId": "c1fa31734bf75df4cdd1a6a04f63307d9817ed9a",
+        "lookupId": "c1fa31734bf75df4cdd1a6a04f63307d9817ed9a",
+        "title": "RoboBrain: A Unified Brain Model for Robotic Manipulation from Abstract to Concrete",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "homerobot": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/facebookresearch/home-robot",
+        "repo": "facebookresearch/home-robot",
+        "stars": 1250,
+        "license": "MIT",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://ovmm.github.io/"
+      },
+      "citations": {
+        "count": 172,
+        "url": "https://www.semanticscholar.org/paper/3b0c02955e88f5862e61b560c7f70ba8cf235b1d",
+        "paperId": "3b0c02955e88f5862e61b560c7f70ba8cf235b1d",
+        "lookupId": "3b0c02955e88f5862e61b560c7f70ba8cf235b1d",
+        "title": "HomeRobot: Open-Vocabulary Mobile Manipulation",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "saytap": {
+      "github": {
+        "status": "unconfirmed",
+        "url": null,
+        "repo": null,
+        "stars": null,
+        "license": null,
+        "shared": false,
+        "note": "已核对论文及作者资料，本次未核实到官方 GitHub 实现；这不表示确定未开源。",
+        "evidence": "https://proceedings.mlr.press/v229/tang23a/tang23a.pdf"
+      },
+      "citations": {
+        "count": 71,
+        "url": "https://www.semanticscholar.org/paper/1fc21645ccc8e99eb8162e5f91407148b7f77e3d",
+        "paperId": "1fc21645ccc8e99eb8162e5f91407148b7f77e3d",
+        "lookupId": "1fc21645ccc8e99eb8162e5f91407148b7f77e3d",
+        "title": "SayTap: Language to Quadrupedal Locomotion",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "embodiedgpt": {
+      "github": {
+        "status": "public",
+        "url": "https://github.com/EmbodiedGPT/EmbodiedGPT_Pytorch",
+        "repo": "EmbodiedGPT/EmbodiedGPT_Pytorch",
+        "stars": 350,
+        "license": null,
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://EmbodiedGPT.github.io"
+      },
+      "citations": {
+        "count": 469,
+        "url": "https://www.semanticscholar.org/paper/00cb69a9f280317d1c59ac5827551ee9b10642b8",
+        "paperId": "00cb69a9f280317d1c59ac5827551ee9b10642b8",
+        "lookupId": "00cb69a9f280317d1c59ac5827551ee9b10642b8",
+        "title": "EmbodiedGPT: Vision-Language Pre-Training via Embodied Chain of Thought",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "openeqa": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/facebookresearch/open-eqa",
+        "repo": "facebookresearch/open-eqa",
+        "stars": 363,
+        "license": "MIT",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://open-eqa.github.io"
+      },
+      "citations": {
+        "count": 427,
+        "url": "https://www.semanticscholar.org/paper/920731b589af90a5b79236f4939ac117bbb939f2",
+        "paperId": "920731b589af90a5b79236f4939ac117bbb939f2",
+        "lookupId": "920731b589af90a5b79236f4939ac117bbb939f2",
+        "title": "OpenEQA: Embodied Question Answering in the Era of Foundation Models",
+        "basis": "正式版记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "mvp": {
+      "github": {
+        "status": "public",
+        "url": "https://github.com/ir413/mvp",
+        "repo": "ir413/mvp",
+        "stars": 244,
+        "license": null,
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://tetexiao.com/projects/real-mvp"
+      },
+      "citations": {
+        "count": 387,
+        "url": "https://www.semanticscholar.org/paper/979810ca765695a481c37126103b8ba256ee2192",
+        "paperId": "979810ca765695a481c37126103b8ba256ee2192",
+        "lookupId": "979810ca765695a481c37126103b8ba256ee2192",
+        "title": "Real-World Robot Learning with Masked Visual Pre-training",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "storm": {
+      "github": {
+        "status": "public",
+        "url": "https://github.com/weipu-zhang/STORM",
+        "repo": "weipu-zhang/STORM",
+        "stars": 141,
+        "license": null,
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://github.com/weipu-zhang/STORM#readme"
+      },
+      "citations": {
+        "count": 156,
+        "url": "https://www.semanticscholar.org/paper/c433c7f0a1c5fe3449274c7234ff5a8fc4f3c3ff",
+        "paperId": "c433c7f0a1c5fe3449274c7234ff5a8fc4f3c3ff",
+        "lookupId": "c433c7f0a1c5fe3449274c7234ff5a8fc4f3c3ff",
+        "title": "STORM: Efficient Stochastic Transformer based World Models for Reinforcement Learning",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "twm": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/jrobine/twm",
+        "repo": "jrobine/twm",
+        "stars": 90,
+        "license": "MIT",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://github.com/jrobine/twm#readme"
+      },
+      "citations": {
+        "count": 175,
+        "url": "https://www.semanticscholar.org/paper/f15a8105f5fb5444ef3685a893f85073af175bc4",
+        "paperId": "f15a8105f5fb5444ef3685a893f85073af175bc4",
+        "lookupId": "f15a8105f5fb5444ef3685a893f85073af175bc4",
+        "title": "Transformer-based World Models Are Happy With 100k Interactions",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "decision-diffuser": {
+      "github": {
+        "status": "public",
+        "url": "https://github.com/anuragajay/decision-diffuser",
+        "repo": "anuragajay/decision-diffuser",
+        "stars": 366,
+        "license": null,
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://anuragajay.github.io/decision-diffuser/"
+      },
+      "citations": {
+        "count": 722,
+        "url": "https://www.semanticscholar.org/paper/f19dfc360088922cf1d423c538662aae8d542c28",
+        "paperId": "f19dfc360088922cf1d423c538662aae8d542c28",
+        "lookupId": "f19dfc360088922cf1d423c538662aae8d542c28",
+        "title": "Is Conditional Generative Modeling all you need for Decision-Making?",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "maniskill2": {
+      "github": {
+        "status": "public",
+        "url": "https://github.com/haosulab/ManiSkill2",
+        "repo": "haosulab/ManiSkill2",
+        "stars": 19,
+        "license": null,
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://maniskill2.github.io/"
+      },
+      "citations": {
+        "count": 478,
+        "url": "https://www.semanticscholar.org/paper/634127f09be5119f4d29a175866f11b14b3821e0",
+        "paperId": "634127f09be5119f4d29a175866f11b14b3821e0",
+        "lookupId": "634127f09be5119f4d29a175866f11b14b3821e0",
+        "title": "ManiSkill2: A Unified Benchmark for Generalizable Manipulation Skills",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "moka": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/moka-manipulation/moka",
+        "repo": "moka-manipulation/moka",
+        "stars": 101,
+        "license": "MIT",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://moka-manipulation.github.io"
+      },
+      "citations": {
+        "count": 190,
+        "url": "https://www.semanticscholar.org/paper/4e0c7732e8e68a1285359e41ab3dc1d02c408865",
+        "paperId": "4e0c7732e8e68a1285359e41ab3dc1d02c408865",
+        "lookupId": "4e0c7732e8e68a1285359e41ab3dc1d02c408865",
+        "title": "MOKA: Open-World Robotic Manipulation through Mark-Based Visual Prompting",
+        "basis": "正式版 DOI 记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "robocasa": {
+      "github": {
+        "status": "public",
+        "url": "https://github.com/robocasa/robocasa",
+        "repo": "robocasa/robocasa",
+        "stars": 1846,
+        "license": null,
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://robocasa.ai"
+      },
+      "citations": {
+        "count": 88,
+        "url": "https://www.semanticscholar.org/paper/a294546084fda4e0f12f307caed4f9c58f051632",
+        "paperId": "a294546084fda4e0f12f307caed4f9c58f051632",
+        "lookupId": "a294546084fda4e0f12f307caed4f9c58f051632",
+        "title": "RoboCasa: Large-Scale Simulation of Household Tasks for Generalist Robots",
+        "basis": "正式版 DOI 记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "act3d": {
+      "github": {
+        "status": "public",
+        "url": "https://github.com/zhouxian/act3d-chained-diffuser",
+        "repo": "zhouxian/act3d-chained-diffuser",
+        "stars": 186,
+        "license": null,
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://act3d.github.io/"
+      },
+      "citations": {
+        "count": 218,
+        "url": "https://www.semanticscholar.org/paper/eb9fc16bd99443af8bca10f9f01f92854ab7cbbc",
+        "paperId": "eb9fc16bd99443af8bca10f9f01f92854ab7cbbc",
+        "lookupId": "eb9fc16bd99443af8bca10f9f01f92854ab7cbbc",
+        "title": "Act3D: 3D Feature Field Transformers for Multi-Task Robotic Manipulation",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "cot-vla": {
+      "github": {
+        "status": "unconfirmed",
+        "url": null,
+        "repo": null,
+        "stars": null,
+        "license": null,
+        "shared": false,
+        "note": "已核对作者项目页，未见可核实的官方实现仓库链接。",
+        "evidence": "https://openaccess.thecvf.com/content/CVPR2025/papers/Zhao_CoT-VLA_Visual_Chain-of-Thought_Reasoning_for_Vision-Language-Action_Models_CVPR_2025_paper.pdf"
+      },
+      "citations": {
+        "count": 655,
+        "url": "https://www.semanticscholar.org/paper/2d7f3a99e916fc80ff890d109699f9682253e66d",
+        "paperId": "2d7f3a99e916fc80ff890d109699f9682253e66d",
+        "lookupId": "2d7f3a99e916fc80ff890d109699f9682253e66d",
+        "title": "CoT-VLA: Visual Chain-of-Thought Reasoning for Vision-Language-Action Models",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "univla": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/OpenDriveLab/UniVLA",
+        "repo": "OpenDriveLab/UniVLA",
+        "stars": 1142,
+        "license": "Apache-2.0",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://github.com/OpenDriveLab/UniVLA#readme"
+      },
+      "citations": {
+        "count": 533,
+        "url": "https://www.semanticscholar.org/paper/23ec5b0184fe48558f14401247a411d2a48bd75f",
+        "paperId": "23ec5b0184fe48558f14401247a411d2a48bd75f",
+        "lookupId": "23ec5b0184fe48558f14401247a411d2a48bd75f",
+        "title": "UniVLA: Learning to Act Anywhere with Task-centric Latent Actions",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "conrft": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/cccedric/conrft",
+        "repo": "cccedric/conrft",
+        "stars": 379,
+        "license": "Apache-2.0",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://github.com/cccedric/conrft#readme"
+      },
+      "citations": {
+        "count": 199,
+        "url": "https://www.semanticscholar.org/paper/84fc714f22535f82c3fbfa28f2883292d2a02167",
+        "paperId": "84fc714f22535f82c3fbfa28f2883292d2a02167",
+        "lookupId": "84fc714f22535f82c3fbfa28f2883292d2a02167",
+        "title": "ConRFT: A Reinforced Fine-tuning Method for VLA Models via Consistency Policy",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "dexvla": {
+      "github": {
+        "status": "unconfirmed",
+        "url": null,
+        "repo": null,
+        "stars": null,
+        "license": null,
+        "shared": false,
+        "note": "作者项目页本次未能提供可核实的官方 GitHub 实现链接。",
+        "evidence": "https://raw.githubusercontent.com/mlresearch/v305/main/assets/wen25b/wen25b.pdf"
+      },
+      "citations": {
+        "count": 270,
+        "url": "https://www.semanticscholar.org/paper/442b8903a2e8808ec9956c0b17dc9d974d8156c4",
+        "paperId": "442b8903a2e8808ec9956c0b17dc9d974d8156c4",
+        "lookupId": "442b8903a2e8808ec9956c0b17dc9d974d8156c4",
+        "title": "DexVLA: Vision-Language Model with Plug-In Diffusion Expert for General Robot Control",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "graspvla": {
+      "github": {
+        "status": "public",
+        "url": "https://github.com/PKU-EPIC/GraspVLA",
+        "repo": "PKU-EPIC/GraspVLA",
+        "stars": 427,
+        "license": null,
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://pku-epic.github.io/GraspVLA-web/"
+      },
+      "citations": {
+        "count": 162,
+        "url": "https://www.semanticscholar.org/paper/41183424eb0b0d3147e1f9ea0de4d5a50cf87d93",
+        "paperId": "41183424eb0b0d3147e1f9ea0de4d5a50cf87d93",
+        "lookupId": "41183424eb0b0d3147e1f9ea0de4d5a50cf87d93",
+        "title": "GraspVLA: a Grasping Foundation Model Pre-trained on Billion-scale Synthetic Action Data",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "flare": {
+      "github": {
+        "status": "unavailable",
+        "url": "https://github.com/NVIDIA/flare",
+        "repo": null,
+        "stars": null,
+        "license": null,
+        "shared": false,
+        "note": "作者项目页标注 GitHub coming soon；所链接仓库本次返回 404。",
+        "evidence": "https://raw.githubusercontent.com/mlresearch/v305/main/assets/zheng25a/zheng25a.pdf"
+      },
+      "citations": {
+        "count": 137,
+        "url": "https://www.semanticscholar.org/paper/a1d10dd3d0eb9d4f6c143976a13c4249dd59528e",
+        "paperId": "a1d10dd3d0eb9d4f6c143976a13c4249dd59528e",
+        "lookupId": "a1d10dd3d0eb9d4f6c143976a13c4249dd59528e",
+        "title": "FLARE: Robot Learning with Implicit World Modeling",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "dreamgen": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/NVIDIA/GR00T-Dreams",
+        "repo": "NVIDIA/GR00T-Dreams",
+        "stars": 626,
+        "license": "Apache-2.0",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://research.nvidia.com/labs/gear/dreamgen"
+      },
+      "citations": {
+        "count": 207,
+        "url": "https://www.semanticscholar.org/paper/2e6b2ce51d6c92dcc7b226d1bd2e0844f5afc44c",
+        "paperId": "2e6b2ce51d6c92dcc7b226d1bd2e0844f5afc44c",
+        "lookupId": "2e6b2ce51d6c92dcc7b226d1bd2e0844f5afc44c",
+        "title": "DreamGen: Unlocking Generalization in Robot Learning through Video World Models",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    },
+    "diwa": {
+      "github": {
+        "status": "open",
+        "url": "https://github.com/acl21/diwa",
+        "repo": "acl21/diwa",
+        "stars": 88,
+        "license": "GPL-3.0",
+        "shared": false,
+        "note": "代码许可按仓库标注；权重与数据许可需参阅作者说明。",
+        "evidence": "https://diwa.cs.uni-freiburg.de"
+      },
+      "citations": {
+        "count": 40,
+        "url": "https://www.semanticscholar.org/paper/350d866c9dcdf8145b5b0123f042008294e9dc6a",
+        "paperId": "350d866c9dcdf8145b5b0123f042008294e9dc6a",
+        "lookupId": "350d866c9dcdf8145b5b0123f042008294e9dc6a",
+        "title": "DiWA: Diffusion Policy Adaptation with World Models",
+        "basis": "arXiv 关联记录",
+        "note": "按所链接的索引记录统计，与其他版本不相加。"
+      }
+    }
+  }
+}

@@ -5,6 +5,7 @@ import { assetPath, atlasLayout, atlasPoints, atlasRoutes, frameworks, islands }
 import { getPaper } from "@/lib/catalog";
 import { CARD_HEIGHT, CARD_WIDTH, islandPath } from "@/lib/atlas-geometry";
 import { useReading } from "./ReadingProvider";
+import PaperMetrics from "./PaperMetrics";
 
 const Terrain = memo(function Terrain() {
   return <svg className="canvas-terrain" width={atlasLayout.bounds.width} height={atlasLayout.bounds.height} aria-hidden="true">
@@ -48,6 +49,7 @@ export const PaperLayer = memo(function PaperLayer({ visibleKey, selectedId, fil
       <b className="canvas-step-number">{String(point.order).padStart(2, "0")}</b>
       <div className="canvas-paper-image"><img src={assetPath(imageTier === "original" ? `/figures/${framework.figure.file}` : `/figures/${imageTier === "overview" ? "overview" : "previews"}/${id}.webp`)} alt={`${paper.name}：${framework.figure.title}`} draggable="false" decoding="async" loading="lazy" /><span>作者原图 ↗</span></div>
       <div className="canvas-paper-caption"><span><strong>{paper.name}</strong><em>{framework.mechanism}</em></span><small>{paper.year}{entries[id]?.status === "done" ? " · 已读" : ""}</small></div>
+      <PaperMetrics id={id} links={false} />
     </button>;
   })}</>;
 });

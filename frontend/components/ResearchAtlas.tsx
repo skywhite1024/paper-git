@@ -9,6 +9,7 @@ import { useReading } from "./ReadingProvider";
 import FrameworkFigure from "./FrameworkFigure";
 import ReadingEditor, { type ReadingEditorHandle } from "./ReadingEditor";
 import AtlasCanvas, { type AtlasFocus } from "./AtlasCanvas";
+import PaperMetrics from "./PaperMetrics";
 
 type ReaderTab = "overview" | "compare" | "notes";
 const tabs: { id: ReaderTab; name: string }[] = [{ id: "overview", name: "论文导读" }, { id: "compare", name: "方法对照" }, { id: "notes", name: "阅读笔记" }];
@@ -147,6 +148,7 @@ export default function ResearchAtlas() {
       {indexOpen && <section className="canvas-paper-index" aria-label="论文搜索与索引"><header><strong>{hasFilters ? "筛选结果" : "全部论文"} · {filtered.length}</strong><button aria-label="收起论文索引" onClick={() => setIndexOpen(false)}>×</button></header><p role="status">全部工作均在画布中，选择一篇可直接定位。</p>{hasFilters && <button className="text-button" onClick={resetFilters}>清除筛选</button>}{islands.map((island) => <div key={island.id} className="canvas-index-group"><h3 style={{ color: island.color }}>{island.name}</h3>{filtered.filter((item) => item.track === island.id).map((item) => <button key={item.id} onClick={() => selectPaper(item.id)} aria-pressed={item.id === selectedId}><span>{item.name}</span><small>{item.year}</small></button>)}</div>)}{!filtered.length && <p>没有匹配项，清除筛选后重新探索。</p>}</section>}
     {readerOpen && <aside className="atlas-reader" aria-label="当前论文解读" ref={reader}>
       <div className="atlas-reader-identity"><div className="atlas-reader-kicker"><span style={{ color: islands.find((island) => island.id === paper.track)!.color }}>{track.name}</span><div className="atlas-reader-actions"><Link href={`/papers/${paper.id}`} aria-label={`打开 ${paper.name} 详情`}>↗</Link><button aria-label="收起论文解读" onClick={closeReader}>×</button></div></div><div className="atlas-reader-title"><h2>{paper.name}</h2><span>{paper.year}</span></div><p>{paper.title}</p><div className="atlas-reader-meta"><span>{paper.venue}</span><Link href={`/tracks/${track.id}#${stage.id}`}>{stage.name} ↗</Link><label><span className="sr-only">当前论文阅读状态</span><select aria-label="当前论文阅读状态" disabled={!ready} value={entries[paper.id]?.status ?? "unread"} onChange={(event) => update(paper.id, { status: event.target.value as ReadingStatus })}>{Object.entries(statusNames).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label></div></div>
+      <div className="atlas-reader-metrics"><PaperMetrics id={paper.id} showDate /></div>
       <div className="atlas-reader-tabs" aria-label="论文内容">{tabs.map((item) => <button key={item.id} aria-pressed={tab === item.id} onClick={() => chooseTab(item.id)}>{item.name}{item.id === "notes" && entries[paper.id]?.note && <i aria-label="有笔记" />}</button>)}</div>
       <nav className="atlas-reading-sequence" aria-label="沿当前研究分支逐篇阅读">
         <button disabled={position === 0} onClick={() => selectPaper(stage.papers[position - 1])} title={getPaper(stage.papers[position - 1])?.name}>← 分支上一篇</button>
